@@ -391,7 +391,13 @@ Notation (define once):
 - Show the case A + RR rays (Figures 2–3).
 - No reach test for the cone (`otvet_cone_smax` stays 8).
 - No 1024³ cone; the suite's 512³ cone.
-- FLD/P1 (planned in `docs/PLAN.md`, not built) stays out.
+
+**Open: flux-limited diffusion** (asked 2026-11-05). FLD is not built:
+`docs/PLAN.md`, "Thread B", has the plan and prompt (an implicit per-group
+solve with the Levermore–Pomraning limiter, whose paper the user is to
+supply). The recommendation is to leave it out of this paper and mention
+it in the discussion; P1 (χ = 1/3 in the existing solver) is a cheap
+optional end member, never to be labelled FLD.
 
 **Decided (user, 2026-11-05): the tensor comparison is in the paper,
 from the 256³ runs "for now at least"** (option (a) below, as a two-panel
