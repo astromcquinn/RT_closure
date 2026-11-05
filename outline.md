@@ -24,7 +24,7 @@ Working titles:
      k ≲ 2 h/Mpc.
    - **Thin OTVET:** follows the rays to x_V ≈ 0.8, then has 11–14× the
      rays' P_Γ after overlap.
-2. **The rays' own Eddington tensor, recorded in the run, shows why.**
+2. **The rays' own Eddington tensor, recorded in a 256³ run, shows why.**
    - During overlap, the thin tensor is too isotropic on large scales: it
      adds light from regions behind neutral gas.
    - After overlap, it is too anisotropic by λ_eff/0.61 L. This is the
@@ -83,7 +83,8 @@ What exists, and what it limits:
   x_V = 0.25, z ≈ 8) exists only as a slab image.
 
 **The 256³ closure runs** (`docs/otvet_closure.md` §1, §5–6;
-`$RUNS/otvcl256*`) are the basis of the a priori tensor analysis.
+`$RUNS/otvcl256*`) are the basis of the tensor comparison (§3, Figure 5;
+user, 2026-11-05: "use the 256³ for now at least").
 - **Box and runs:** 20 Mpc/h with the same cell. Rays (`otvcl256`) carry
   `tensor_dump = 1`: the Γ-weighted angular moments S0, S1 and S2 of the
   rays' radiation per cell, at 13 redshifts from z = 10 to 5. Moment
@@ -147,9 +148,25 @@ rays' x_V there.
   - `tensor_dump` accumulates S0 = Σw, S1 = Σw n and S2 = Σw n nᵀ over
     the ray deposits, with w the Γ-weighted photons; h_true = S2/S0.
   - Sampling noise from odd against even substeps: 0.005–0.02 per cell.
-- **3.2 Metrics:** the S0-weighted Frobenius error |h − h_true| on cells
-  and on 8³ blocks, the anisotropy A = |h − I/3|/√(2/3), and the error
-  power of the radiation force ∇·(S0 h) against the true force.
+- **3.2 Metrics** (`tools/analysis/tensor_compare.py`):
+  - **Error:** the Frobenius distance |h − h_true| = √(Σ_ij (h_ij −
+    h_true,ij)²) over all nine components, not normalised by |h_true|.
+    It is averaged over the ionised cells (x_HII > 0.9), weighted by S0.
+  - **Its scale:** both tensors have trace 1, so isotropic against one
+    beam is √(2/3) ≈ 0.82, two perpendicular beams √2 (the maximum), and
+    two beams at angle θ √2 sin θ. In the paper, divide the error by
+    √(2/3) so that it shares A's scale.
+  - **Anisotropy:** A = |h − I/3|/√(2/3). It is 0 for isotropic light, 1
+    for one beam (or two opposite beams) and 0.5 for light spread evenly
+    in a plane; it depends only on the eigenvalues.
+  - **Blocks:** S0 h is summed over each 8³ block (0.625 Mpc/h at 256³ in
+    20 Mpc/h) before normalising. A closure's h is weighted by the rays'
+    S0, so every tensor describes the same radiation field. Directions
+    that differ within a block cancel, so the block A measures coherent
+    anisotropy on scales ≳ 0.6 Mpc/h: the part that sets the large-scale
+    flux and P_Γ at k ≲ 3 h/Mpc, and nearly free of the rays' noise.
+  - **Radiation-force error** (∇·(S0 h) against the true force, per k):
+    for an appendix at most.
 - **3.3 Before overlap:**
   - Thin OTVET is good in the bulk, with block error 0.06–0.09.
   - Its errors sit in the 10–20 % of ionised cells that are shadowed or
@@ -361,7 +378,7 @@ Notation (define once):
 | **2** | Δ² of x_HII, the ratio to the rays and r(k) at z = 7, 6.25 and 5.75: M1, thin, split, screen, cone and the case A + RR rays | suite snapshots | `rt_suite_figures.py` `pk_xHII.png` (case A + RR already in it) | exists; paper style |
 | **3** | Δ² of δ_Γ (`gammaHI_avg`), the ratio and r(k) at z = 6.0, 5.5 and 5.0: every method and the case A + RR rays | suite snapshots | `rt_suite_figures.py`; it chooses epochs by the rays' x_V, so it needs a `--z` option for the after-overlap redshifts | to make |
 | 4 | Schematic of the closures: the split's budget picture and the cone march | — | drawn | to make |
-| 5 | A priori tensor errors against z: cell, block, anisotropy, force at k = 0.47 / 3.8 for thin, M1 (oracle), split, screen and cone | 256³ dumps | `tensor_compare.py`, `tensor_summary.py` (`figures/otvet_closure_apriori.png`) | exists in draft form; needs the final cone configuration at every z (it has six) |
+| **5** | The tensor comparison, two panels against z (or x_V): (top) block-8³ anisotropy A, with the truth in black; (bottom) the S0-weighted cell error divided by √(2/3). Curves: thin, split, screen, cone (final), and M1 given the rays' flux. | 256³ dumps (13 redshifts, x_V = 0.05–1) | `apps/otvet_tensor` (the code's own tensors: the budget λ of the screen, the final cone with its blend) into `tensor_compare.py --moment`, then `tensor_summary.py` | draft exists (`figures/otvet_closure_apriori.png`, six panels, prototype tensors, final cone at six redshifts only); to remake with the code's tensors at all 13 |
 | 6 | The normalisation: A_OTVET/A_true, median N/N_dir and P_Γ(OTVET)/rays against λ_eff/0.61 L, with the line (λ_eff/0.61 L)² | 256³ dumps and runs | from the tables in `otvet_closure.md` §3 | to make (small) |
 | T1 | Runs, closure keys and cost | `rt_suite_512.md` §3 | — | exists |
 | T2 | Closure parameters and defaults | `otvet_closure.md` §5 | — | exists |
@@ -376,8 +393,13 @@ Notation (define once):
 - No 1024³ cone; the suite's 512³ cone.
 - FLD/P1 (planned in `docs/PLAN.md`, not built) stays out.
 
-**Still open: the a priori analysis (§3–4, Figures 5–6).** It needs the
-rays' own Eddington tensor (`tensor_dump = 1`).
+**Decided (user, 2026-11-05): the tensor comparison is in the paper,
+from the 256³ runs "for now at least"** (option (a) below, as a two-panel
+Figure 5; the configuration stated in one sentence). Option (b) stays
+available if the 256³ configuration turns out to matter.
+
+Background: the comparison needs the rays' own Eddington tensor
+(`tensor_dump = 1`).
 - **The suite** is the 512³ set with one set of parameters, and Figures 1–3
   use it. But none of its runs wrote the tensor, and each kept only its
   last checkpoint, so the dump can't be added by a restart.
@@ -451,11 +473,14 @@ purpose):
   - Record the commit of every figure.
 - **Closure-diagnostics thread:**
   - Check that the `otvcl256` dumps exist.
-  - Rerun `tensor_compare.py` with the final cone (blend) at all 13
-    redshifts (Figure 5).
+  - At all 13 dump redshifts, compute each closure's tensor with
+    `apps/otvet_tensor` (thin, split, screen with the budget λ, the final
+    cone with its blend) and compare it with the rays' using
+    `tensor_compare.py --moment` (the M1 curve is `tensor_compare.py`'s
+    own: Levermore's D on the rays' flux); make the two-panel Figure 5.
   - Figure 6.
   - The Appendix A table.
-  - If the user picks (b) in §4, launch the 512³ `tensor_dump` ray run.
+  - Not now: the 512³ `tensor_dump` ray run (option (b) in §4).
 - **References:** verify the "snippet" and "from memory" entries in a
   session with web access (arXiv and ADS are not reachable from klone),
   and build `refs.bib` here.
