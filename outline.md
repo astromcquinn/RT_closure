@@ -49,7 +49,7 @@ is the basis of Figures 1–3.
 | run | method | role in the paper |
 |---|---|---|
 | `reion512_rays` | adaptive rays, case B | reference |
-| `reion512_rays_caseA` | rays, case A + recombination radiation | the rays' own physics variation (optional) |
+| `reion512_rays_caseA` | rays, case A + recombination radiation | shown in Figures 2–3 (user, 2026-11-05): the rays' own physics variation |
 | `reion512_rays_m1` | M1 | historic |
 | `reion512_rays_otvet` | OTVET, thin tensor | historic |
 | `reion512_rays_otvet_split` | split | new |
@@ -92,10 +92,14 @@ What exists, and what it limits:
   f_esc = 0.23, case A + recombination radiation.
 - **To check on klone:** that the dumps still exist.
 
-**Optional:** `runs/reion1024_otvet_cone`, the cone at 1024³ on the AMReX
-backend (`docs/stage_e_moments.md`). It has the first set's configuration
-too, and its 512³ partner was overwritten, so it is not a clean resolution
-test as it stands.
+**Not used** (user, 2026-11-05): the 1024³ cone run
+(`runs/reion1024_otvet_cone`). The cone in the paper is the suite's 512³
+`reion512_rays_otvet_cone`.
+
+**Comparisons are at fixed z** (user, 2026-11-05). Every run writes its
+snapshots at the same redshifts. `rt_suite_figures.py` already pairs the
+runs at the reference's snapshot redshift, and labels each epoch by the
+rays' x_V there.
 
 ## 2. Outline
 
@@ -334,7 +338,7 @@ Notation (define once):
 - **Relation to Gnedin (2025)'s CROC/Thesan comparison and to Wu+21's
   linear theory.**
 - **Extensions:** per-group cones, retarded sources, the cone on AMR
-  levels, and the `smax` reach study (§4 of this outline, decision 4).
+  levels.
 
 ### 7. Conclusions
 
@@ -353,9 +357,9 @@ Notation (define once):
 
 | # | content | data | tool | status |
 |---|---|---|---|---|
-| **1** | Reionization images: x_HII slabs (8 cells) with columns rays, M1, thin OTVET and cone, and rows at x_V ≈ 0.25 (slab only), 0.5, 0.8 and 0.97. Optionally a log Γ_HI row at x_V ≈ 0.8 and after overlap. | suite snapshots and movie slabs | `rt_suite_figures.py` (`maps_xHII.png` already has all 7 runs at 0.49 / 0.79 / 0.97); the movie frames for x_V = 0.25 | exists; trim to 4 columns, add the early row, paper style |
-| **2** | Δ² of x_HII, the ratio to the rays and r(k) at x_V ≈ 0.49 / 0.79 / 0.97: M1, thin, split, screen, cone (± rays case A + RR) | suite snapshots | `rt_suite_figures.py` `pk_xHII.png` | exists; paper style |
-| **3** | Δ² of δ_Γ (`gammaHI_avg`), the ratio and r(k) at z = 6.0, 5.5 and 5.0: all methods | suite snapshots | `rt_suite_figures.py`; it selects epochs by x_V, so it needs a `--z` option for the after-overlap redshifts | to make |
+| **1** | Reionization images: x_HII slabs (8 cells) with columns rays, M1, thin OTVET and cone (a case A + RR column if wanted), and rows at z ≈ 8 (x_V ≈ 0.25, slab only), 7, 6.25 and 5.75 (x_V ≈ 0.49 / 0.79 / 0.97). Optionally a log Γ_HI row. | suite snapshots and movie slabs | `rt_suite_figures.py` (`maps_xHII.png` already has all 7 runs at these three snapshots); the movie frames for z ≈ 8 | exists; trim the columns, add the early row, paper style |
+| **2** | Δ² of x_HII, the ratio to the rays and r(k) at z = 7, 6.25 and 5.75: M1, thin, split, screen, cone and the case A + RR rays | suite snapshots | `rt_suite_figures.py` `pk_xHII.png` (case A + RR already in it) | exists; paper style |
+| **3** | Δ² of δ_Γ (`gammaHI_avg`), the ratio and r(k) at z = 6.0, 5.5 and 5.0: every method and the case A + RR rays | suite snapshots | `rt_suite_figures.py`; it chooses epochs by the rays' x_V, so it needs a `--z` option for the after-overlap redshifts | to make |
 | 4 | Schematic of the closures: the split's budget picture and the cone march | — | drawn | to make |
 | 5 | A priori tensor errors against z: cell, block, anisotropy, force at k = 0.47 / 3.8 for thin, M1 (oracle), split, screen and cone | 256³ dumps | `tensor_compare.py`, `tensor_summary.py` (`figures/otvet_closure_apriori.png`) | exists in draft form; needs the final cone configuration at every z (it has six) |
 | 6 | The normalisation: A_OTVET/A_true, median N/N_dir and P_Γ(OTVET)/rays against λ_eff/0.61 L, with the line (λ_eff/0.61 L)² | 256³ dumps and runs | from the tables in `otvet_closure.md` §3 | to make (small) |
@@ -363,26 +367,31 @@ Notation (define once):
 | T2 | Closure parameters and defaults | `otvet_closure.md` §5 | — | exists |
 | T3 | Γ/⟨Γ⟩ quantiles in ionised cells at z = 5.5 and 5.0 | suite | `gamma_power.py --field gammaHI_avg` | partly (z = 4.99) |
 
-## 4. Open decisions for the user
+## 4. Decisions
 
-1. **The a priori analysis (§3–4, Figures 5–6):**
-   - (a) the existing 256³ dumps, in the first set's configuration (0.2c,
-     case A + RR, f_esc 0.23), stated as such; or
-   - (b) a new 512³ ray run with `tensor_dump = 1` in the suite's
-     configuration. That is one serial node for about 24 h, plus disk for
-     the dumps at the snapshot steps.
-2. **Compare at fixed z or at fixed x_V?** The figures pair at the
-   reference's x_V and the same z. The histories differ by ≤ 0.1 in z.
-3. **The rays' own scatter:** whether to show the case A + RR rays as a
-   reference curve. Recombination radiation changes the morphology less
-   than any closure does. Alternatively, run a second case-B ray
-   realisation (`ray_rotate` seed) for an honest noise band: about 24 h on
-   a node.
-4. **The `smax` reach test** (cheap, a priori on the 256³ dumps):
-   `otvet_cone_smax` = 2, 3, 4 against 8.
-5. **The 1024³ cone run:** drop it, or rerun its 512³ partner in its
-   configuration as a resolution appendix.
-6. **Scope:** FLD/P1 (planned in `docs/PLAN.md`, not built) stays out.
+**Decided (user, 2026-11-05):**
+- Compare at fixed z.
+- Show the case A + RR rays (Figures 2–3).
+- No reach test for the cone (`otvet_cone_smax` stays 8).
+- No 1024³ cone; the suite's 512³ cone.
+- FLD/P1 (planned in `docs/PLAN.md`, not built) stays out.
+
+**Still open: the a priori analysis (§3–4, Figures 5–6).** It needs the
+rays' own Eddington tensor (`tensor_dump = 1`).
+- **The suite** is the 512³ set with one set of parameters, and Figures 1–3
+  use it. But none of its runs wrote the tensor, and each kept only its
+  last checkpoint, so the dump can't be added by a restart.
+- **The earlier 512³ set** (`docs/rt_methods_512.md`, `otvet_closure.md`
+  §7: constant 0.2c, f_esc = 0.23, case A + RR) had no tensor dump either.
+  Its runs were overwritten by the suite under the same names.
+- **The only dumps are the 256³ runs**, which share that earlier set's
+  parameters.
+
+The choice:
+- (a) the 256³ dumps, stated as a different configuration; or
+- (b) a new 512³ ray run with `tensor_dump = 1` in the suite's
+  configuration: one serial node for about 24 h, plus disk for the dumps
+  at the snapshot steps.
 
 ## 5. References
 
@@ -445,9 +454,8 @@ purpose):
   - Rerun `tensor_compare.py` with the final cone (blend) at all 13
     redshifts (Figure 5).
   - Figure 6.
-  - The `smax` test (decision 4).
   - The Appendix A table.
-  - If the user picks 1(b), launch the 512³ `tensor_dump` ray run.
+  - If the user picks (b) in §4, launch the 512³ `tensor_dump` ray run.
 - **References:** verify the "snippet" and "from memory" entries in a
   session with web access (arXiv and ADS are not reachable from klone),
   and build `refs.bib` here.
