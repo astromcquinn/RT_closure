@@ -354,6 +354,21 @@ Notation (define once):
   - First-order GLF diffusion.
 - **Relation to Gnedin (2025)'s CROC/Thesan comparison and to Wu+21's
   linear theory.**
+- **Flux-limited diffusion, not run; expected failures** (reasoned, not
+  measured). The flux is F = −ĉ λ(R) ∇N/κ, with R = |∇N|/(κN): it has no
+  memory and always points down the local gradient.
+  - No shadows: light flows around obstacles, so neutral islands are
+    eaten from every side and self-shielded gas is over-ionised.
+  - No crossing light: like M1, only the net flux down ∇N, with no beams
+    through other light.
+  - After overlap, in ionised gas R = λ_mfp |∇ln N| ≫ 1 almost everywhere
+    in the box. The limiter then makes every photon a single beam down
+    the gradient (|F| → ĉN, Eddington factor → 1), where the true light
+    is nearly isotropic. That is the opposite extreme from M1, whose own
+    fluxes cancel. Wu+21's linear theory, in which FLD at small R is plain
+    diffusion like M1, holds only for fluctuations too weak to matter in
+    the box. The sign of the resulting P_Γ error is not predictable
+    without a run.
 - **Extensions:** per-group cones, retarded sources, the cone on AMR
   levels.
 
@@ -392,12 +407,9 @@ Notation (define once):
 - No reach test for the cone (`otvet_cone_smax` stays 8).
 - No 1024³ cone; the suite's 512³ cone.
 
-**Open: flux-limited diffusion** (asked 2026-11-05). FLD is not built:
-`docs/PLAN.md`, "Thread B", has the plan and prompt (an implicit per-group
-solve with the Levermore–Pomraning limiter, whose paper the user is to
-supply). The recommendation is to leave it out of this paper and mention
-it in the discussion; P1 (χ = 1/3 in the existing solver) is a cheap
-optional end member, never to be labelled FLD.
+**Decided (user, 2026-11-05): no flux-limited diffusion in this paper.**
+It is not built (`docs/PLAN.md`, "Thread B", has the plan). The
+discussion mentions it with the expected failures (§2, Discussion).
 
 **Decided (user, 2026-11-05): the tensor comparison is in the paper,
 from the 256³ runs "for now at least"** (option (a) below, as a two-panel
