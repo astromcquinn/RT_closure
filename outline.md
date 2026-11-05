@@ -4,8 +4,10 @@
 "not the paper, a minimal outline and references, more complete on the new
 methods"). Sources: the uniform 512³ suite (`docs/rt_suite_512.md`), the
 closure design and validation (`docs/otvet_closure.md`), the literature
-notes (`docs/otvet_closure_literature.md`). The paper itself goes in its own
-repository; figures are made on klone by threads (§6).*
+notes (`docs/otvet_closure_literature.md`). Every `docs/`, `src/`,
+`include/`, `tools/` and `data/` path below is in the code repository,
+`astromcquinn/NewRadHydroCode`; this repository (private) holds the paper.
+Figures are made on klone by threads (§6).*
 
 Working titles:
 - *An HI-attenuated Eddington tensor for moment radiative transfer of
@@ -448,7 +450,7 @@ purpose):
   - If the user picks 1(b), launch the 512³ `tensor_dump` ray run.
 - **References:** verify the "snippet" and "from memory" entries in a
   session with web access (arXiv and ADS are not reachable from klone),
-  and build `refs.bib` in the paper repository.
-- **Paper repository:** `main.tex`, `refs.bib`, `figures/` (the PDFs),
+  and build `refs.bib` here.
+- **This repository:** `main.tex`, `refs.bib`, `figures/` (the PDFs),
   and `figures/README` naming the scripts and the NewRadHydroCode commit
   of each figure. No code or data from the private Fortran submodule.
