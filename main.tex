@@ -144,34 +144,39 @@ in $z$ (Table~\ref{tab:runs}), we compare them at fixed redshift.
 %Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
 
 
-\subsection{Adaptive ray tracing (the reference)}
+The seven runs differ only in how the radiation is transported:
 \begin{itemize}
-\item HEALPix rays split adaptively \citep{abel02,gorski05}, 5 frequency groups, photon-conserving deposit.
-\item $\Gamma$ statistics use \texttt{gammaHI\_avg}, $\Gamma$ averaged
-  over the hydro step's RT substeps (removes the rays' sampling noise).
-\item The case A + recombination-radiation rays: the rays' own physics
-  variation (shown in Figs.~\ref{fig:pkx}--\ref{fig:pkg}).
-\end{itemize}
-
-\subsection{The moment solver}
-\begin{itemize}
-\item Per group $g$, at the reduced speed of light:
-\begin{align}
-\partial_t N_g + \chat\,\nabla\cdot\mathbf F_g &= S_g - \text{absorption},\\
-\partial_t \mathbf F_g + \chat^2\,\nabla\cdot(\mathsf D\,N_g) &= -\text{absorption},
-\end{align}
-  $N_g$ the photons per mean H atom. First-order GLF (Rusanov) flux, wave
-  speed $\chat$, 4 subcycles per RT substep; the same cell physics,
-  redshifting and photon conservation as the rays; isotropic injection.
-\item M1 \citep{levermore84}:
-  $\mathsf D=\frac{1-\chi}{2}\mathsf I+\frac{3\chi-1}{2}\hat u\hat u\T$,
-  $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$, $f=|\mathbf F|/\chat N$.
-\item Thin OTVET \citep{gnedin01}: $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$,
-\begin{equation}
-\mathsf S(\mathbf x)=\sum_s L_s\,\frac{\mathbf d\,\mathbf d\T}{|\mathbf d|^4},
-\qquad \mathbf d=\mathbf x-\mathbf x_s\ \text{(minimum image)},
-\end{equation}
-  by FFT once per hydro step.
+\item \textbf{Rays}, the reference. Each source emits rays along HEALPix
+  directions \citep{gorski05}, which split as they travel so that every
+  cell they reach is crossed by several rays \citep{abel02,trac07}, and
+  deposit their
+  photoionizations cell by cell, conserving photons. One run uses case-B
+  recombination, the other case A with the recombination radiation
+  transported.
+\item \textbf{Moment methods.} For each frequency group $g$ we evolve the
+  photon density $N_g$ and the flux $\chat\,\mathbf F_g$,
+  \begin{align}
+  \partial_t N_g + \chat\,\nabla\cdot\mathbf F_g &= S_g - \chat\kappa_g N_g,\\
+  \partial_t \mathbf F_g + \chat\,\nabla\cdot(\mathsf D\,N_g) &= -\chat\kappa_g \mathbf F_g,
+  \end{align}
+  with a first-order Godunov scheme using global Lax--Friedrichs fluxes
+  of wave speed $\chat$. The sources $S_g$, the absorption $\kappa_g$ and
+  the redshifting are those of the ray runs. The methods differ only in
+  the Eddington tensor $\mathsf D$ (trace 1).
+\item \textbf{M1} \citep{levermore84} takes $\mathsf D$ from the local
+  reduced flux $f=|\mathbf F_g|/N_g$:
+  $\mathsf D=\frac{1-\chi}{2}\mathsf I+\frac{3\chi-1}{2}\hat{\mathbf u}\hat{\mathbf u}\T$,
+  with $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$ and $\hat{\mathbf u}=\mathbf F_g/|\mathbf F_g|$.
+\item \textbf{Thin OTVET} \citep{gnedin01} takes $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$,
+  the Eddington tensor of the optically thin light of the current sources,
+  \begin{equation}
+  \mathsf S(\mathbf x)=\sum_s L_s\,\frac{\mathbf d_s\mathbf d_s\T}{|\mathbf d_s|^4},
+  \qquad \mathbf d_s=\mathbf x-\mathbf x_s,
+  \end{equation}
+  with each source $s$ of luminosity $L_s$ at its nearest periodic image,
+  computed by FFT once per hydro step.
+\item \textbf{Split, screen and cone}, the three new closures of
+  \S\ref{sec:closures}, replace $\mathsf h$ in thin OTVET.
 \end{itemize}
 
 %======================================================================
@@ -214,7 +219,7 @@ A=\frac{|\mathsf h-\mathsf I/3|}{\sqrt{2/3}},
 \end{itemize}
 
 %======================================================================
-\section{New closures}
+\section{New closures}\label{sec:closures}
 Notation: $q_g$ the photons per unit $L$ per RT substep injected into
 group $g$, and $N_{{\rm dir},g}$ the unattenuated steady-state photons of
 the current sources (minimum image),
