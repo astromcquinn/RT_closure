@@ -179,43 +179,6 @@ The seven runs differ only in how the radiation is transported:
   \S\ref{sec:closures}, replace $\mathsf h$ in thin OTVET.
 \end{itemize}
 
-%======================================================================
-\section{The Eddington tensor of the rays}
-\begin{itemize}
-\item 256$^3$, $20\mpch$, the same cell; constant $\chat=0.2c$,
-  $f_{\rm esc}=0.23$, case A + recombination radiation (a different
-  configuration from the suite: state it). 13 snapshots, $z=10$--5
-  ($\xv=0.05$--1).
-\item The rays record $S_0=\sum w$, $\mathbf S_1=\sum w\hat n$,
-  $\mathsf S_2=\sum w\hat n\hat n\T$ over their deposits ($w$ the
-  $\Gamma$-weighted photons); $\mathsf h_{\rm rays}=\mathsf S_2/S_0$.
-  Sampling noise (odd vs.\ even substeps): 0.005--0.02 per cell.
-\item Metrics (Frobenius norm over all nine components, normalised by
-  $\sqrt{2/3}$, the distance from isotropy to one beam):
-\begin{equation}
-\epsilon=\frac{|\mathsf h-\mathsf h_{\rm rays}|}{\sqrt{2/3}},\qquad
-A=\frac{|\mathsf h-\mathsf I/3|}{\sqrt{2/3}},
-\end{equation}
-  $\epsilon$ averaged over ionised cells weighted by $S_0$; $A$ on $8^3$
-  blocks ($0.625\mpch$) of $\sum S_0\mathsf h$, the coherent anisotropy
-  behind $P_\Gamma$ at $k\lesssim3\hmpc$. Each closure is evaluated on the
-  rays' sources and HI and weighted by the rays' $S_0$.
-\item Before overlap: thin OTVET good in the bulk; errors in the
-  10--20\% of ionised cells that are shadowed or have
-  $\Gamma<\langle\Gamma\rangle/2$, where the rays are more beamed.
-\item During overlap: thin OTVET too isotropic on large scales (block $A$
-  0.32 vs.\ 0.42 at $z=7.4$): edge cells are lit from inside their own
-  region, OTVET adds regions behind neutral gas.
-\item After overlap: per unit emissivity $\int_{\rm cube}d^3r/(4\pi r^2)=0.610\,L$,
-  so the anisotropy is right only while $\lambda_{\rm eff}\approx0.61L$;
-  block $A$ stays at 0.25 while the rays' falls to 0.07; the $P_\Gamma$
-  excess follows $(\lambda_{\rm eff}/0.61L)^2$ (Fig.~\ref{fig:norm};
-  \citealt{wu21}, appendix~\ref{app:norm}).
-\item M1 given the rays' flux: too isotropic on large scales in every
-  regime ($A\approx0.02$ vs.\ 0.11 after overlap).
-\item Radiation-force error ($\nabla\cdot(S_0\mathsf h)$ per $k$): at most
-  one sentence (thin OTVET anti-correlated with the rays after overlap) or
-  an appendix.
 \end{itemize}
 
 %======================================================================
@@ -611,6 +574,49 @@ Figs.~\ref{fig:pkx}--\ref{fig:pkg} and are to be unified.}}
 \item \texttt{gammaHI\_avg} vs.\ the last substep's $\Gamma$; odd vs.\
   even substeps of the tensor.
 \end{itemize}
+
+
+\appendix
+
+
+%======================================================================
+\section{The Eddington tensor of the rays}
+\begin{itemize}
+\item 256$^3$, $20\mpch$, the same cell; constant $\chat=0.2c$,
+  $f_{\rm esc}=0.23$, case A + recombination radiation (a different
+  configuration from the suite: state it). 13 snapshots, $z=10$--5
+  ($\xv=0.05$--1).
+\item The rays record $S_0=\sum w$, $\mathbf S_1=\sum w\hat n$,
+  $\mathsf S_2=\sum w\hat n\hat n\T$ over their deposits ($w$ the
+  $\Gamma$-weighted photons); $\mathsf h_{\rm rays}=\mathsf S_2/S_0$.
+  Sampling noise (odd vs.\ even substeps): 0.005--0.02 per cell.
+\item Metrics (Frobenius norm over all nine components, normalised by
+  $\sqrt{2/3}$, the distance from isotropy to one beam):
+\begin{equation}
+\epsilon=\frac{|\mathsf h-\mathsf h_{\rm rays}|}{\sqrt{2/3}},\qquad
+A=\frac{|\mathsf h-\mathsf I/3|}{\sqrt{2/3}},
+\end{equation}
+  $\epsilon$ averaged over ionised cells weighted by $S_0$; $A$ on $8^3$
+  blocks ($0.625\mpch$) of $\sum S_0\mathsf h$, the coherent anisotropy
+  behind $P_\Gamma$ at $k\lesssim3\hmpc$. Each closure is evaluated on the
+  rays' sources and HI and weighted by the rays' $S_0$.
+\item Before overlap: thin OTVET good in the bulk; errors in the
+  10--20\% of ionised cells that are shadowed or have
+  $\Gamma<\langle\Gamma\rangle/2$, where the rays are more beamed.
+\item During overlap: thin OTVET too isotropic on large scales (block $A$
+  0.32 vs.\ 0.42 at $z=7.4$): edge cells are lit from inside their own
+  region, OTVET adds regions behind neutral gas.
+\item After overlap: per unit emissivity $\int_{\rm cube}d^3r/(4\pi r^2)=0.610\,L$,
+  so the anisotropy is right only while $\lambda_{\rm eff}\approx0.61L$;
+  block $A$ stays at 0.25 while the rays' falls to 0.07; the $P_\Gamma$
+  excess follows $(\lambda_{\rm eff}/0.61L)^2$ (Fig.~\ref{fig:norm};
+  \citealt{wu21}, appendix~\ref{app:norm}).
+\item M1 given the rays' flux: too isotropic on large scales in every
+  regime ($A\approx0.02$ vs.\ 0.11 after overlap).
+\item Radiation-force error ($\nabla\cdot(S_0\mathsf h)$ per $k$): at most
+  one sentence (thin OTVET anti-correlated with the rays after overlap) or
+  an appendix.
+
 
 \bibliographystyle{plainnat}
 \bibliography{refs}
