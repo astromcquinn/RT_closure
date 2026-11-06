@@ -180,6 +180,7 @@ The advantage of M1 is that it needs only each cell's own moments and is exact f
   \begin{equation}
   \mathsf S(\mathbf x)=\sum_s L_s\,\frac{\mathbf d_s\mathbf d_s\T}{|\mathbf d_s|^4},
   \qquad \mathbf d_s=\mathbf x-\mathbf x_s,
+  \label{eqn:otvet}
   \end{equation}
   with each source $s$ of luminosity $L_s$ at its nearest periodic image,
   computed by FFT once per hydro step. The tensor is non-local and exact
@@ -198,13 +199,13 @@ The advantage of M1 is that it needs only each cell's own moments and is exact f
   from earlier emission, and so arrive from all directions. The split
   corrects OTVET's anisotropy when the mean free path is larger than the
   box, with no free parameter and at no extra cost.
-\item \textbf{Screen} (new): $\mathsf h$ from the sources' light
+\item \textbf{Screen} (new): Rather than the optically thin approximation as in equation~\ref{eqn:otvet}, $\mathsf h$ from the sources' light
   attenuated by $e^{-r/\lambda}$ and summed over all periodic images, with
   $\lambda$ the photons' mean path from the photon budget. This is the
   remedy \citet{wu21} propose: attenuating at the mean free path gives the
   right anisotropy on average, but with one $\lambda$ for every
-  direction.
-\item \textbf{Cone} (new): $\mathsf h$ from the sources' light attenuated
+  direction.  Here $\lambda$ is calculated by \todo{fill in}
+\item \textbf{Cone} (new): This is our most sophisticated closure. $\mathsf h$ from the sources' light attenuated
   by the HI along each direction, traced through cones out to several box
   lengths, with a photon-budget cutoff, and blended with the split on
   scales of a few cells. Neither the split nor the screen knows where the
@@ -213,6 +214,8 @@ The advantage of M1 is that it needs only each cell's own moments and is exact f
   shadows and the right large-scale anisotropy, and cone tracing keeps the
   cost independent of the number of sources.
 \end{itemize}
+The walltime for all the simple clsures are about 10 hours (cone takes an extra $\approx 45$ minutes), and the runs with rays take about 24 hours.
+
 
 %======================================================================
 \section{New closures}\label{sec:closures}
@@ -407,52 +410,7 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
 \todo{write.}
 
 %======================================================================
-\section*{Tables}
 
-\begin{table}[h]
-\centering
-\caption{The 512$^3$ runs (\texttt{docs/rt\_suite\_512.md} \S3--4): the
-redshifts at which $\xv$ reaches 0.5 and 0.99, the Thomson optical depth,
-and the wall time on one 192-core node from $z=100$ to 5.}
-\label{tab:runs}
-\begin{tabular}{llcccc}
-\toprule
-run & keys & $z_{50}$ & $z_{99}$ & $\tau_{\rm es}$ & wall \\
-\midrule
-rays, case B (reference) & \texttt{rays} & 6.94 & 5.58 & 0.0591 & 23\,h\,52 \\
-rays, case A + RR & \texttt{recomb\_rad = 1} & 6.98 & 5.61 & 0.0595 & 24\,h\,51 \\
-M1 & \texttt{m1} & 6.95 & 5.66 & 0.0594 & 9\,h\,47 \\
-OTVET, thin & \texttt{otvet} & 6.94 & 5.64 & 0.0594 & 9\,h\,56 \\
-split & \texttt{otvet\_split = 1} & 6.94 & 5.64 & 0.0594 & 10\,h\,38 \\
-screen & \texttt{otvet\_closure = screen} & 6.96 & 5.68 & 0.0596 & 10\,h\,08 \\
-cone & \texttt{otvet\_closure = cone} & 6.94 & 5.60 & 0.0594 & 10\,h\,35 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\centering
-\caption{The closure parameters and their defaults
-(\texttt{docs/otvet\_closure.md} \S5). The defaults of the first two keys
-give the original thin tensor.}
-\label{tab:params}
-\begin{tabular}{lll}
-\toprule
-key & meaning & default \\
-\midrule
-\texttt{otvet\_closure} & thin, screen or cone & thin \\
-\texttt{otvet\_split} & direct + diffuse split (thin or screen) & 0 \\
-\texttt{otvet\_screen\_lambda} & screening length (cells); 0: photon budget & 0 \\
-\texttt{otvet\_cone\_nside} & HEALPix nside of the cones & 4 \\
-\texttt{otvet\_cone\_coarse} & receivers every $C$ cells & 4 \\
-\texttt{otvet\_cone\_rc} & near-field radius $r_c$ (cells) & 8 \\
-\texttt{otvet\_cone\_taucap} & group-1 $\tau$ cap per cell & 1 \\
-\texttt{otvet\_cone\_smax} & reach of the cones (boxes) & 8 \\
-\texttt{otvet\_cone\_budget} & cutoff from the photon budget & 1 \\
-\texttt{otvet\_cone\_blend} & blend $\sigma$ (cells); 0: the cone alone & 4 \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 %======================================================================
 \section*{Figures}
