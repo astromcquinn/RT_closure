@@ -8,6 +8,8 @@ and the command of each final figure here.
 | file | paper | source (NewRadHydroCode) | made by | status |
 |---|---|---|---|---|
 | `fig1_maps_xHII_draft.png` | Fig. 1 | `docs/figures/rt_suite_512_maps_xHII.png` (e800544) | `tools/analysis/rt_suite_figures.py` on the 512³ suite | draft: all seven runs; final with four columns and an early row |
+| `fig_gamma_maps_draft.png` | Γ maps | `docs/figures/rt_suite_512_maps_gamma.png` (e800544), the x_V = 0.49 row cut and the colour bar redrawn (LogNorm 1e-14–1e-11, magma) | crop by hand (2026-11-06); final: `rt_suite_figures.py --xv-gamma 0.8,0.97,1.0` | draft |
+| — | profiles | — | `tools/analysis/gamma_profile.py` (NewRadHydroCode, branch `claude/beautiful-archimedes-kcgsvx`) on the 512³ suite | to make on klone |
 | `fig2_pk_xHII_draft.png` | Fig. 2 | `docs/figures/rt_suite_512_pk_xHII.png` (e800544) | `rt_suite_figures.py` | draft: content final, paper style to do |
 | `fig3_pk_gamma_draft.png` | Fig. 3 | `docs/figures/rt_suite_512_pk_gamma.png` (e800544) | `rt_suite_figures.py` | draft: epochs by x_V; final at z ≈ 6.0, 5.5, 5.0 (a `--z` option) |
 | `fig4_schematic.{pdf,png}` | Fig. 4 | — | `scripts/fig4_schematic.py` (this repository) | first version |

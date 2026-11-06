@@ -280,6 +280,16 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
 \item Morphology (Fig.~\ref{fig:maps}): M1's rounder fronts, no proximity
   zones; thin OTVET's diffuse fronts and early-vanishing islands; the
   cone's sharp islands.
+\item $\Gamma_{\rm HI}$ maps (Fig.~\ref{fig:mapsg}) and proximity zones
+  (Fig.~\ref{fig:profile}): the rays and the cone resolve a $\Gamma$ that
+  falls away from each source; M1 fills its bubbles with a nearly uniform
+  $\Gamma$ (a local closure diffuses once the background dominates $N$: a
+  source's excess is then smaller by $\sim3r/\lambda$ than streaming);
+  thin OTVET beams the background along the source directions after
+  overlap (bright patches, 99.9\% point of $\Gamma/\langle\Gamma\rangle$
+  4.2 against the rays' 1.85; M1 1.26, cone 1.93 at $z=4.99$). The
+  source cells themselves are set by the injection order
+  (\texttt{moment\_inject}), not the closure.
 \item $x_{\rm HII}$ power (Fig.~\ref{fig:pkx}): large scales agree except
   M1. $r(k=4.9\hmpc)$ at $\xv=0.49/0.79/0.97$: cone 0.92/0.86/0.65, thin
   0.85/0.69/0.30, M1 0.65/0.43/0.26; split = thin.
@@ -375,6 +385,31 @@ key & meaning & default \\
 Final: columns rays, M1, thin OTVET, cone (case A + RR optional); an
 earlier row at $z\approx8$ ($\xv\approx0.25$) from the movie slabs.}
 \label{fig:maps}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_gamma_maps_draft.png}
+\caption{\draft{\texttt{rt\_suite\_512\_maps\_gamma.png} without its
+$\xv=0.49$ row, the colour bar redrawn (same map and range).}
+$\Gamma_{\rm HI}$ (\texttt{gammaHI\_avg}) in 8-cell slabs through the box
+middle at $z=6.20$, 5.70 and 4.99 ($\xv=0.79$, 0.97, 1.00 in the rays), all
+seven runs. Final: regenerated with \texttt{rt\_suite\_figures.py
+--xv-gamma 0.8,0.97,1.0}; possibly a zoom on a source cluster and
+$\Gamma/\langle\Gamma\rangle$ on a narrower range to show the proximity
+zones.}
+\label{fig:mapsg}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\placeholder{stacked $\Gamma(r)/\langle\Gamma\rangle_{\rm ion}$ around the
+sources (the brightest third) at $z\approx6.0$, 5.5, 5.0: rays, M1, thin
+OTVET, cone (and split, screen, case A + RR); a $1+E(r_0/r)^2$ streaming
+guide; below, the ratio to the rays. \texttt{tools/analysis/gamma\_profile.py}
+(NewRadHydroCode), on klone.}
+\caption{Stacked proximity-zone profiles.}
+\label{fig:profile}
 \end{figure}
 
 \begin{figure}[h]
