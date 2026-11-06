@@ -300,6 +300,14 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
   Why they agree at $k\lambda\gg1$: once the anisotropy amplitude is
   right, $P_\Gamma$ is the sources' $1/r^2$ near field \citep{wu21}.
   $\Gamma$ PDF quantiles: Table \todo{T3}.
+\item $\tau_{\rm eff}$ over $50\mpch$ segments (Fig.~\ref{fig:taueff}):
+  rescaled to the observed mean flux, the width of the distribution
+  follows the $\Gamma$ fluctuations (expected: thin OTVET broader, M1
+  narrower, the cone close to the rays); the 40\,Mpc/$h$ box makes the
+  scatter a lower bound.
+\item 21cmFAST on the same density field (Fig.~\ref{fig:21cmfast}): is
+  the excursion set closer to the rays or to the moment methods?
+  \todo{cite Mesinger, Furlanetto \& Cen 2011; Murray+20.}
 \item IGM statistics: the same for every method against the data
   \citep{gaikwad23,becker21,zhu23,bosman22}; $\lambda_{\rm mfp}$
   3.5--5$\times$ too long in every run (resolution, not the closure).
@@ -471,6 +479,27 @@ $(\lambda_{\rm eff}/0.61L)^2$; data in \texttt{docs/otvet\_closure.md}
 \caption{Thin OTVET's after-overlap error against the prediction of
 \citet{wu21}.}
 \label{fig:norm}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\placeholder{cumulative $\tau_{\rm eff}$ distributions over $50\mpch$
+segments (rescaled to the Bosman+22 mean flux) at $z\approx5.98$, 5.49,
+4.99, and the 16/50/84\% points against $z$, every method
+(\texttt{prompts/taueff\_21cmfast.md}, part A).}
+\caption{The Ly$\alpha$ forest's $\tau_{\rm eff}$ scatter by RT method.}
+\label{fig:taueff}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\placeholder{21cmFAST's excursion set on the suite's density field
+($\zeta(z)$ matched to the rays' $\xv$): $\Delta^2$ of $x_{\rm HII}$, the
+ratio and $r(k)$ with the rays, beside every RT method; a maps column
+(\texttt{prompts/taueff\_21cmfast.md}, part B).}
+\caption{A semi-numerical model against the RT methods on the same density
+field.}
+\label{fig:21cmfast}
 \end{figure}
 
 %======================================================================
