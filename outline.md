@@ -74,9 +74,10 @@ Configuration:
   `params.txt`.
 
 What exists, and what it limits:
-- **3D snapshots** at z = 15, 7, 6.5, 6.25, 6, 5.75, 5.5, 5.25 and 5, with
-  x_HI, T, ρ, `gammaHI` and `gammaHI_avg`. In the reference run, x_V ≈ 0.49
-  at z = 7, ≈ 0.79 at 6.25 and ≈ 0.97 at 5.75.
+- **3D snapshots** at the nominal z = 15, 7, 6.5, 6.25, 6, 5.75, 5.5, 5.25
+  and 5 (actual e.g. 6.97, 6.20, 5.98, 5.70, 5.49, 5.25, 4.99), with x_HI,
+  T, ρ, `gammaHI` and `gammaHI_avg`. In the reference run, x_V = 0.49 at
+  z = 6.97, 0.79 at 6.20 and 0.97 at 5.70.
 - **Movie slabs** (8 cells thick) every Δz = 0.025.
 - **One checkpoint per run**, the last. Power spectra are therefore
   possible only at the snapshot redshifts; an earlier epoch (e.g.
@@ -389,8 +390,8 @@ Notation (define once):
 
 | # | content | data | tool | status |
 |---|---|---|---|---|
-| **1** | Reionization images: x_HII slabs (8 cells) with columns rays, M1, thin OTVET and cone (a case A + RR column if wanted), and rows at z ≈ 8 (x_V ≈ 0.25, slab only), 7, 6.25 and 5.75 (x_V ≈ 0.49 / 0.79 / 0.97). Optionally a log Γ_HI row. | suite snapshots and movie slabs | `rt_suite_figures.py` (`maps_xHII.png` already has all 7 runs at these three snapshots); the movie frames for z ≈ 8 | exists; trim the columns, add the early row, paper style |
-| **2** | Δ² of x_HII, the ratio to the rays and r(k) at z = 7, 6.25 and 5.75: M1, thin, split, screen, cone and the case A + RR rays | suite snapshots | `rt_suite_figures.py` `pk_xHII.png` (case A + RR already in it) | exists; paper style |
+| **1** | Reionization images: x_HII slabs (8 cells) with columns rays, M1, thin OTVET and cone (a case A + RR column if wanted), and rows at z ≈ 8 (x_V ≈ 0.25, slab only), 6.97, 6.20 and 5.70 (x_V = 0.49 / 0.79 / 0.97). Optionally a log Γ_HI row. | suite snapshots and movie slabs | `rt_suite_figures.py` (`maps_xHII.png` already has all 7 runs at these three snapshots); the movie frames for z ≈ 8 | exists; trim the columns, add the early row, paper style |
+| **2** | Δ² of x_HII, the ratio to the rays and r(k) at z = 6.97, 6.20 and 5.70: M1, thin, split, screen, cone and the case A + RR rays | suite snapshots | `rt_suite_figures.py` `pk_xHII.png` (case A + RR already in it) | exists; paper style |
 | **3** | Δ² of δ_Γ (`gammaHI_avg`), the ratio and r(k) at z = 6.0, 5.5 and 5.0: every method and the case A + RR rays | suite snapshots | `rt_suite_figures.py`; it chooses epochs by the rays' x_V, so it needs a `--z` option for the after-overlap redshifts | to make |
 | 4 | Schematic of the closures: the split's budget picture and the cone march | — | drawn | to make |
 | **5** | The tensor comparison, two panels against z (or x_V): (top) block-8³ anisotropy A of the rays (black, labelled "rays": their tensor is the truth, h_true = S2/S0) and of each closure; (bottom) the S0-weighted cell error divided by √(2/3), with the rays' own sampling noise as a grey floor (`tensor_compare.py`'s noise: the distance between the odd- and even-substep h_true, halved). Curves: thin, split, screen, cone (final), and M1 given the rays' flux. | 256³ dumps (13 redshifts, x_V = 0.05–1) | `apps/otvet_tensor` (the code's own tensors: the budget λ of the screen, the final cone with its blend) into `tensor_compare.py --moment`, then `tensor_summary.py` | draft exists (`figures/otvet_closure_apriori.png`, six panels, prototype tensors, final cone at six redshifts only); to remake with the code's tensors at all 13 |
