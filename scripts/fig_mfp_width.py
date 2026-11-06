@@ -33,7 +33,7 @@ DATA = os.path.join(HERE, "..", "data")
 # the paper's runs, colours and line styles (as rt_suite_figures.py)
 RUNS = [("rays", "rays", "#000000", "-"),
         ("M1", "M1", "#2a78d6", "-"),
-        ("OTVET", "OTVET (thin)", "#eb6834", "-"),
+        ("OTVET", "OTVET", "#eb6834", "-"),
         ("split", "split", "#1baf7a", "--"),
         ("screen", "screen", "#eda100", "-."),
         ("cone", "cone", "#e87ba4", ":"),

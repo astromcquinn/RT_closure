@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Draft of Figure 1 cut from a rendered figure: the x_HII maps of the rays,
-M1, thin OTVET, the cone and 21cmFAST (on the suite's own density,
+M1, OTVET, the cone and 21cmFAST (on the suite's own density,
 R_max = 15 Mpc; mass-dependent sources with the suite's abundance-matched
 slope, branch 21cmfast-mass-sources, 61b8312) at z = 6.97, 6.20 and 5.70.
 
@@ -33,7 +33,7 @@ COLS = {"rays": (124, 467), "rays A+RR": (473, 816), "M1": (822, 1165), "OTVET":
 XV = {6.97: 0.49, 6.45: 0.68, 6.20: 0.79, 5.98: 0.88, 5.70: 0.97}
 
 PICK_ROWS = [6.97, 6.20, 5.70]
-PICK_COLS = [("rays", "rays"), ("M1", "M1"), ("OTVET", "OTVET (thin)"), ("cone", "cone"),
+PICK_COLS = [("rays", "rays"), ("M1", "M1"), ("OTVET", "OTVET"), ("cone", "cone"),
              ("21cmFAST", "21cmFAST")]
 
 

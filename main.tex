@@ -42,7 +42,7 @@
   recombinations: the two standard closures fail in opposite ways against
   adaptive rays. M1 has no proximity zones, its fronts decorrelate at a few
   Mpc, and after overlap $P_\Gamma$ is $\sim25\times$ too low at
-  $k\lesssim2\hmpc$. Thin OTVET follows the rays to $\xv\approx0.8$, then
+  $k\lesssim2\hmpc$. OTVET follows the rays to $\xv\approx0.8$, then
   has 11--14$\times$ the rays' $P_\Gamma$.
 \item The rays' own Eddington tensor (256$^3$) shows why: during overlap
   the thin tensor is too isotropic on large scales (light from regions
@@ -162,33 +162,55 @@ density $N$ and the flux $\chat\,\mathbf F$,
 with a first-order Godunov scheme using global Lax--Friedrichs fluxes of
 wave speed $\chat$. The sources $S$, the absorption $\kappa$ and the
 redshifting are those of the ray runs. The methods differ only in the
-Eddington tensor $\mathsf D$ (trace 1):
+Eddington tensor $\mathsf D$ (trace 1). M1 and OTVET are the two closures
+in common use in reionization simulations; we also consider three new
+ones, described in \S\ref{sec:closures}:
 \begin{itemize}
 \item \textbf{M1} \citep{levermore84} takes $\mathsf D$ from the local
   reduced flux $f=|\mathbf F|/N$:
   $\mathsf D=\frac{1-\chi}{2}\mathsf I+\frac{3\chi-1}{2}\hat{\mathbf u}\hat{\mathbf u}\T$,
   with $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$ and $\hat{\mathbf u}=\mathbf F/|\mathbf F|$.
-\item \textbf{Thin OTVET} \citep{gnedin01} takes $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$,
-  the Eddington tensor of the optically thin light of the current sources,
+  It needs only each cell's own moments and is exact for a single beam,
+  which makes it cheap and local
+  \citep{aubert08,rosdahl13,kannan19,kannan22}. With one flux direction
+  per cell, however, it cannot represent light arriving from several
+  directions, which it merges and diffuses.
+\item \textbf{OTVET} \citep{gnedin01,gnedin14} takes
+  $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$, the Eddington tensor
+  of the optically thin light of the current sources,
   \begin{equation}
   \mathsf S(\mathbf x)=\sum_s L_s\,\frac{\mathbf d_s\mathbf d_s\T}{|\mathbf d_s|^4},
   \qquad \mathbf d_s=\mathbf x-\mathbf x_s,
   \end{equation}
   with each source $s$ of luminosity $L_s$ at its nearest periodic image,
-  computed by FFT once per hydro step.
+  computed by FFT once per hydro step. The tensor is non-local and exact
+  around an isolated source, so it keeps the radial geometry of the
+  light. It ignores absorption, though, and counts sources only out to
+  half a box, which makes it too anisotropic once the mean free path
+  exceeds the box \citep{wu21}.
 \item \textbf{Split} (new): only as many photons as the current sources
   would supply without absorption, $N_{\rm dir}$, carry the direction of
   $\mathsf h$; the rest are isotropic,
   $\mathsf D=\mathsf I/3+\min(1,N_{\rm dir}/N)\,(\mathsf h-\mathsf I/3)$.
+  Photons beyond $N_{\rm dir}$ must come from farther than half a box or
+  from earlier emission, and so arrive from all directions. The split
+  corrects OTVET's normalization with no free parameter and at no extra
+  cost.
 \item \textbf{Screen} (new): $\mathsf h$ from the sources' light
   attenuated by $e^{-r/\lambda}$ and summed over all periodic images, with
-  $\lambda$ the photons' mean path from the photon budget \citep{wu21}.
+  $\lambda$ the photons' mean path from the photon budget. This is the
+  remedy \citet{wu21} propose: attenuating at the mean free path gives the
+  right anisotropy on average, but with one $\lambda$ for every
+  direction.
 \item \textbf{Cone} (new): $\mathsf h$ from the sources' light attenuated
   by the HI along each direction, traced through cones out to several box
   lengths, with a photon-budget cutoff, and blended with the split on
-  scales of a few cells.
+  scales of a few cells. Neither the split nor the screen knows where the
+  neutral gas is: during overlap a cell is lit mainly from inside its own
+  ionized region. Attenuating along each direction by the actual HI gives
+  shadows and the right large-scale anisotropy, and cone tracing keeps the
+  cost independent of the number of sources.
 \end{itemize}
-The three new closures are described in \S\ref{sec:closures}.
 
 %======================================================================
 \section{New closures}\label{sec:closures}
@@ -208,7 +230,7 @@ defaults: Table~\ref{tab:params}; schematic: Fig.~\ref{fig:schematic}.
 \mathsf P_g = N_g\,\frac{\mathsf I}{3} + \min(N_g,N_{{\rm dir},g})\left(\mathsf h-\frac{\mathsf I}{3}\right)
 \end{equation}
 \begin{itemize}
-\item $N\le\Ndir$: thin OTVET exactly. $N>\Ndir$: the thin light's own
+\item $N\le\Ndir$: OTVET exactly. $N>\Ndir$: the thin light's own
   pressure $q_g\mathsf S/4\pi$ plus the excess photons as an isotropic gas.
 \item $N>\Ndir$ when photons outlive $\sim0.61L$ of travel:
   $\sum N/\sum\Ndir\approx\lambda_{\rm eff}/0.61L$, the anisotropy error
@@ -219,7 +241,7 @@ defaults: Table~\ref{tab:params}; schematic: Fig.~\ref{fig:schematic}.
 \item Cf.\ the CROC background split \citep{gnedin14} and
   \citet{gnedin01}'s background; here local, from the solution's $N$.
 \item Limits: amount of anisotropy only, not its direction; identical to
-  thin OTVET before overlap; no direction for the diffuse part.
+  OTVET before overlap; no direction for the diffuse part.
 \end{itemize}
 
 \subsection{Screened periodic kernel}
@@ -233,8 +255,8 @@ defaults: Table~\ref{tab:params}; schematic: Fig.~\ref{fig:schematic}.
   $\chat$ times the mean photon lifetime, from the start of the hydro step.
   The remedy of \citet{wu21}.
 \item Fails during overlap: one $\lambda$ cuts all directions by
-  distance; a priori more isotropic than thin OTVET at
-  $\xv=0.74$--0.94, force error 2.6--5.4$\times$ thin OTVET's at
+  distance; a priori more isotropic than OTVET at
+  $\xv=0.74$--0.94, force error 2.6--5.4$\times$ OTVET's at
   $k=0.47\hmpc$; in the suite a mottled $\Gamma$, $2\times$ $P_\Gamma$ at
   $k\approx2\hmpc$ during reionization.
 \end{itemize}
@@ -282,9 +304,9 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
 
 \subsection{Comparison with the rays' tensor}
 \begin{itemize}
-\item Fig.~\ref{fig:tensor}: thin OTVET too isotropic during overlap and
+\item Fig.~\ref{fig:tensor}: OTVET too isotropic during overlap and
   too anisotropic after; the split follows the rays only after overlap;
-  the screen only after; the cone in both, halving thin OTVET's cell error
+  the screen only after; the cone in both, halving OTVET's cell error
   during overlap.
 \end{itemize}
 
@@ -295,14 +317,14 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
   $\tau_{\rm es}$ within 0.0005 (photon budget); the cone ends closest
   ($\Delta z=0.02$).
 \item Morphology (Fig.~\ref{fig:maps}): M1's rounder fronts, no proximity
-  zones; thin OTVET's diffuse fronts and early-vanishing islands; the
+  zones; OTVET's diffuse fronts and early-vanishing islands; the
   cone's sharp islands.
 \item $\Gamma_{\rm HI}$ maps (Fig.~\ref{fig:mapsg}) and proximity zones
   (Fig.~\ref{fig:profile}): the rays and the cone resolve a $\Gamma$ that
   falls away from each source; M1 fills its bubbles with a nearly uniform
   $\Gamma$ (a local closure diffuses once the background dominates $N$: a
   source's excess is then smaller by $\sim3r/\lambda$ than streaming);
-  thin OTVET beams the background along the source directions after
+  OTVET beams the background along the source directions after
   overlap (bright patches, 99.9\% point of $\Gamma/\langle\Gamma\rangle$
   4.2 against the rays' 1.85; M1 1.26, cone 1.93 at $z=4.99$). The
   source cells themselves are set by the injection order
@@ -325,21 +347,21 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
     cone 11--14\% and M1 within 4\%.
   \item The 84--16\% width of $\tau_{\rm eff}$ at the observed $\langle
     F\rangle$: M1 broadest (+4--24\%; +24\% at $z=5.47$, just after its
-    overlap, and +11--14\% at $z\ge6$), thin OTVET
+    overlap, and +11--14\% at $z\ge6$), OTVET
     narrowest after overlap ($-12$--14\%), the cone within 7\% of the rays,
     case A + RR within 3\%.
   \item The reverse of the $P_\Gamma$ ordering: with a uniform $\Gamma$
     every method gives the same width, and after overlap $\langle\Gamma
     \rangle$ and $\langle\rho\rangle$ of a segment are correlated
     ($\tau\propto\rho^2/\Gamma$), so a method with too much $\Gamma$ power
-    near the sources (thin OTVET) narrows the distribution and one with
+    near the sources (OTVET) narrows the distribution and one with
     too little (M1) broadens it. The 40\,Mpc/$h$ box makes the scatter a
     lower bound (NewRadHydroCode \texttt{docs/taueff\_21cmfast.md} A.3, A.6).
   \end{itemize}
 \item 21cmFAST on the same density field, with sources matched to the
   suite's mass weighting (Figs.~\ref{fig:maps}, \ref{fig:21cmfast}): far
   from every RT method. 21--17\% of the cells differ from the rays by more
-  than 0.5 in $x_{\rm HII}$ at $\xv=0.49$--0.79 (M1 7--8\%, thin OTVET
+  than 0.5 in $x_{\rm HII}$ at $\xv=0.49$--0.79 (M1 7--8\%, OTVET
   3\%, the cone 2\%); $r(k)$ with the rays falls below 0.5 by
   $k\approx0.5$--$1\hmpc$; 1.6--3.1$\times$ the rays' power at
   $k\approx0.2\hmpc$, 0.5--0.8$\times$ at 1--3$\hmpc$. Matching the source
@@ -430,7 +452,7 @@ key & meaning & default \\
 \includegraphics[width=\linewidth]{figures/fig1_maps_xHII_draft.png}
 \caption{$x_{\rm HII}$ in 8-cell ($0.625\mpch$) slabs through the box
 middle at $z=6.97$, 6.20 and 5.70 ($\xv=0.49$, 0.79, 0.97 in the rays):
-the rays, M1, thin OTVET, the cone, and 21cmFAST's excursion-set
+the rays, M1, OTVET, the cone, and 21cmFAST's excursion-set
 criterion on the suite's own gas density ($R_{\rm max}=15$\,Mpc), with
 mass-dependent sources matched to the suite's (\texttt{E-INTEGRAL},
 $\alpha_\star=a(z)-1=0.43$--0.46 from the abundance matching,
@@ -524,7 +546,7 @@ $N/\Ndir$ and $P_\Gamma({\rm OTVET})/P_\Gamma({\rm rays})$ against
 $\lambda_{\rm eff}/0.61L$ (256$^3$, $z\le6.2$), with the line
 $(\lambda_{\rm eff}/0.61L)^2$; data in \texttt{docs/otvet\_closure.md}
 \S3.}
-\caption{Thin OTVET's after-overlap error against the prediction of
+\caption{OTVET's after-overlap error against the prediction of
 \citet{wu21}.}
 \label{fig:norm}
 \end{figure}
@@ -609,10 +631,10 @@ A=\frac{|\mathsf h-\mathsf I/3|}{\sqrt{2/3}},
   blocks ($0.625\mpch$) of $\sum S_0\mathsf h$, the coherent anisotropy
   behind $P_\Gamma$ at $k\lesssim3\hmpc$. Each closure is evaluated on the
   rays' sources and HI and weighted by the rays' $S_0$.
-\item Before overlap: thin OTVET good in the bulk; errors in the
+\item Before overlap: OTVET good in the bulk; errors in the
   10--20\% of ionised cells that are shadowed or have
   $\Gamma<\langle\Gamma\rangle/2$, where the rays are more beamed.
-\item During overlap: thin OTVET too isotropic on large scales (block $A$
+\item During overlap: OTVET too isotropic on large scales (block $A$
   0.32 vs.\ 0.42 at $z=7.4$): edge cells are lit from inside their own
   region, OTVET adds regions behind neutral gas.
 \item After overlap: per unit emissivity $\int_{\rm cube}d^3r/(4\pi r^2)=0.610\,L$,
@@ -623,7 +645,7 @@ A=\frac{|\mathsf h-\mathsf I/3|}{\sqrt{2/3}},
 \item M1 given the rays' flux: too isotropic on large scales in every
   regime ($A\approx0.02$ vs.\ 0.11 after overlap).
 \item Radiation-force error ($\nabla\cdot(S_0\mathsf h)$ per $k$): at most
-  one sentence (thin OTVET anti-correlated with the rays after overlap) or
+  one sentence (OTVET anti-correlated with the rays after overlap) or
   an appendix.
 \end{itemize}
 
