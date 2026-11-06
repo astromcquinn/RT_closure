@@ -13,6 +13,11 @@
 \usepackage[authoryear,round]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
+% ADS journal macros used by refs.bib (a journal class defines them; \providecommand leaves those)
+\providecommand{\mnras}{MNRAS}\providecommand{\apj}{ApJ}\providecommand{\apjs}{ApJS}
+\providecommand{\apjl}{ApJL}\providecommand{\aap}{A\&A}\providecommand{\jcap}{JCAP}
+\providecommand{\pasp}{PASP}\providecommand{\araa}{ARA\&A}\providecommand{\prd}{Phys.~Rev.~D}
+\providecommand{\nat}{Nature}\providecommand{\physrep}{Phys.~Rep.}\providecommand{\na}{New Astron.}
 \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
 \newcommand{\draft}[1]{\textcolor{orange}{[draft: #1]}}
 \newcommand{\chat}{\hat{c}}
@@ -311,11 +316,25 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
   Why they agree at $k\lambda\gg1$: once the anisotropy amplitude is
   right, $P_\Gamma$ is the sources' $1/r^2$ near field \citep{wu21}.
   $\Gamma$ PDF quantiles: Table \todo{T3}.
-\item $\tau_{\rm eff}$ over $50\mpch$ segments (Fig.~\ref{fig:taueff}):
-  rescaled to the observed mean flux, the width of the distribution
-  follows the $\Gamma$ fluctuations (expected: thin OTVET broader, M1
-  narrower, the cone close to the rays); the 40\,Mpc/$h$ box makes the
-  scatter a lower bound.
+\item $\lambda_{\rm mfp}$ and the $\tau_{\rm eff}$ scatter over $50\mpch$
+  segments, full snapshots only (Fig.~\ref{fig:taueff}):
+  \begin{itemize}
+  \item $\lambda_{\rm mfp}$: every method 3.5--5$\times$ the data; thin
+    OTVET 18--25\% longer than the rays at $z\le5.7$; at $z\le5.5$ the
+    cone 11--14\% and M1 within 4\%.
+  \item The 84--16\% width of $\tau_{\rm eff}$ at the observed $\langle
+    F\rangle$: M1 broadest (+4--24\%; +24\% at $z=5.47$, just after its
+    overlap, and +11--14\% at $z\ge6$), thin OTVET
+    narrowest after overlap ($-12$--14\%), the cone within 7\% of the rays,
+    case A + RR within 3\%.
+  \item The reverse of the $P_\Gamma$ ordering: with a uniform $\Gamma$
+    every method gives the same width, and after overlap $\langle\Gamma
+    \rangle$ and $\langle\rho\rangle$ of a segment are correlated
+    ($\tau\propto\rho^2/\Gamma$), so a method with too much $\Gamma$ power
+    near the sources (thin OTVET) narrows the distribution and one with
+    too little (M1) broadens it. The 40\,Mpc/$h$ box makes the scatter a
+    lower bound (NewRadHydroCode \texttt{docs/taueff\_21cmfast.md} A.3, A.6).
+  \end{itemize}
 \item 21cmFAST on the same density field (Fig.~\ref{fig:21cmfast}): is
   the excursion set closer to the rays or to the moment methods?
   \todo{cite Mesinger, Furlanetto \& Cen 2011; Murray+20.}
@@ -398,11 +417,17 @@ key & meaning & default \\
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig1_maps_xHII_draft.png}
-\caption{\draft{\texttt{rt\_suite\_512\_maps\_xHII.png}: $x_{\rm HII}$ in
-8-cell ($0.625\mpch$) slabs through the box middle at $z=6.97$, 6.20 and
-5.70 ($\xv=0.49$, 0.79, 0.97 in the rays), all seven runs.}
-Final: columns rays, M1, thin OTVET, cone (case A + RR optional); an
-earlier row at $z\approx8$ ($\xv\approx0.25$) from the movie slabs.}
+\caption{$x_{\rm HII}$ in 8-cell ($0.625\mpch$) slabs through the box
+middle at $z=6.97$, 6.20 and 5.70 ($\xv=0.49$, 0.79, 0.97 in the rays):
+the rays, M1, thin OTVET, the cone, and 21cmFAST's excursion-set criterion
+with its default parameters ($R_{\rm max}=15$\,Mpc) applied to the suite's
+own gas density, $\zeta$ chosen at each $z$ to give the rays' $\xv$.
+\draft{cut by \texttt{scripts/fig1\_compose\_draft.py} from NewRadHydroCode
+\texttt{taueff\_21cmfast\_fig8\_maps.png} (branch
+\texttt{taueff-21cmfast}); the 21cmFAST column to be replaced by the new
+run matched to the sources. Final from the cubes:
+\texttt{rt\_suite\_figures.py} with the \texttt{excursion\_set.py} output
+as one more run (it needs an option for runs without $\Gamma$).}}
 \label{fig:maps}
 \end{figure}
 
@@ -494,11 +519,16 @@ $(\lambda_{\rm eff}/0.61L)^2$; data in \texttt{docs/otvet\_closure.md}
 
 \begin{figure}[h]
 \centering
-\placeholder{cumulative $\tau_{\rm eff}$ distributions over $50\mpch$
-segments (rescaled to the Bosman+22 mean flux) at $z\approx5.98$, 5.49,
-4.99, and the 16/50/84\% points against $z$, every method
-(\texttt{prompts/taueff\_21cmfast.md}, part A).}
-\caption{The Ly$\alpha$ forest's $\tau_{\rm eff}$ scatter by RT method.}
+\includegraphics[width=\linewidth]{figures/fig_mfp_width.pdf}
+\caption{The full-box snapshots of every run
+(\texttt{scripts/fig\_mfp\_width.py}). (a) The 912\,\AA\ mean free path
+from random starts (the distance where $\langle F\rangle=1/e$; open: the
+exponential fit from ionised starts at $z\approx5$, where that distance
+exceeds the sightlines), and the measurements of \citet{becker21} and
+\citet{zhu23}. (b) The 84--16\% width of $\tau_{\rm eff}$ over $50\mpch$
+segments ($3\times8192$ redshift-space skewers; a box-length skewer joined
+to $10\mpch$ of another), with $\tau$ rescaled so that the mean flux
+equals \citet{bosman22}'s.}
 \label{fig:taueff}
 \end{figure}
 
