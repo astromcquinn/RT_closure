@@ -149,11 +149,11 @@ The seven runs differ only in how the radiation is transported.
 \paragraph{Rays.} The reference. Each source emits rays along HEALPix
 directions \citep{gorski05}, which split as they travel so that every cell
 they reach is crossed by several rays \citep{abel02,trac07}, and deposit
-their photoionizations cell by cell, conserving photons. One run uses
+their photoionizations cell by cell, conserving photons. One comparison run uses
 case-B recombination, the other case A with the recombination radiation
 transported.
 
-\paragraph{Moment methods.} For each frequency group we evolve the photon
+\paragraph{Moment methods.} For each frequency group, we evolve the photon
 density $N$ and the flux $\chat\,\mathbf F$,
 \begin{align}
 \partial_t N + \chat\,\nabla\cdot\mathbf F &= S - \chat\kappa N,\\
@@ -170,9 +170,8 @@ ones, described in \S\ref{sec:closures}:
   reduced flux $f=|\mathbf F|/N$:
   $\mathsf D=\frac{1-\chi}{2}\mathsf I+\frac{3\chi-1}{2}\hat{\mathbf u}\hat{\mathbf u}\T$,
   with $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$ and $\hat{\mathbf u}=\mathbf F/|\mathbf F|$.
-  It needs only each cell's own moments and is exact for a single beam,
-  which makes it cheap and local
-  \citep{aubert08,rosdahl13,kannan19,kannan22}. With one flux direction
+The advantage of M1 is that it needs only each cell's own moments and is exact for a single beam,
+  which makes it cheap and local. With one flux direction
   per cell, however, it cannot represent light arriving from several
   directions, which it merges and diffuses.
 \item \textbf{OTVET} \citep{gnedin01,gnedin14} takes
