@@ -240,8 +240,16 @@ defaults: Table~\ref{tab:params}; schematic: Fig.~\ref{fig:schematic}.
 \item Realizable (eigenvalues in $[0,N]$); piecewise linear in $N$ with
   slopes $\mathsf h$ and $\mathsf I/3$, so GLF stays positive at $\chat$;
   one float per cell, no extra FFT.
-\item Cf.\ the CROC background split \citep{gnedin14} and
-  \citet{gnedin01}'s background; here local, from the solution's $N$.
+\item Related decompositions split the field into a uniform background
+  with an isotropic tensor and a local part, sourced by the fluctuations of
+  the emissivity, with the optically thin tensor. The background's share is
+  set by a global opacity: $\Lambda=\exp(-\langle\kappa\rangle L)$ with
+  $L=\int d^3x/(4\pi r^2)$ in \citet{gnedin01}, the same integral that
+  sets OTVET's normalisation here, and a mean free path tied to
+  observations for the background in CROC \citep{gnedin14}. The split
+  instead decides cell by cell from the solution's own photons, with no
+  mean free path, and changes only the Eddington tensor of a single
+  radiation field.
 \item Limits: amount of anisotropy only, not its direction; identical to
   OTVET before overlap; no direction for the diffuse part.
 \end{itemize}
