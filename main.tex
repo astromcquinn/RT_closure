@@ -23,10 +23,7 @@
 \newcommand{\T}{^{\mathsf T}}
 \newcommand{\placeholder}[1]{\fbox{\parbox[c][5cm][c]{0.9\linewidth}{\centering\textcolor{red}{To make:} #1}}}
 
-\title{An HI-attenuated Eddington tensor for moment radiative transfer of
-reionization, tested against adaptive ray tracing\\[4pt]
-\normalsize Alternative: \emph{Moment closures for reionization against ray
-tracing: what the optically thin Eddington tensor gets wrong, and how to fix it}}
+\title{Moment closures for reionization against ray tracing}
 \author{\todo{authors}}
 \date{Outline, 2026-11-06}
 
@@ -59,26 +56,40 @@ tracing: what the optically thin Eddington tensor gets wrong, and how to fix it}
 
 %======================================================================
 \section{Introduction}
-\begin{itemize}
-\item Moment RT is the workhorse of large reionization simulations: M1
-  (RAMSES-RT, ATON, AREPO-RT/Thesan; \citealt{aubert08};
-  \todo{cite Rosdahl+13, Kannan+19, Kannan+22}), OTVET (ART/CROC;
-  \citealt{gnedin01,gnedin14}). The $\Gamma_{\rm HI}$ field after overlap
-  feeds the Ly$\alpha$ forest, the mean free path and the $\tau_{\rm eff}$
-  scatter \citep{davies16,davies17}.
-\item Known issues: M1 merges beams, no proximity zones; the thin tensor
-  casts no shadows \citep{gnedin01,petkova09} and has the box-size
-  normalisation error \citep{wu21}; CROC and Thesan disagree on the
-  $\Gamma$--source transfer function, with no ray-tracing reference
-  \citep{gnedin25}. Second-order closures are unstable
-  \citep{gnedinkatz26}, so first-order (tensor-only) closures here.
-\item Attenuated tensors so far: long characteristics \citep{finlator09},
-  short characteristics \citep{davis12}, tree columns
-  (\citealt{hopkins20}; \todo{cite TreeCol, TRAPHIC, TreeRay}).
-\item New here: (1) one code with every closure and adaptive rays, all
-  other physics shared; (2) the true Eddington tensor measured from the
-  rays; (3) three closures, one a cone-traced HI-attenuated tensor.
-\end{itemize}
+Moment methods are the workhorse of radiative transfer in large reionization
+simulations. M1 underlies RAMSES-RT \citep{rosdahl13}, ATON
+\citep{aubert08} and AREPO-RT \citep{kannan19}, and through AREPO-RT the
+Thesan simulations \citep{kannan22}; the optically thin variable Eddington
+tensor (OTVET; \citealt{gnedin01}) underlies the CROC simulations
+\citep{gnedin14}. Before overlap, the transfer sets the morphology of reionization that
+21\,cm experiments will map \citep{Furlanetto2006}; after it, the $\Gamma_{\rm HI}$
+these methods return sets the Ly$\alpha$ forest, the mean free path, the
+scatter in $\tau_{\rm eff}$ \citep{davies16,davies17} and the neutral gas
+seen by 21\,cm intensity mapping \todo{cite}, so closure errors become
+errors in the observables.
+
+The closures have known problems. M1 carries one flux direction per cell,
+so crossing beams merge and the proximity zones of individual sources are
+lost. The optically thin tensor ignores intervening absorbers, so it casts
+no shadows \citep{gnedin01,petkova09}, and its normalisation depends on box
+size \citep{wu21}. \citet{gnedin25} showed that the consequences are not
+academic: CROC and Thesan disagree on the transfer function between
+$\Gamma_{\rm HI}$ and the sources, and he noted that no ray-tracing
+calculation exists to decide between them. Since second-order closures are
+unstable \citep{gnedinkatz26}, we consider only first-order closures, in
+which the Eddington tensor alone is prescribed.
+
+The natural improvement is to attenuate the tensor by the intervening
+absorbers, as has been done with long characteristics \citep{finlator09},
+short characteristics \citep{davis12} and tree-based column densities
+\citep{pawlik08,clark12,hopkins20,wunsch21}.
+
+Here we test these ideas against the exact answer. (1) One code holds every
+closure and adaptive ray tracing \citep{trac07}, with all other physics
+shared, so differences between runs come from the transfer alone. (2) We
+measure the true Eddington tensor from the rays and compare each closure
+with it. (3) We study three closures, one a new HI-attenuated tensor built
+by cone tracing.
 
 %======================================================================
 \section{Simulations and radiative transfer}

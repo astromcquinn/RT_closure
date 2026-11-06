@@ -1,192 +1,470 @@
-% References for main.tex.
-%
-% Only fields that were checked are given: from the code repository's
-% docs/otvet_closure_literature.md (papers read through their HTML
-% versions; quotes there need checking against the PDFs) and the header of
-% data/igm/igm_z5_6.txt. "others" stands for the authors not recorded
-% there. Complete every entry from ADS before submission.
-%
-% The references known only from memory are NOT here; main.tex marks them
-% with \todo{cite ...}: Trac & Cen 2007; Trac, Cen & Loeb 2008; Abel &
-% Wandelt 2002; Gorski et al. 2005; Levermore 1984; Rosdahl et al. 2013;
-% Kannan et al. 2019, 2022; Clark, Glover & Klessen 2012; Pawlik & Schaye
-% 2008; Wunsch et al. 2021; Crassin et al. 2011; Gnedin 2016; Deparis et
-% al. 2019; Ocvirk et al. 2019; Iliev et al. 2006, 2009; Sheth & Tormen
-% 1999; Eisenstein & Hu 1998; Planck 2018.
 
-% ---- read (docs/otvet_closure_literature.md) -----------------------------
+% ---- Radiative-transfer methods --------------------------------
 
-@article{wu21,
-  author        = {Wu and McQuinn and Eisenstein},
-  title         = {On the accuracy of common moment-based radiative transfer methods for simulating reionization},
-  journal       = {JCAP},
-  year          = {2021},
-  volume        = {2021},
-  number        = {02},
-  pages         = {042},
-  eprint        = {2009.07278},
+@ARTICLE{wu21,
+  author = {{Wu}, X. and {McQuinn}, M. and {Eisenstein}, D.},
+  title = {{On the accuracy of common moment-based radiative
+            transfer methods for simulating reionization}},
+  journal = {Journal of Cosmology and Astroparticle Physics},
+  year = 2021,
+  month = feb,
+  volume = {2021},
+  number = {02},
+  pages = {042},
+  doi = {10.1088/1475-7516/2021/02/042},
   archivePrefix = {arXiv},
-  note          = {TODO: initials}
+  eprint = {2009.07278},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2021JCAP...02..042W}
 }
 
-@article{gnedin01,
-  author        = {Gnedin and Abel},
-  journal       = {New Astronomy},
-  year          = {2001},
-  volume        = {6},
-  pages         = {437},
-  eprint        = {astro-ph/0106278},
+@ARTICLE{gnedin01,
+  author = {{Gnedin}, N.~Y. and {Abel}, T.},
+  title = {{Multi-dimensional cosmological radiative transfer
+            with a Variable Eddington Tensor formalism}},
+  journal = {New Astronomy},
+  year = 2001,
+  month = oct,
+  volume = {6},
+  number = {7},
+  pages = {437--455},
+  doi = {10.1016/S1384-1076(01)00068-9},
   archivePrefix = {arXiv},
-  note          = {TODO: title, initials}
+  eprint = {astro-ph/0106278},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2001NewA....6..437G}
 }
 
-@article{gnedin14,
-  author        = {Gnedin},
-  journal       = {ApJ},
-  year          = {2014},
-  volume        = {793},
-  pages         = {29},
-  eprint        = {1403.4245},
+@ARTICLE{gnedin14,
+  author = {{Gnedin}, N.~Y.},
+  title = {{Cosmic Reionization On Computers. I. Design and
+            Calibration of Simulations}},
+  journal = {\apj},
+  year = 2014,
+  month = sep,
+  volume = {793},
+  number = {1},
+  pages = {29},
+  doi = {10.1088/0004-637X/793/1/29},
   archivePrefix = {arXiv},
-  note          = {TODO: title, initials}
+  eprint = {1403.4245},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2014ApJ...793...29G}
 }
 
-@misc{gnedin25,
-  author        = {Gnedin},
-  title         = {Do we know how to model reionization?},
-  year          = {2025},
-  eprint        = {2504.10571},
+@ARTICLE{gnedin25,
+  author = {{Gnedin}, N.~Y.},
+  title = {{Do We Know How to Model Reionization?}},
+  journal = {The Open Journal of Astrophysics},
+  year = 2025,
+  month = jul,
+  volume = {8},
+  doi = {10.33232/001c.142442},
   archivePrefix = {arXiv},
-  note          = {TODO: journal, initials}
+  eprint = {2504.10571},
+  adsurl = {https://ui.adsabs.harvard.edu/search/q=doi:10.33232/001c.142442}
 }
 
-@article{gnedinkatz26,
-  author        = {Gnedin and Katz},
-  journal       = {The Open Journal of Astrophysics},
-  year          = {2026},
-  volume        = {9},
-  eprint        = {2603.22400},
+@ARTICLE{gnedinkatz26,
+  author = {{Gnedin}, N.~Y. and {Katz}, H.},
+  title = {{Second Order Closures for the Radiative Transfer
+            Equation: Some Are Unstable}},
+  journal = {The Open Journal of Astrophysics},
+  year = 2026,
+  month = aug,
+  volume = {9},
+  doi = {10.33232/001c.168200},
   archivePrefix = {arXiv},
-  note          = {TODO: full title (abstract read only), initials}
+  eprint = {2603.22400},
+  adsurl = {https://ui.adsabs.harvard.edu/search/q=doi:10.33232/001c.168200}
 }
 
-@article{finlator09,
-  author        = {Finlator and {\"O}zel and Dav{\'e}},
-  journal       = {MNRAS},
-  year          = {2009},
-  volume        = {393},
-  pages         = {1090},
-  eprint        = {0808.3578},
+@ARTICLE{finlator09,
+  author = {{Finlator}, K. and {{\"O}zel}, F. and {Dav{\'e}}, R.},
+  title = {{A new moment method for continuum radiative
+            transfer in cosmological re-ionization}},
+  journal = {\mnras},
+  year = 2009,
+  month = mar,
+  volume = {393},
+  number = {4},
+  pages = {1090--1106},
+  doi = {10.1111/j.1365-2966.2008.14190.x},
   archivePrefix = {arXiv},
-  note          = {TODO: title, initials}
+  eprint = {0808.3578},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2009MNRAS.393.1090F}
 }
 
-@article{petkova09,
-  author        = {Petkova and Springel},
-  journal       = {MNRAS},
-  year          = {2009},
-  volume        = {396},
-  pages         = {1383},
-  eprint        = {0812.1801},
+@ARTICLE{petkova09,
+  author = {{Petkova}, M. and {Springel}, V.},
+  title = {{An implementation of radiative transfer in
+            the cosmological simulation code gadget}},
+  journal = {\mnras},
+  year = 2009,
+  month = jul,
+  volume = {396},
+  number = {3},
+  pages = {1383--1403},
+  doi = {10.1111/j.1365-2966.2009.14843.x},
   archivePrefix = {arXiv},
-  note          = {TODO: title, initials}
+  eprint = {0812.1801},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2009MNRAS.396.1383P}
 }
 
-% ---- data (data/igm/igm_z5_6.txt header; docs/abundance_matching.md) ----
+% ---- Reionization observations --------------------------------
 
-@article{becker21,
-  author        = {Becker and others},
-  title         = {The mean free path of ionizing photons at $5 < z < 6$},
-  journal       = {MNRAS},
-  year          = {2021},
-  eprint        = {2103.16610},
+@ARTICLE{becker21,
+  author = {{Becker}, G.~D. and {D'Aloisio}, A. and
+            {Christenson}, H.~M. and {Zhu}, Y. and
+            {Worseck}, G. and {Bolton}, J.~S.},
+  title = {{The mean free path of ionizing photons at
+            $5 < z < 6$: evidence for rapid evolution
+            near reionization}},
+  journal = {\mnras},
+  year = 2021,
+  month = dec,
+  volume = {508},
+  number = {2},
+  pages = {1853--1869},
+  doi = {10.1093/mnras/stab2696},
   archivePrefix = {arXiv},
-  note          = {TODO: volume, pages, authors}
+  eprint = {2103.16610},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2021MNRAS.508.1853B}
 }
 
-@article{zhu23,
-  author        = {Zhu and others},
-  journal       = {ApJ},
-  year          = {2023},
-  volume        = {955},
-  pages         = {115},
-  note          = {TODO: title, authors, arXiv}
-}
-
-@article{bosman22,
-  author        = {Bosman and others},
-  journal       = {MNRAS},
-  year          = {2022},
-  volume        = {514},
-  pages         = {55},
-  note          = {XQR-30. TODO: title, authors, arXiv}
-}
-
-@misc{gaikwad23,
-  author        = {Gaikwad and others},
-  year          = {2023},
-  eprint        = {2304.02038},
+@ARTICLE{zhu23,
+  author = {{Zhu}, Y. and {Becker}, G.~D. and
+            {Christenson}, H.~M. and {D'Aloisio}, A. and
+            {Bosman}, S.~E.~I. and {Bakx}, T. and
+            {D'Odorico}, V. and {Bischetti}, M. and
+            {Cain}, C. and {Davies}, F.~B. and
+            {Davies}, R.~L. and {Eilers}, A.-C. and
+            {Fan}, X. and {Gaikwad}, P. and
+            {Haehnelt}, M.~G. and {Keating}, L.~C. and
+            {Kulkarni}, G. and {Lai}, S. and
+            {Ma}, H.-X. and {Mesinger}, A. and
+            {Qin}, Y. and {Satyavolu}, S. and
+            {Takeuchi}, T.~T. and {Umehata}, H. and
+            {Yang}, J.},
+  title = {{Probing Ultralate Reionization: Direct Measurements
+            of the Mean Free Path over $5 < z < 6$}},
+  journal = {\apj},
+  year = 2023,
+  month = oct,
+  volume = {955},
+  number = {2},
+  pages = {115},
+  doi = {10.3847/1538-4357/aceef4},
   archivePrefix = {arXiv},
-  note          = {TODO: title, journal, authors}
+  eprint = {2308.04614},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2023ApJ...955..115Z}
 }
 
-@article{pahl25,
-  author        = {Pahl and others},
-  journal       = {ApJ},
-  year          = {2025},
-  volume        = {981},
-  pages         = {134},
-  eprint        = {2407.03399},
+@ARTICLE{bosman22,
+  author = {{Bosman}, S.~E.~I. and {Davies}, F.~B. and
+            {Becker}, G.~D. and {Keating}, L.~C. and
+            {Davies}, R.~L. and {Zhu}, Y. and
+            {Eilers}, A.-C. and {D'Odorico}, V. and
+            {Bian}, F. and {Bischetti}, M. and
+            {Cristiani}, S.~V. and {Fan}, X. and
+            {Farina}, E.~P. and {Haehnelt}, M.~G. and
+            {Hennawi}, J.~F. and {Kulkarni}, G. and
+            {Mesinger}, A. and {Meyer}, R.~A. and
+            {Onoue}, M. and {Pallottini}, A. and
+            {Qin}, Y. and {Ryan-Weber}, E. and
+            {Schindler}, J.~T. and {Walter}, F. and
+            {Wang}, F. and {Yang}, J.},
+  title = {{Hydrogen reionization ends by $z = 5.3$:
+            Lyman-{$\alpha$} optical depth measured by
+            the XQR-30 sample}},
+  journal = {\mnras},
+  year = 2022,
+  month = jul,
+  volume = {514},
+  number = {1},
+  pages = {55--76},
+  doi = {10.1093/mnras/stac1046},
   archivePrefix = {arXiv},
-  note          = {TODO: title, authors}
+  eprint = {2108.03699},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2022MNRAS.514...55B}
 }
 
-% ---- seen only as a search snippet or title: check before citing ---------
-
-@misc{aubert08,
-  author        = {Aubert and Teyssier},
-  year          = {2008},
-  eprint        = {0709.1544},
+@ARTICLE{gaikwad23,
+  author = {{Gaikwad}, P. and {Haehnelt}, M.~G. and
+            {Davies}, F.~B. and {Bosman}, S.~E.~I. and
+            {Molaro}, M. and {Kulkarni}, G. and
+            {D'Odorico}, V. and {Becker}, G.~D. and
+            {Davies}, R.~L. and {Nasir}, F. and
+            {Bolton}, J.~S. and {Keating}, L.~C. and
+            {Ir{\v{s}}i{\v{c}}}, V. and {Puchwein}, E. and
+            {Zhu}, Y. and {Asthana}, S. and
+            {Yang}, J. and {Lai}, S. and {Eilers}, A.-C.},
+  title = {{Measuring the photoionization rate, neutral fraction,
+            and mean free path of H {I} ionizing photons at
+            $4.9 \leq z \leq 6.0$ from a large sample of
+            XShooter and ESI spectra}},
+  journal = {\mnras},
+  year = 2023,
+  month = nov,
+  volume = {525},
+  number = {3},
+  pages = {4093--4120},
+  doi = {10.1093/mnras/stad2566},
   archivePrefix = {arXiv},
-  note          = {ATON. TODO: verify (title page only)}
+  eprint = {2304.02038},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2023MNRAS.525.4093G}
 }
 
-@misc{davis12,
-  author        = {Davis and Stone and Jiang},
-  year          = {2012},
-  eprint        = {1201.2223},
+@ARTICLE{pahl25,
+  author = {{Pahl}, A.~J. and {Topping}, M.~W. and
+            {Shapley}, A. and {Sanders}, R. and
+            {Reddy}, N.~A. and {Clarke}, L. and
+            {Kehoe}, E. and {Bento}, T. and
+            {Brammer}, G.},
+  title = {{A Spectroscopic Analysis of the Ionizing Photon
+            Production Efficiency in JADES and CEERS:
+            Implications for the Ionizing Photon Budget}},
+  journal = {\apj},
+  year = 2025,
+  volume = {981},
+  number = {2},
+  pages = {134},
+  doi = {10.3847/1538-4357/adb1ab},
   archivePrefix = {arXiv},
-  note          = {Short-characteristics VET. TODO: verify (snippet only)}
+  eprint = {2407.03399},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2025ApJ...981..134P}
 }
 
-@misc{davies16,
-  author        = {Davies and Furlanetto},
-  year          = {2016},
-  eprint        = {1509.07131},
+% ---- Additional radiative-transfer methods and models ----------
+
+@ARTICLE{aubert08,
+  author = {{Aubert}, D. and {Teyssier}, R.},
+  title = {{A radiative transfer scheme for cosmological
+            reionization based on a local Eddington tensor}},
+  journal = {\mnras},
+  year = 2008,
+  month = jun,
+  volume = {387},
+  number = {1},
+  pages = {295--307},
+  doi = {10.1111/j.1365-2966.2008.13223.x},
   archivePrefix = {arXiv},
-  note          = {TODO: verify (snippet only)}
+  eprint = {0709.1544},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2008MNRAS.387..295A}
 }
 
-@misc{davies17,
-  author        = {Davies and others},
-  year          = {2017},
-  eprint        = {1611.02711},
+@ARTICLE{davis12,
+  author = {{Jiang}, Y.-F. and {Stone}, J.~M. and
+            {Davis}, S.~W.},
+  title = {{A Godunov Method for Multidimensional Radiation
+            Magnetohydrodynamics Based on a Variable
+            Eddington Tensor}},
+  journal = {\apjs},
+  year = 2012,
+  volume = {199},
+  number = {1},
+  pages = {14},
+  doi = {10.1088/0067-0049/199/1/14},
   archivePrefix = {arXiv},
-  note          = {TODO: verify (snippet only)}
+  eprint = {1201.2223},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2012ApJS..199...14J}
 }
 
-@misc{hopkins20,
-  author        = {Hopkins and others},
-  year          = {2020},
-  eprint        = {1811.12462},
+@ARTICLE{davies16,
+  author = {{Davies}, F.~B. and {Furlanetto}, S.~R.},
+  title = {{Large fluctuations in the hydrogen-ionizing
+            background and mean free path following the
+            epoch of reionization}},
+  journal = {\mnras},
+  year = 2016,
+  volume = {460},
+  number = {2},
+  pages = {1328--1339},
+  doi = {10.1093/mnras/stw931},
   archivePrefix = {arXiv},
-  note          = {FIRE RT methods, LEBRON. TODO: verify (abstract page only)}
+  eprint = {1509.07131},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2016MNRAS.460.1328D}
 }
 
-@misc{cain24,
-  author        = {Cain and D'Aloisio},
-  year          = {2024},
-  eprint        = {2409.04521},
+@ARTICLE{davies17,
+  author = {{D'Aloisio}, A. and {McQuinn}, M. and
+            {Davies}, F.~B. and {Furlanetto}, S.~R.},
+  title = {{Large Fluctuations in the High-Redshift
+            Metagalactic Ionizing Background}},
+  journal = {\mnras},
+  year = 2018,
+  month = jan,
+  volume = {473},
+  number = {1},
+  pages = {560--575},
+  doi = {10.1093/mnras/stx2341},
   archivePrefix = {arXiv},
-  note          = {FlexRT. TODO: verify (snippet only)}
+  eprint = {1611.02711},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2018MNRAS.473..560D}
+}
+
+@ARTICLE{hopkins20,
+  author = {{Hopkins}, P.~F. and {Grudi{\'c}}, M.~Y. and
+            {Wetzel}, A.~R. and {Kere{\v{s}}}, D. and
+            {Faucher-Gigu{\`e}re}, C.-A. and {Ma}, X. and
+            {Murray}, N. and {Butcher}, N.},
+  title = {{Radiative stellar feedback in galaxy formation:
+            Methods and physics}},
+  journal = {\mnras},
+  year = 2020,
+  month = jan,
+  volume = {491},
+  number = {3},
+  pages = {3702--3729},
+  doi = {10.1093/mnras/stz3129},
+  archivePrefix = {arXiv},
+  eprint = {1811.12462},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2020MNRAS.491.3702H}
+}
+
+@ARTICLE{cain24,
+  author = {{Cain}, C. and {D'Aloisio}, A.},
+  title = {{FlexRT -- A fast and flexible cosmological radiative
+            transfer code for reionization studies.
+            Part I. Code validation}},
+  journal = {Journal of Cosmology and Astroparticle Physics},
+  year = 2024,
+  month = dec,
+  volume = {2024},
+  number = {12},
+  pages = {025},
+  doi = {10.1088/1475-7516/2024/12/025},
+  archivePrefix = {arXiv},
+  eprint = {2409.04521},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2024JCAP...12..025C}
+}
+
+
+@article{Furlanetto2006,
+    author = "Furlanetto, Steven and Oh, S. Peng and Briggs, Frank",
+    title = "{Cosmology at Low Frequencies: The 21 cm Transition and the High-Redshift Universe}",
+    eprint = "astro-ph/0608032",
+    archivePrefix = "arXiv",
+    doi = "10.1016/j.physrep.2006.08.002",
+    journal = "Phys. Rept.",
+    volume = "433",
+    pages = "181--301",
+    year = "2006"
+}
+
+
+@ARTICLE{rosdahl13,
+  author = {{Rosdahl}, J. and {Blaizot}, J. and {Aubert}, D.
+            and {Stranex}, T. and {Teyssier}, R.},
+  title = {{RAMSES-RT: radiation hydrodynamics in the cosmological context}},
+  journal = {\mnras},
+  year = 2013,
+  month = dec,
+  volume = {436},
+  number = {3},
+  pages = {2188--2231},
+  doi = {10.1093/mnras/stt1722},
+  archivePrefix = {arXiv},
+  eprint = {1304.7126},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2013MNRAS.436.2188R}
+}
+
+@ARTICLE{kannan19,
+  author = {{Kannan}, R. and {Vogelsberger}, M. and
+            {Marinacci}, F. and {McKinnon}, R. and
+            {Pakmor}, R. and {Springel}, V.},
+  title = {{AREPO-RT: radiation hydrodynamics on a moving mesh}},
+  journal = {\mnras},
+  year = 2019,
+  month = may,
+  volume = {485},
+  number = {1},
+  pages = {117--149},
+  doi = {10.1093/mnras/stz287},
+  archivePrefix = {arXiv},
+  eprint = {1804.01987},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2019MNRAS.485..117K}
+}
+
+@ARTICLE{kannan22,
+  author = {{Kannan}, R. and {Garaldi}, E. and {Smith}, A.
+            and {Pakmor}, R. and {Springel}, V. and
+            {Vogelsberger}, M. and {Hernquist}, L.},
+  title = {{Introducing the THESAN project: radiation-magnetohydrodynamic
+            simulations of the epoch of reionization}},
+  journal = {\mnras},
+  year = 2022,
+  month = apr,
+  volume = {511},
+  number = {3},
+  pages = {4005--4030},
+  doi = {10.1093/mnras/stab3710},
+  archivePrefix = {arXiv},
+  eprint = {2110.00584},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2022MNRAS.511.4005K}
+}
+
+@ARTICLE{pawlik08,
+  author = {{Pawlik}, A.~H. and {Schaye}, J.},
+  title = {{TRAPHIC - radiative transfer for smoothed particle
+            hydrodynamics simulations}},
+  journal = {\mnras},
+  year = 2008,
+  month = sep,
+  volume = {389},
+  number = {2},
+  pages = {651--677},
+  doi = {10.1111/j.1365-2966.2008.13601.x},
+  archivePrefix = {arXiv},
+  eprint = {0802.1715},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2008MNRAS.389..651P}
+}
+
+@ARTICLE{clark12,
+  author = {{Clark}, P.~C. and {Glover}, S.~C.~O. and
+            {Klessen}, R.~S.},
+  title = {{TreeCol: a novel approach to estimating column densities
+            in astrophysical simulations}},
+  journal = {\mnras},
+  year = 2012,
+  month = feb,
+  volume = {420},
+  number = {1},
+  pages = {745--756},
+  doi = {10.1111/j.1365-2966.2011.20087.x},
+  archivePrefix = {arXiv},
+  eprint = {1109.3861},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2012MNRAS.420..745C}
+}
+
+@ARTICLE{wunsch21,
+  author = {{W{\"u}nsch}, R. and {Walch}, S. and
+            {Dinnbier}, F. and {Seifried}, D. and
+            {Haid}, S. and {Klepitko}, A. and
+            {Whitworth}, A.~P. and {Palou{\v{s}}}, J.},
+  title = {{Tree-based solvers for adaptive mesh refinement code
+            FLASH - II: radiation transport module TreeRay}},
+  journal = {\mnras},
+  year = 2021,
+  month = aug,
+  volume = {505},
+  number = {3},
+  pages = {3730--3754},
+  doi = {10.1093/mnras/stab1482},
+  archivePrefix = {arXiv},
+  eprint = {2105.09644},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2021MNRAS.505.3730W}
+}
+
+@ARTICLE{trac07,
+  author = {{Trac}, H. and {Cen}, R.},
+  title = {{Radiative Transfer Simulations of Cosmic Reionization.
+            I. Methodology and Initial Results}},
+  journal = {\apj},
+  year = 2007,
+  month = dec,
+  volume = {671},
+  number = {1},
+  pages = {1--13},
+  doi = {10.1086/522566},
+  archivePrefix = {arXiv},
+  eprint = {astro-ph/0612406},
+  adsurl = {https://ui.adsabs.harvard.edu/abs/2007ApJ...671....1T}
 }
