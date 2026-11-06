@@ -2,7 +2,7 @@
 """Figure 4: schematic of the new closures.
 
 (a) the direct + diffuse split: the thin minimum-image sum gives the
-    direct light N_dir with its tensor h; the solution's photons beyond it
+    optically thin light N_OT with its tensor h; the solution's photons beyond it
     are treated as isotropic.
 (b) the cone tensor: receivers send HEALPix cones that march through
     mip-maps of the emissivity and the HI column; a thin near field inside
@@ -56,7 +56,7 @@ def panel_split(ax):
     for sx, sy in [(3.2, 6.8), (6.9, 6.3), (3.6, 3.2), (6.6, 3.3)]:
         star(ax, sx, sy)
         arrow(ax, (sx, sy), (rx, ry), ORANGE, lw=1.4)
-    ax.text(5.0, 7.15, r"direct: $N_{\rm dir}=q\,{\rm tr}\,\mathsf{S}/4\pi$, direction $\mathsf{h}$",
+    ax.text(5.0, 7.15, r"optically thin: $N_{\rm OT}=q\,{\rm tr}\,\mathsf{S}/4\pi$, direction $\mathsf{h}$",
             color=INK, fontsize=7, ha="center", va="bottom")
     ax.text(3.3, 4.6, "diffuse", color=INK, fontsize=7, ha="right", va="center")
     # diffuse light: periodic images, old photons, recombination radiation
@@ -75,11 +75,11 @@ def panel_split(ax):
     y0, h = 0.45, 0.38
     ax.add_patch(Rectangle((1.0, y0), 3.6, h, fc=ORANGE, ec="white", lw=1.5))
     ax.add_patch(Rectangle((4.6, y0), 4.4, h, fc=BLUE, ec="white", lw=1.5))
-    ax.text(2.8, y0 - 0.12, r"$\min(N, N_{\rm dir})$: $\mathsf{h}$", ha="center", va="top", fontsize=7)
-    ax.text(6.8, y0 - 0.12, r"$N - N_{\rm dir}$: isotropic $\mathsf{I}/3$", ha="center", va="top", fontsize=7)
-    ax.text(1.0, y0 + h + 0.12, r"the cell's photons $N$ (after overlap, $N > N_{\rm dir}$)", fontsize=7,
+    ax.text(2.8, y0 - 0.12, r"$\min(N, N_{\rm OT})$: $\mathsf{h}$", ha="center", va="top", fontsize=7)
+    ax.text(6.8, y0 - 0.12, r"$N - N_{\rm OT}$: isotropic $\mathsf{I}/3$", ha="center", va="top", fontsize=7)
+    ax.text(1.0, y0 + h + 0.12, r"the cell's photons $N$ (after overlap, $N > N_{\rm OT}$)", fontsize=7,
             va="bottom", color=INK)
-    ax.text(5.0, 8.75, r"$\mathsf{P} = N\,\frac{\mathsf{I}}{3} + \min(N, N_{\rm dir})\,(\mathsf{h} - \frac{\mathsf{I}}{3})$",
+    ax.text(5.0, 8.75, r"$\mathsf{P} = N\,\frac{\mathsf{I}}{3} + \min(N, N_{\rm OT})\,(\mathsf{h} - \frac{\mathsf{I}}{3})$",
             ha="center", fontsize=9)
 
 

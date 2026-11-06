@@ -24,7 +24,7 @@
 \newcommand{\hmpc}{\,h\,\mathrm{Mpc}^{-1}}
 \newcommand{\mpch}{\,\mathrm{Mpc}/h}
 \newcommand{\xv}{x_{\rm V}}
-\newcommand{\Ndir}{N_{\rm dir}}
+\newcommand{\Ndir}{N_{\rm OT}}
 \newcommand{\T}{^{\mathsf T}}
 \newcommand{\placeholder}[1]{\fbox{\parbox[c][5cm][c]{0.9\linewidth}{\centering\textcolor{red}{To make:} #1}}}
 
@@ -188,11 +188,14 @@ ones, described in \S\ref{sec:closures}:
   light. It ignores absorption, though, and counts sources only out to
   half a box, which makes it too anisotropic once the mean free path
   exceeds the box \citep{wu21}.
-\item \textbf{Split} (new): only as many photons as the current sources
-  would supply without absorption, $N_{\rm dir}$, carry the direction of
-  $\mathsf h$; the rest are isotropic,
-  $\mathsf D=\mathsf I/3+\min(1,N_{\rm dir}/N)\,(\mathsf h-\mathsf I/3)$.
-  Photons beyond $N_{\rm dir}$ must come from farther than half a box or
+\item \textbf{Split} (new): the OTVET tensor is applied only to the part
+  of the radiation in a cell that the optically thin approximation
+  accounts for, and the rest is assumed to be isotropic. With $N_{\rm OT}$
+  the photon density the current sources would produce in the optically
+  thin limit (from ${\rm tr}\,\mathsf S$), the fraction $\min(1,N_{\rm OT}/N)$
+  of the photons carries the direction of $\mathsf h$, so that
+  $\mathsf D=\mathsf I/3+\min(1,N_{\rm OT}/N)\,(\mathsf h-\mathsf I/3)$.
+  Photons beyond $N_{\rm OT}$ must come from farther than half a box or
   from earlier emission, and so arrive from all directions. The split
   corrects OTVET's normalization with no free parameter and at no extra
   cost.
@@ -215,11 +218,11 @@ ones, described in \S\ref{sec:closures}:
 %======================================================================
 \section{New closures}\label{sec:closures}
 Notation: $q_g$ the photons per unit $L$ per RT substep injected into
-group $g$, and $N_{{\rm dir},g}$ the unattenuated steady-state photons of
+group $g$, and $N_{{\rm OT},g}$ the unattenuated steady-state photons of
 the current sources (minimum image),
 \begin{equation}
 q_g=\frac{f_{\rm esc}\,\xi_g\,\Delta t_{\rm RT}}{V_{\rm cell}\langle n_{\rm H}\rangle},\qquad
-N_{{\rm dir},g}=\frac{q_g\,{\rm tr}\,\mathsf S}{4\pi};
+N_{{\rm OT},g}=\frac{q_g\,{\rm tr}\,\mathsf S}{4\pi};
 \end{equation}
 one RT substep is one cell of light travel; $\Gamma$-weighted sums
 $N_w=\sum_g\sigma_gN_g$, $q_w=\sum_g\sigma_gq_g$. Parameters and
@@ -227,7 +230,7 @@ defaults: Table~\ref{tab:params}; schematic: Fig.~\ref{fig:schematic}.
 
 \subsection{Direct + diffuse split}
 \begin{equation}
-\mathsf P_g = N_g\,\frac{\mathsf I}{3} + \min(N_g,N_{{\rm dir},g})\left(\mathsf h-\frac{\mathsf I}{3}\right)
+\mathsf P_g = N_g\,\frac{\mathsf I}{3} + \min(N_g,N_{{\rm OT},g})\left(\mathsf h-\frac{\mathsf I}{3}\right)
 \end{equation}
 \begin{itemize}
 \item $N\le\Ndir$: OTVET exactly. $N>\Ndir$: the thin light's own
@@ -516,7 +519,7 @@ method and the case A + RR rays (needs a
 \includegraphics[width=\linewidth]{figures/fig4_schematic.pdf}
 \caption{Schematic of the new closures (\texttt{scripts/fig4\_schematic.py}).
 (a) The split: the thin minimum-image sum gives the direct light
-$N_{\rm dir}$ with direction $\mathsf h$; the cell's photons beyond it are
+$N_{\rm OT}$ with direction $\mathsf h$; the cell's photons beyond it are
 treated as isotropic. (b) The cone tensor: a receiver's HEALPix cones march
 through mip-maps of the emissivity and the HI column, sampling the level
 that matches the cone width; a neutral island shadows the sources behind
