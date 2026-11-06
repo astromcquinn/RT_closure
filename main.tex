@@ -14,7 +14,7 @@
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
 % ADS journal macros used by refs.bib (a journal class defines them; \providecommand leaves those)
-\providecommand{\mnras}{MNRAS}\providecommand{\apj}{ApJ}\providecommand{\apjs}{ApJS}
+\providecommand{\mnras}{MNRAS}\providecommand{\apj}{ApJ}\providecommand{\apjs}{ApJS}\providecommand{\aj}{AJ}
 \providecommand{\apjl}{ApJL}\providecommand{\aap}{A\&A}\providecommand{\jcap}{JCAP}
 \providecommand{\pasp}{PASP}\providecommand{\araa}{ARA\&A}\providecommand{\prd}{Phys.~Rev.~D}
 \providecommand{\nat}{Nature}\providecommand{\physrep}{Phys.~Rep.}\providecommand{\na}{New Astron.}
@@ -105,7 +105,7 @@ particle-mesh (PM) $N$-body solver for the dark matter, an Eulerian solver
 for the gas, and the transfer of ionizing radiation in five frequency
 groups with non-equilibrium hydrogen and helium chemistry and
 photoheating. With its original settings the port reproduces the Fortran
-code bit for bit on a set of validation problems. %The runs here enable a set of bookkeeping and physics corrections to the original (among them photon-conserving ray deposition). They also replace its moving-frame hydrodynamics scheme with an unsplit MUSCL--Hancock scheme with HLLC fluxes and a dual-energy formulation \todo{cite Toro 2009}, which removes the spurious heating of cold, supersonically moving gas.
+code bit for bit on a set of validation problems. %The runs here enable a set of bookkeeping and physics corrections to the original (among them photon-conserving ray deposition). They also replace its moving-frame hydrodynamics scheme with an unsplit MUSCL--Hancock scheme with HLLC fluxes and a dual-energy formulation \citep{toro09}, which removes the spurious heating of cold, supersonically moving gas.
 
 The comparison uses one uniform suite of seven runs that differ only in
 the radiative transfer (Table~\ref{tab:runs}). The box is $40\mpch$ on a
@@ -114,14 +114,14 @@ matter particles of $6.4\times10^6\,M_\odot$, whose forces are computed on
 a $2048^3$ PM mesh. The cosmology is $\Omega_m=0.27$,
 $\Omega_\Lambda=0.73$, $\Omega_b=0.045$, $h=0.70$, $\sigma_8=0.80$ and
 $n_s=0.96$. The initial conditions are a Zel'dovich realization at $z=100$
-of the \todo{cite Eisenstein \& Hu 1998} no-wiggle linear power spectrum..
+of the no-wiggle linear power spectrum of \citet{eisenstein98}..
 
 Sources are the friends-of-friends halos (linking length 0.2) found on the
 fly at every hydro step, down to 20 particles
 ($1.3\times10^8\,M_\odot$). Each halo's UV luminosity comes from abundance
 matching observed UV luminosity functions to a Sheth--Tormen mass function
 refit to the friends-of-friends halos of this box
-\todo{cite Sheth \& Tormen 1999; the UV LF papers}. Below the turnover,
+\citep{sheth99,bouwens21,bouwens22,donnan24,atek26}. Below the turnover,
 this gives $L_{\rm UV}\propto M^{1.43\textrm{--}1.46}$ at $z=7$--5.7. The
 ionizing photon production efficiency is
 $\log\xi_{\rm ion}=25.38$ \citep{pahl25}, and the escape fraction is
@@ -146,8 +146,7 @@ in $z$ (Table~\ref{tab:runs}), we compare them at fixed redshift.
 
 \subsection{Adaptive ray tracing (the reference)}
 \begin{itemize}
-\item HEALPix rays split adaptively \todo{cite Abel \& Wandelt 2002;
-  G\'orski+05}, 5 frequency groups, photon-conserving deposit.
+\item HEALPix rays split adaptively \citep{abel02,gorski05}, 5 frequency groups, photon-conserving deposit.
 \item $\Gamma$ statistics use \texttt{gammaHI\_avg}, $\Gamma$ averaged
   over the hydro step's RT substeps (removes the rays' sampling noise).
 \item The case A + recombination-radiation rays: the rays' own physics
@@ -164,7 +163,7 @@ in $z$ (Table~\ref{tab:runs}), we compare them at fixed redshift.
   $N_g$ the photons per mean H atom. First-order GLF (Rusanov) flux, wave
   speed $\chat$, 4 subcycles per RT substep; the same cell physics,
   redshifting and photon conservation as the rays; isotropic injection.
-\item M1 \todo{cite Levermore 1984}:
+\item M1 \citep{levermore84}:
   $\mathsf D=\frac{1-\chi}{2}\mathsf I+\frac{3\chi-1}{2}\hat u\hat u\T$,
   $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$, $f=|\mathbf F|/\chat N$.
 \item Thin OTVET \citep{gnedin01}: $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$,
@@ -289,7 +288,7 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
   normalisation including the box scale. Cf.\ \citet{finlator09}
   (per-source long characteristics, cost $\propto$ cells $\times$
   sources), TreeCol/LEBRON \citep{hopkins20}, voxel cone tracing
-  \todo{cite Crassin+11}.
+  \citep{crassin11}.
 \item Limits: shadows narrower than a cone ($\approx0.29s$), clumpy
   absorbers ($\tau$ cap), one hydro step of lag, instantaneous sources,
   gray tensor.
@@ -372,7 +371,7 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
   fractions on a nonlinear density, no recombinations beyond
   $R_{\rm max}$, spheres ionised whole). Its upturn at $k\gtrsim20\hmpc$ is
   its sharp ionised/neutral boundaries.
-  \todo{cite Mesinger, Furlanetto \& Cen 2011; Murray+20.}
+  \citep{mesinger11,murray20}
 \item IGM statistics: the same for every method against the data
   \citep{gaikwad23,becker21,zhu23,bosman22}; $\lambda_{\rm mfp}$
   3.5--5$\times$ too long in every run (resolution, not the closure).
@@ -391,7 +390,7 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
   light through light (like M1); after overlap $R=\lambda_{\rm mfp}|\nabla\ln N|\gg1$,
   so every photon becomes a beam down the gradient, the opposite extreme
   from M1; sign of the $P_\Gamma$ error unknown without a run.
-  \todo{cite an FLD reionization code.}
+  FLD is used for reionization in, e.g., Enzo \citep{reynolds09,norman15}.
 \item Extensions: per-group cones, retarded sources, AMR levels.
 \end{itemize}
 
