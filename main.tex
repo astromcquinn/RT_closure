@@ -400,10 +400,16 @@ method and the case A + RR rays (needs a
 
 \begin{figure}[h]
 \centering
-\placeholder{schematic of the closures: the split's direct and diffuse
-photons; the cone march (receivers, cones widening through the mip levels,
-transmission, distance bins, the budget cutoff).}
-\caption{Schematic of the new closures.}
+\includegraphics[width=\linewidth]{figures/fig4_schematic.pdf}
+\caption{Schematic of the new closures (\texttt{scripts/fig4\_schematic.py}).
+(a) The split: the thin minimum-image sum gives the direct light
+$N_{\rm dir}$ with direction $\mathsf h$; the cell's photons beyond it are
+treated as isotropic. (b) The cone tensor: a receiver's HEALPix cones march
+through mip-maps of the emissivity and the HI column, sampling the level
+that matches the cone width; a neutral island shadows the sources behind
+it; the near field ($r<r_c$) is the thin FFT; the budget cutoff
+$e^{-s/\lambda_x}$ fades the cones, which continue through the periodic
+images. Cone widths and steps exaggerated for legibility.}
 \label{fig:schematic}
 \end{figure}
 
