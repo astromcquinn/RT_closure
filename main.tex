@@ -144,29 +144,30 @@ in $z$ (Table~\ref{tab:runs}), we compare them at fixed redshift.
 %Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
 
 
-The seven runs differ only in how the radiation is transported:
+The seven runs differ only in how the radiation is transported.
+
+\paragraph{Rays.} The reference. Each source emits rays along HEALPix
+directions \citep{gorski05}, which split as they travel so that every cell
+they reach is crossed by several rays \citep{abel02,trac07}, and deposit
+their photoionizations cell by cell, conserving photons. One run uses
+case-B recombination, the other case A with the recombination radiation
+transported.
+
+\paragraph{Moment methods.} For each frequency group we evolve the photon
+density $N$ and the flux $\chat\,\mathbf F$,
+\begin{align}
+\partial_t N + \chat\,\nabla\cdot\mathbf F &= S - \chat\kappa N,\\
+\partial_t \mathbf F + \chat\,\nabla\cdot(\mathsf D\,N) &= -\chat\kappa \mathbf F,
+\end{align}
+with a first-order Godunov scheme using global Lax--Friedrichs fluxes of
+wave speed $\chat$. The sources $S$, the absorption $\kappa$ and the
+redshifting are those of the ray runs. The methods differ only in the
+Eddington tensor $\mathsf D$ (trace 1):
 \begin{itemize}
-\item \textbf{Rays}, the reference. Each source emits rays along HEALPix
-  directions \citep{gorski05}, which split as they travel so that every
-  cell they reach is crossed by several rays \citep{abel02,trac07}, and
-  deposit their
-  photoionizations cell by cell, conserving photons. One run uses case-B
-  recombination, the other case A with the recombination radiation
-  transported.
-\item \textbf{Moment methods.} For each frequency group $g$ we evolve the
-  photon density $N_g$ and the flux $\chat\,\mathbf F_g$,
-  \begin{align}
-  \partial_t N_g + \chat\,\nabla\cdot\mathbf F_g &= S_g - \chat\kappa_g N_g,\\
-  \partial_t \mathbf F_g + \chat\,\nabla\cdot(\mathsf D\,N_g) &= -\chat\kappa_g \mathbf F_g,
-  \end{align}
-  with a first-order Godunov scheme using global Lax--Friedrichs fluxes
-  of wave speed $\chat$. The sources $S_g$, the absorption $\kappa_g$ and
-  the redshifting are those of the ray runs. The methods differ only in
-  the Eddington tensor $\mathsf D$ (trace 1).
 \item \textbf{M1} \citep{levermore84} takes $\mathsf D$ from the local
-  reduced flux $f=|\mathbf F_g|/N_g$:
+  reduced flux $f=|\mathbf F|/N$:
   $\mathsf D=\frac{1-\chi}{2}\mathsf I+\frac{3\chi-1}{2}\hat{\mathbf u}\hat{\mathbf u}\T$,
-  with $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$ and $\hat{\mathbf u}=\mathbf F_g/|\mathbf F_g|$.
+  with $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$ and $\hat{\mathbf u}=\mathbf F/|\mathbf F|$.
 \item \textbf{Thin OTVET} \citep{gnedin01} takes $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$,
   the Eddington tensor of the optically thin light of the current sources,
   \begin{equation}
@@ -175,11 +176,19 @@ The seven runs differ only in how the radiation is transported:
   \end{equation}
   with each source $s$ of luminosity $L_s$ at its nearest periodic image,
   computed by FFT once per hydro step.
-\item \textbf{Split, screen and cone}, the three new closures of
-  \S\ref{sec:closures}, replace $\mathsf h$ in thin OTVET.
+\item \textbf{Split} (new): only as many photons as the current sources
+  would supply without absorption, $N_{\rm dir}$, carry the direction of
+  $\mathsf h$; the rest are isotropic,
+  $\mathsf D=\mathsf I/3+\min(1,N_{\rm dir}/N)\,(\mathsf h-\mathsf I/3)$.
+\item \textbf{Screen} (new): $\mathsf h$ from the sources' light
+  attenuated by $e^{-r/\lambda}$ and summed over all periodic images, with
+  $\lambda$ the photons' mean path from the photon budget \citep{wu21}.
+\item \textbf{Cone} (new): $\mathsf h$ from the sources' light attenuated
+  by the HI along each direction, traced through cones out to several box
+  lengths, with a photon-budget cutoff, and blended with the split on
+  scales of a few cells.
 \end{itemize}
-
-\end{itemize}
+The three new closures are described in \S\ref{sec:closures}.
 
 %======================================================================
 \section{New closures}\label{sec:closures}
