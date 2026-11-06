@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Draft of Figure 1 cut from a rendered figure: the x_HII maps of the rays,
-M1, thin OTVET, the cone and 21cmFAST (default, R_max = 15 Mpc, on the
-suite's own density) at z = 6.97, 6.20 and 5.70.
+M1, thin OTVET, the cone and 21cmFAST (on the suite's own density,
+R_max = 15 Mpc; mass-dependent sources with the suite's abundance-matched
+slope, branch 21cmfast-mass-sources, 61b8312) at z = 6.97, 6.20 and 5.70.
 
 The panels come from NewRadHydroCode's docs/figures/taueff_21cmfast_fig8_maps.png
-(branch taueff-21cmfast; excursion_set.py figure --es rmax15: rows z = 6.97,
+(excursion_set.py figure --es rmax15: rows z = 6.97,
 6.45, 6.20, 5.98, 5.70; columns rays, rays A+RR, M1, OTVET, split, screen,
 cone, 21cmFAST; the 8-cell slab through the box middle, as in
 rt_suite_figures.py). The final figure is to be drawn from the cubes on
@@ -33,7 +34,7 @@ XV = {6.97: 0.49, 6.45: 0.68, 6.20: 0.79, 5.98: 0.88, 5.70: 0.97}
 
 PICK_ROWS = [6.97, 6.20, 5.70]
 PICK_COLS = [("rays", "rays"), ("M1", "M1"), ("OTVET", "OTVET (thin)"), ("cone", "cone"),
-             ("21cmFAST", "21cmFAST (default)")]
+             ("21cmFAST", "21cmFAST")]
 
 
 def main():

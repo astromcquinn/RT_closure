@@ -334,8 +334,18 @@ T=\sum_g W_g\,e^{-\sigma_g\,{\rm col}},\quad W_g\propto q_g\sigma_g,
     too little (M1) broadens it. The 40\,Mpc/$h$ box makes the scatter a
     lower bound (NewRadHydroCode \texttt{docs/taueff\_21cmfast.md} A.3, A.6).
   \end{itemize}
-\item 21cmFAST on the same density field (Fig.~\ref{fig:21cmfast}): is
-  the excursion set closer to the rays or to the moment methods?
+\item 21cmFAST on the same density field, with sources matched to the
+  suite's mass weighting (Figs.~\ref{fig:maps}, \ref{fig:21cmfast}): far
+  from every RT method. 21--17\% of the cells differ from the rays by more
+  than 0.5 in $x_{\rm HII}$ at $\xv=0.49$--0.79 (M1 7--8\%, thin OTVET
+  3\%, the cone 2\%); $r(k)$ with the rays falls below 0.5 by
+  $k\approx0.5$--$1\hmpc$; 1.6--3.1$\times$ the rays' power at
+  $k\approx0.2\hmpc$, 0.5--0.8$\times$ at 1--3$\hmpc$. Matching the source
+  weighting makes it slightly worse than constant $\zeta$ (19\% of cells
+  off at $\xv=0.49$): the limit is the criterion itself (EPS collapsed
+  fractions on a nonlinear density, no recombinations beyond
+  $R_{\rm max}$, spheres ionised whole). Its upturn at $k\gtrsim20\hmpc$ is
+  its sharp ionised/neutral boundaries.
   \todo{cite Mesinger, Furlanetto \& Cen 2011; Murray+20.}
 \item IGM statistics: the same for every method against the data
   \citep{gaikwad23,becker21,zhu23,bosman22}; $\lambda_{\rm mfp}$
@@ -418,13 +428,14 @@ key & meaning & default \\
 \includegraphics[width=\linewidth]{figures/fig1_maps_xHII_draft.png}
 \caption{$x_{\rm HII}$ in 8-cell ($0.625\mpch$) slabs through the box
 middle at $z=6.97$, 6.20 and 5.70 ($\xv=0.49$, 0.79, 0.97 in the rays):
-the rays, M1, thin OTVET, the cone, and 21cmFAST's excursion-set criterion
-with its default parameters ($R_{\rm max}=15$\,Mpc) applied to the suite's
-own gas density, $\zeta$ chosen at each $z$ to give the rays' $\xv$.
-\draft{cut by \texttt{scripts/fig1\_compose\_draft.py} from NewRadHydroCode
-\texttt{taueff\_21cmfast\_fig8\_maps.png} (branch
-\texttt{taueff-21cmfast}); the 21cmFAST column to be replaced by the new
-run matched to the sources. Final from the cubes:
+the rays, M1, thin OTVET, the cone, and 21cmFAST's excursion-set
+criterion on the suite's own gas density ($R_{\rm max}=15$\,Mpc), with
+mass-dependent sources matched to the suite's (\texttt{E-INTEGRAL},
+$\alpha_\star=a(z)-1=0.43$--0.46 from the abundance matching,
+$\alpha_{\rm esc}=0$, the normalisation chosen at each $z$ to give the
+rays' $\xv$). \draft{cut by \texttt{scripts/fig1\_compose\_draft.py} from
+NewRadHydroCode \texttt{taueff\_21cmfast\_fig8\_maps.png} (branch
+\texttt{21cmfast-mass-sources}, 61b8312). Final from the cubes:
 \texttt{rt\_suite\_figures.py} with the \texttt{excursion\_set.py} output
 as one more run (it needs an option for runs without $\Gamma$).}}
 \label{fig:maps}
@@ -533,12 +544,15 @@ equals \citet{bosman22}'s.}
 
 \begin{figure}[h]
 \centering
-\placeholder{21cmFAST's excursion set on the suite's density field
-($\zeta(z)$ matched to the rays' $\xv$): $\Delta^2$ of $x_{\rm HII}$, the
-ratio and $r(k)$ with the rays, beside every RT method; a maps column
-(\texttt{prompts/taueff\_21cmfast.md}, part B).}
-\caption{A semi-numerical model against the RT methods on the same density
-field.}
+\includegraphics[width=\linewidth]{figures/fig8_21cmfast_pk_draft.png}
+\caption{21cmFAST (mass-dependent sources matched to the suite's,
+$R_{\rm max}=15$\,Mpc, on the suite's density; violet) against every RT
+method at the five snapshots during reionization: $\Delta^2$ of
+$x_{\rm HII}$, the ratio to the rays and $r(k)$ with them; top right, the
+fraction of cells whose $x_{\rm HII}$ differs from the rays' by more than
+0.5. \draft{NewRadHydroCode \texttt{taueff\_21cmfast\_fig8\_pk.png}
+(branch \texttt{21cmfast-mass-sources}, 61b8312); its colours differ from
+Figs.~\ref{fig:pkx}--\ref{fig:pkg} and are to be unified.}}
 \label{fig:21cmfast}
 \end{figure}
 
