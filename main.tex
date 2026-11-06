@@ -97,26 +97,52 @@ by cone tracing.
 
 %======================================================================
 \section{Simulations and radiative transfer}
-\subsection{Code and simulations}
-\begin{itemize}
-\item C++ port of the Trac \& Cen RadHydro \todo{cite Trac \& Cen 2007;
-  Trac, Cen \& Loeb 2008}.
-\item The uniform 512$^3$ suite (Table~\ref{tab:runs}; code
-  \texttt{docs/rt\_suite\_512.md}): $40\mpch$, $512^3$ gas cells
-  ($78\,{\rm kpc}/h$), $1024^3$ particles on the $2048^3$ PM mesh;
-  Zel'dovich ICs at $z=100$ \todo{cite Eisenstein \& Hu 1998}; sources by
-  abundance matching to FoF halos (Sheth--Tormen refit;
-  \todo{cite Sheth \& Tormen 1999}), $\log\xi_{\rm ion}=25.38$
-  \citep{pahl25}, $f_{\rm esc}(z)=f_6\,[(1+z)/7]^{2.5}$ with $f_6=0.11$;
-  continuous $\chat$ schedule in $x_{\rm HII,V}$ from $0.1c$ to $0.5c$
-  \todo{cite Gnedin 2016; Deparis+19; Ocvirk+19}; case B; unsplit hydro.
-  \todo{confirm $f_6$ and the schedule from the runs' params.txt: the
-  table of rt\_suite\_512.md \S1 is stale.}
-\item Outputs: 3D snapshots at the nominal $z=15$, 7, 6.5, 6.25, 6,
-  5.75, 5.5, 5.25, 5 (actual e.g.\ 6.97, 6.20, 5.98, 5.70, 5.49, 5.25,
-  4.99); 8-cell slabs every $\Delta z=0.025$; one checkpoint per run.
-\item All comparisons at fixed $z$.
-\end{itemize}
+
+
+All runs use a C++ port of the cosmological radiation-hydrodynamics code
+of \citet{trac07}, which couples a
+particle-mesh (PM) $N$-body solver for the dark matter, an Eulerian solver
+for the gas, and the transfer of ionizing radiation in five frequency
+groups with non-equilibrium hydrogen and helium chemistry and
+photoheating. With its original settings the port reproduces the Fortran
+code bit for bit on a set of validation problems. %The runs here enable a set of bookkeeping and physics corrections to the original (among them photon-conserving ray deposition). They also replace its moving-frame hydrodynamics scheme with an unsplit MUSCL--Hancock scheme with HLLC fluxes and a dual-energy formulation \todo{cite Toro 2009}, which removes the spurious heating of cold, supersonically moving gas.
+
+The comparison uses one uniform suite of seven runs that differ only in
+the radiative transfer (Table~\ref{tab:runs}). The box is $40\mpch$ on a
+side, with $512^3$ gas and RT cells ($78\,h^{-1}$\,kpc) and $1024^3$ dark
+matter particles of $6.4\times10^6\,M_\odot$, whose forces are computed on
+a $2048^3$ PM mesh. The cosmology is $\Omega_m=0.27$,
+$\Omega_\Lambda=0.73$, $\Omega_b=0.045$, $h=0.70$, $\sigma_8=0.80$ and
+$n_s=0.96$. The initial conditions are a Zel'dovich realization at $z=100$
+of the \todo{cite Eisenstein \& Hu 1998} no-wiggle linear power spectrum..
+
+Sources are the friends-of-friends halos (linking length 0.2) found on the
+fly at every hydro step, down to 20 particles
+($1.3\times10^8\,M_\odot$). Each halo's UV luminosity comes from abundance
+matching observed UV luminosity functions to a Sheth--Tormen mass function
+refit to the friends-of-friends halos of this box
+\todo{cite Sheth \& Tormen 1999; the UV LF papers}. Below the turnover,
+this gives $L_{\rm UV}\propto M^{1.43\textrm{--}1.46}$ at $z=7$--5.7. The
+ionizing photon production efficiency is
+$\log\xi_{\rm ion}=25.38$ \citep{pahl25}, and the escape fraction is
+$f_{\rm esc}(z)=f_6\,[(1+z)/7]^{2.5}$ with $f_6=0.11$, chosen so that
+reionization ends with ionized fraction $\xv=0.99$ at $z\approx5.6$, a redshift scaling motivated by \todo{cite D'Aloisio in prep}. 
+% f6 = 0.11 and the continuous c-hat schedule: the suite's launch record
+% (NewRadHydroCode docs/STATUS.md); the table in rt_suite_512.md S1 is stale.
+
+All runs use case-B recombination with on-the-spot absorption of the
+recombination photons, except one ray run with case-A recombination and
+the recombination radiation transported (``rays, case A + RR''). %As in the original code, cooling is suppressed above 200 times the mean density, and a cell denser than 50 times the mean (overdensity $\delta>50$) removes only a fraction $e^{-(\delta-50)/50}$ of the photons its photoionizations use, so the densest gas neither consumes nor shields much radiation.
+The reduced speed of light follows the volume-weighted ionized fraction
+$x$ of the previous hydro step. It is piecewise linear through
+$(x,\chat/c)=(0.125,0.1)$, $(0.375,0.2)$, $(0.625,0.3)$ and $(0.875,0.5)$,
+and constant outside them, a schedule chosen to achieve a converged ionization history to better than $\Delta z<0.1$.  Every $\Gamma_{\rm HI}$ statistic uses
+$\Gamma_{\rm HI}$ averaged over the RT substeps of the hydro step, which
+removes most of the rays' sampling noise. Since the runs share their
+initial conditions and sources, and their histories agree to within 0.1
+in $z$ (Table~\ref{tab:runs}), we compare them at fixed redshift.
+%Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
+
 
 \subsection{Adaptive ray tracing (the reference)}
 \begin{itemize}
