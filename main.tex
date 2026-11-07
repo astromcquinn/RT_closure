@@ -248,7 +248,7 @@ as one more run (it needs an option for runs without $\Gamma$).}}
 \includegraphics[width=\linewidth]{figures/fig2_pk_xHII_draft.png}
 \caption{\draft{\texttt{rt\_suite\_512\_pk\_xHII.png}.} $\Delta^2$ of
 $x_{\rm HII}$, the ratio to the rays and $r(k)$ at $z=6.97$, 6.20, 5.70:
-M1, thin, split, screen, cone and the case A + RR rays. \todo{include 21cmfast}}
+M1, OTVET, split, screen, cone and the case A + RR rays. \todo{include 21cmfast}}
 \label{fig:pkx}
 \end{figure}
 
@@ -279,16 +279,10 @@ more diffuse, and its last islands are eroded early: at $z=5.70$ its
 ionized fraction is 0.981 against the rays' 0.971, and the island at the
 top of the slab has nearly gone. The cone, which attenuates the light by
 the HI along each direction, keeps these islands, and its maps are the
-closest to the rays' at every stage. This shows in the cross-correlation
-with the rays at $k=4.9\hmpc$: $r=0.92$, 0.86 and 0.65 at
-$\xv=0.49$, 0.79 and 0.97 for the cone, against 0.85, 0.69 and 0.30 for
-OTVET and 0.65, 0.43 and 0.26 for M1. Late in reionization the cone has
-somewhat more small-scale $x_{\rm HII}$ power than the rays (1.2--1.3$\times$
-at $k=1$--$5\hmpc$ at $\xv=0.97$): its last islands are sharper. OTVET's
-is half the rays' there.
+closest to the rays' at every stage.
 
 21cmFAST, applied to the same density field with sources matched to the
-suite's, differs far more from the rays than any RT method does.  21cmFast does essentially no radiative transfer, assigning ionization based on smoothing the distribution of emission and asking if there is enough photons on any sphere around a pixel to ionize that sphere, and marking it as ionized if the answer is `yes'. It
+suite's, differs far more from the rays than any RT method does.  21cmFast does essentially no radiative transfer, assigning ionization based on smoothing the distribution of emission and asking if there are enough photons on any sphere around a pixel to ionize that sphere, and marking it as ionized if the answer is `yes'. It
 ionizes the largest overdense region completely and early, while many of
 the isolated bubbles the rays grow around individual sources are absent;
 21\% of the cells differ from the rays by more than 0.5 at $\xv=0.49$,
@@ -297,6 +291,26 @@ $k\approx0.5$--$1\hmpc$. Matching the source mass dependence makes this
 slightly worse than a constant ionizing efficiency (19\%), so the
 difference lies in the excursion-set criterion itself rather than in the
 sources.
+
+Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
+of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
+coefficient $r(k)$ with the rays. On large scales every RT method has the
+rays' power to within 10\% until $\xv\approx0.8$. The cross-correlation
+then separates the methods. M1 decorrelates first: $r=0.86$ already at
+$k\approx1\hmpc$ at $\xv=0.49$, falling to 0.57 at $\xv=0.97$, the
+displaced fronts of Figure~\ref{fig:maps}. On smaller scales
+($k\approx5\hmpc$) the cone stays the closest, with $r=0.92$, 0.86 and
+0.65 at $\xv=0.49$, 0.79 and 0.97, against 0.85, 0.69 and 0.30 for OTVET
+and 0.65, 0.43 and 0.26 for M1; the split equals OTVET here, since it
+only acts after overlap. At the end of reionization ($\xv=0.97$) OTVET,
+whose islands erode early, has half the rays' power at $k\gtrsim1\hmpc$,
+while the cone has 1.2--1.3 times the rays' at $k=1$--$5\hmpc$: its
+islands are sharper. Recombination radiation (case A + RR) changes the
+morphology less than any closure, with $r\ge0.99$ at $k\le2\hmpc$
+throughout. 21cmFAST has 1.6--3.1 times the rays' power at
+$k\approx0.2\hmpc$, its ionized regions too clustered on the largest
+scales, and 0.5--0.8 times on scales of 1--$3\hmpc$, and its $r(k)$
+falls below 0.5 by $k\approx0.5$--$1\hmpc$.
 
 \subsection{Fluctuations in the photoionization rate}
 
@@ -328,15 +342,37 @@ method and the case A + RR rays (needs a
 \end{figure}
 
 
+The closures differ more in the photoionization rate than in the
+ionized fraction. Figure~\ref{fig:mapsg} shows $\Gamma_{\rm HI}$ in the
+same slab. The mean rate is set by the photon budget and agrees between
+the methods: the median $\Gamma_{\rm HI}$ of the ionized cells is within
+10\% of the rays' from $z=12$ to 5. Its distribution is not. Inside the
+bubbles the rays, the cone and the case A + RR rays show a rate that
+falls away from each source, the proximity zones resolved. M1 fills its
+bubbles with a nearly uniform rate: once a cell's photons are mostly a
+nearly isotropic background, a source's flux is a small part of the
+cell's, M1's closure becomes almost isotropic, and the source's light
+diffuses instead of streaming. OTVET and the split have the rays'
+structure inside the bubbles but at a lower level, and the screen gives
+a mottled field during reionization, its single attenuation length
+over-weighting the nearest sources. After overlap ($z=4.99$) all the
+runs are smooth except OTVET, which keeps bright patches around the
+source clusters. The one-point distribution shows the same: between its
+0.1 and 99.9 percentiles, $\Gamma/\langle\Gamma\rangle$ in ionized
+cells spans 0.81--1.85 for the rays, 0.92--1.93 for the cone, 0.94--1.26
+for M1, which has no proximity zones, and 0.65--4.2 for OTVET.
+
 Figure~\ref{fig:pkg} shows the power spectrum of
 $\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ and its
-cross-correlation with the rays. During reionization all the OTVET
-variants follow the rays closely ($r\ge0.95$ at $k\le2\hmpc$ and the
-power within 30\%), except the screen, whose single attenuation length
-over-weights the nearest sources and gives twice the rays' power at
-$k\approx2\hmpc$. M1 is 20--40\% low, and its correlation with the rays
-falls to 0.6--0.7 at $k=0.5$--$1\hmpc$, the scale on which its fronts
-are displaced.
+cross-correlation with the rays. During reionization ($\xv=0.49$ and
+0.79) all the OTVET variants follow the rays closely ($r\ge0.95$ at
+$k\le2\hmpc$ and the power within 30\%), except the screen, with twice
+the rays' power at $k\approx2\hmpc$, the mottling of
+Figure~\ref{fig:mapsg}. M1 is 20--40\% low, and its correlation with the
+rays falls to 0.6--0.7 at $k=0.5$--$1\hmpc$, the scale on which its
+fronts are displaced. Near the end ($\xv=0.97$) the OTVET variants are
+1.2--1.7 times the rays' power at $k\le2\hmpc$ and M1 0.6 times, while
+the cone keeps $r=0.96$.
 
 After overlap the methods separate sharply. At $z=4.99$ OTVET has
 11--14 times the rays' power at every $k$, yet its correlation with the
@@ -369,29 +405,6 @@ only 3--15\%, less than any closure does.
 \item Histories (Table~\ref{tab:runs}): every method within 0.1 in $z$,
   $\tau_{\rm es}$ within 0.0005 (photon budget); the cone ends closest
   ($\Delta z=0.02$).
-\item Morphology (Fig.~\ref{fig:maps}): M1's rounder fronts, no proximity
-  zones; OTVET's diffuse fronts and early-vanishing islands; the
-  cone's sharp islands.
-\item $\Gamma_{\rm HI}$ maps (Fig.~\ref{fig:mapsg}) and proximity zones
-  (Fig.~\ref{fig:profile}): the rays and the cone resolve a $\Gamma$ that
-  falls away from each source; M1 fills its bubbles with a nearly uniform
-  $\Gamma$ (a local closure diffuses once the background dominates $N$: a
-  source's excess is then smaller by $\sim3r/\lambda$ than streaming);
-  OTVET beams the background along the source directions after
-  overlap (bright patches, 99.9\% point of $\Gamma/\langle\Gamma\rangle$
-  4.2 against the rays' 1.85; M1 1.26, cone 1.93 at $z=4.99$). The
-  source cells themselves are set by the injection order
-  (\texttt{moment\_inject}), not the closure.
-\item $x_{\rm HII}$ power (Fig.~\ref{fig:pkx}): large scales agree except
-  M1. $r(k=4.9\hmpc)$ at $\xv=0.49/0.79/0.97$: cone 0.92/0.86/0.65, thin
-  0.85/0.69/0.30, M1 0.65/0.43/0.26; split = thin.
-\item $\Gamma_{\rm HI}$ at $z=5$--6 (Fig.~\ref{fig:pkg}): thin
-  11--14$\times$, M1 0.04--0.4$\times$, the new closures
-  0.7--1.9$\times$ with $r=0.92$--0.96; the cone closest at
-  $k\le2\hmpc$; all moment methods 1.6--1.9$\times$ at $k\approx5$.
-  Why they agree at $k\lambda\gg1$: once the anisotropy amplitude is
-  right, $P_\Gamma$ is the sources' $1/r^2$ near field \citep{wu21}.
-  $\Gamma$ PDF quantiles: Table \todo{T3}.
 \item $\lambda_{\rm mfp}$ and the $\tau_{\rm eff}$ scatter over $50\mpch$
   segments, full snapshots only (Fig.~\ref{fig:taueff}):
   \begin{itemize}
@@ -412,7 +425,7 @@ only 3--15\%, less than any closure does.
     lower bound (NewRadHydroCode \texttt{docs/taueff\_21cmfast.md} A.3, A.6).
   \end{itemize}
 \item 21cmFAST on the same density field, with sources matched to the
-  suite's mass weighting (Figs.~\ref{fig:maps}, \ref{fig:21cmfast}): far
+  suite's mass weighting (Figs.~\ref{fig:maps}, \ref{fig:pkx}): far
   from every RT method. 21--17\% of the cells differ from the rays by more
   than 0.5 in $x_{\rm HII}$ at $\xv=0.49$--0.79 (M1 7--8\%, OTVET
   3\%, the cone 2\%); $r(k)$ with the rays falls below 0.5 by
