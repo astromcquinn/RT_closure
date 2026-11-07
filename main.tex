@@ -1,9 +1,4 @@
-% Outline of the paper on moment-RT closures against ray tracing.
-% Not the paper: every section holds the outline points (itemize) and the
-% key equations; prose is to be written. Mirrors outline.md (2026-11-06).
-% Paths like docs/... and tools/... are in astromcquinn/NewRadHydroCode.
-% Figures marked "draft" are copies of the code repository's report
-% figures (figures/README.md); the final ones are made on klone.
+
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb}
@@ -28,7 +23,7 @@
 \newcommand{\T}{^{\mathsf T}}
 \newcommand{\placeholder}[1]{\fbox{\parbox[c][5cm][c]{0.9\linewidth}{\centering\textcolor{red}{To make:} #1}}}
 
-\title{Moment closures for reionization against ray tracing}
+\title{Moment closures against ray tracing for modeling reionization}
 \author{\todo{authors}}
 \date{Outline, 2026-11-06}
 
@@ -218,6 +213,8 @@ the photons in the box.
 \end{itemize}
 The walltime for all the simple clsures are about 10 hours (cone takes an extra $\approx 45$ minutes), and the runs with rays take about 24 hours.  The time computing the Eddington tensor time per step at 256$^3$ is 0.7\,s for OTVET, 1.2\,s for screen, and 3.2\,s for the cone.
 
+We also will compare the radiative transfer models agains 21cmFAST. \todo{describe}
+
 
 %======================================================================
 \section{Results}
@@ -257,40 +254,26 @@ and the cross-correlation coefficient with the rays (bottom) at $z=6.97$,
 
 
 
-Figure~\ref{fig:maps} shows the ionized fraction in a slab through the
+Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$ deep slab through the
 box at three stages of reionization. All the RT methods agree on where
 the ionized regions are: the bubbles grow around the same source
 clusters, and on scales above a few Mpc the $x_{\rm HII}$ fields are
-nearly identical ($r\ge0.96$ with the rays at $k\le1\hmpc$ up to
-$\xv\approx0.8$, except M1). The methods differ at the fronts and in the
+nearly identical. The methods differ at the fronts and in the
 last neutral islands. With the rays' $\xv$ at each redshift matched to
-within 0.01 by all the methods, 1.8\% of the cells differ from the rays
-by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.97$ and 6.20,
-2.8--3.0\% for OTVET, and 6.6--7.8\% for M1.
+within 1\% by all the methods.  % 1.8\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.97$ and 6.20, 2.8--3.0\% for OTVET, and 6.6--7.8\% for M1.
 
-M1's fronts are the roundest and in places the most displaced: its
-ionized regions merge in different places, and its fronts run ahead in
-the large bubbles and lag in the small ones. A local closure merges the
+ M1's local closure merges the
 light of several sources into one flux per cell and diffuses it, so the
-fronts lose the geometry set by the individual sources. OTVET keeps that
+fronts lose the geometry leading to rounder fronts and that are most geometrically distinct from the other methods. OTVET keeps that
 geometry, since its tensor points at the sources, but it illuminates
 every front from all sides at the optically thin rate. Its fronts are
-more diffuse, and its last islands are eroded early: at $z=5.70$ its
-ionized fraction is 0.981 against the rays' 0.971, and the island at the
-top of the slab has nearly gone. The cone, which attenuates the light by
-the HI along each direction, keeps these islands, and its maps are the
-closest to the rays' at every stage.
+more diffuse than rays, and its last islands are eroded early. The cone, which attenuates the light by
+the HI along each direction, produces a very similar morphology to the rays' at every stage.
 
 21cmFAST, applied to the same density field with sources matched to the
 suite's, differs far more from the rays than any RT method does.  21cmFast does essentially no radiative transfer, assigning ionization based on smoothing the distribution of emission and asking if there are enough photons on any sphere around a pixel to ionize that sphere, and marking it as ionized if the answer is `yes'. It
 ionizes the largest overdense region completely and early, while many of
-the isolated bubbles the rays grow around individual sources are absent;
-21\% of the cells differ from the rays by more than 0.5 at $\xv=0.49$,
-and its cross-correlation with the rays falls below 0.5 by
-$k\approx0.5$--$1\hmpc$. Matching the source mass dependence makes this
-slightly worse than a constant ionizing efficiency (19\%), so the
-difference lies in the excursion-set criterion itself rather than in the
-sources.
+the isolated bubbles the rays grow around individual sources are absent.
 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
