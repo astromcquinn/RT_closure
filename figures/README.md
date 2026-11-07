@@ -17,3 +17,6 @@ and the command of each final figure here.
 | — | Fig. 6 | — | from `docs/otvet_closure.md` §3 tables | to make: the normalisation |
 | `fig_mfp_width.{pdf,png}` | λ_mfp and τ_eff width | `data/taueff_mfp_snap_A.txt` (from `docs/figures/taueff_21cmfast_z_snap_A.txt`, branch `taueff-21cmfast`, 88e686d) and `data/lambda_mfp_obs.txt` (`data/igm/igm_z5_6.txt`) | `scripts/fig_mfp_width.py` (this repository) | final for the current runs |
 | `fig8_21cmfast_pk_draft.png` | 21cmFAST comparison | `docs/figures/taueff_21cmfast_fig8_pk.png` (branch `21cmfast-mass-sources`, 61b8312) | `excursion_set.py figure` | draft: colours to unify with Figs. 2–3 |
+| `fig2_pk_xHII.{pdf,png}` | Fig. 2 | `data/pk_xHII_21cmfast.txt` (from `docs/figures/taueff_21cmfast_fig8.txt`, branch `21cmfast-mass-sources`, 61b8312) | `scripts/fig_pk.py` (this repository) | every run and 21cmFAST; drawn at the printed width |
+| `fig3_gamma_maps.png` | Fig. 3 | panels of `docs/figures/rt_suite_512_maps_gamma.png` (main) | `scripts/fig3_gamma_maps.py` (this repository) | draft (relabelled at the printed size); final from the cubes |
+| `fig4_pk_gamma.{pdf,png}` | Fig. 4 | `data/pk_suite.txt` (from `docs/figures/rt_suite_512_pk.txt`, main) | `scripts/fig_pk.py` (this repository) | epochs by x_V; final at z ≈ 6.0, 5.5, 5.0 |

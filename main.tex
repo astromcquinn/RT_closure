@@ -245,10 +245,10 @@ as one more run (it needs an option for runs without $\Gamma$).}}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{figures/fig2_pk_xHII_draft.png}
-\caption{\draft{\texttt{rt\_suite\_512\_pk\_xHII.png}.} $\Delta^2$ of
-$x_{\rm HII}$, the ratio to the rays and $r(k)$ at $z=6.97$, 6.20, 5.70:
-M1, OTVET, split, screen, cone and the case A + RR rays. \todo{include 21cmfast}}
+\includegraphics[width=\linewidth]{figures/fig2_pk_xHII.pdf}
+\caption{$\Delta^2$ of $x_{\rm HII}$ (top), the ratio to the rays (middle)
+and the cross-correlation coefficient with the rays (bottom) at $z=6.97$,
+6.20 and 5.70: every run and 21cmFAST (\texttt{scripts/fig\_pk.py}).}
 \label{fig:pkx}
 \end{figure}
 
@@ -317,9 +317,9 @@ falls below 0.5 by $k\approx0.5$--$1\hmpc$.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{figures/fig_gamma_maps_draft.png}
-\caption{\draft{\texttt{rt\_suite\_512\_maps\_gamma.png} without its
-$\xv=0.49$ row, the colour bar redrawn (same map and range).}
+\includegraphics[width=\linewidth]{figures/fig3_gamma_maps.png}
+\caption{\draft{panels cut from \texttt{rt\_suite\_512\_maps\_gamma.png},
+relabelled by \texttt{scripts/fig3\_gamma\_maps.py}.}
 $\Gamma_{\rm HI}$ (\texttt{gammaHI\_avg}) in 8-cell slabs through the box
 middle at $z=6.20$, 5.70 and 4.99 ($\xv=0.79$, 0.97, 1.00 in the rays), all
 seven runs. Final: regenerated with \texttt{rt\_suite\_figures.py
@@ -331,13 +331,13 @@ zones.}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{figures/fig3_pk_gamma_draft.png}
-\caption{\draft{\texttt{rt\_suite\_512\_pk\_gamma.png}, epochs chosen by
-$\xv$ (0.49, 0.79, 0.97, 1).} Final: $\Delta^2$ of
+\includegraphics[width=\linewidth]{figures/fig4_pk_gamma.pdf}
+\caption{As Fig.~\ref{fig:pkx}, for $\delta_\Gamma$ at $\xv=0.49$, 0.79,
+0.97 and after overlap (\texttt{scripts/fig\_pk.py}). \draft{Final: $\Delta^2$ of
 $\delta_\Gamma$ (\texttt{gammaHI\_avg}), the ratio to the rays and $r(k)$
 at $z\approx6.0$, 5.5 and 5.0 (snapshots 5.98, 5.49, 4.99), every
 method and the case A + RR rays (needs a
-\texttt{--z} option in \texttt{rt\_suite\_figures.py}). }
+\texttt{--z} option in \texttt{rt\_suite\_figures.py}).}}
 \label{fig:pkg}
 \end{figure}
 
