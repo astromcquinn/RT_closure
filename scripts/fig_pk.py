@@ -62,7 +62,8 @@ def read_blocks(path):
     return blocks
 
 
-def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.1, 10)):
+def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3)):
+    """ylim_ratio: one (lo, hi) for every panel, or a list with one per panel."""
     plt.rcParams.update({"font.size": 9, "axes.labelsize": 10, "xtick.labelsize": 8.5,
                          "ytick.labelsize": 8.5, "axes.linewidth": 0.8, "axes.edgecolor": INK2})
     n = len(blocks)
@@ -83,7 +84,12 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.1, 10)):
         a0.set_title(title.replace(", ", "\n") if n > 3 else title, fontsize=9.5)
         a0.set_yscale("log")
         a1.set_yscale("log")
-        a1.set_ylim(*ylim_ratio)
+        lim = ylim_ratio[j] if isinstance(ylim_ratio, list) else ylim_ratio
+        a1.set_ylim(*lim)
+        if lim == (0.3, 3):
+            a1.set_yticks([0.3, 0.5, 1, 2, 3])
+            a1.set_yticklabels(["0.3", "0.5", "1", "2", "3"])
+            a1.minorticks_off()
         a1.axhline(1, color="#9a9a96", lw=0.8, zorder=0)
         a2.set_ylim(0, 1.05)
         a2.set_yticks([0, 0.5, 1])
@@ -101,7 +107,7 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.1, 10)):
     fig.legend([handles[l] for l in order], order, loc="upper center", ncol=min(len(order), 4),
                frameon=False, fontsize=9, bbox_to_anchor=(0.5, 1.0), handlelength=2.8,
                columnspacing=1.2)
-    fig.subplots_adjust(left=0.1, right=0.99, bottom=0.08, top=0.87)
+    fig.subplots_adjust(left=0.1, right=0.99, bottom=0.08, top=0.83 if n > 3 else 0.87)
     fig.savefig(out + ".pdf")
     fig.savefig(out + ".png", dpi=300)
     print("wrote", os.path.normpath(out) + ".{pdf,png}")
@@ -122,7 +128,7 @@ def main():
         m = re.search(r"x_V = ([\d.]+) z = ([\d.]+)", h)
         titles.append(f"$z={float(m.group(2)):.2f}$, $x_V={float(m.group(1)):.2f}$")
     panel_grid([bs[h] for h in gam], titles, r"$\Delta^2_{\delta_\Gamma}(k)$",
-               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=(0.02, 30))
+               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=[(0.3, 3)] * (len(gam) - 1) + [(0.02, 30)])
 
 
 if __name__ == "__main__":
