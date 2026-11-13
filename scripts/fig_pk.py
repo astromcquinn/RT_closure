@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Figures 2 and 4: power spectra, the ratio to the rays and r(k) with the rays.
 
-  fig2: x_HII at z = 6.97, 6.20, 5.70 (x_V = 0.49, 0.79, 0.97 in the rays), every
-        run and 21cmFAST (data/pk_xHII_21cmfast.txt, NewRadHydroCode
-        excursion_set.py figure, branch 21cmfast-mass-sources)
-  fig4: delta_Gamma (gammaHI_avg) at x_V = 0.49, 0.79, 0.97 and after overlap
-        (z = 4.99), every run (data/pk_suite.txt, rt_suite_figures.py)
+  fig2: x_HII at every step of data/pk_xHII_21cmfast.txt (NewRadHydroCode
+        excursion_set.py figure: every run and 21cmFAST), titled by the
+        rays' z and x_V
+  fig4: delta_Gamma (gammaHI_avg) at the 'gamma' panels of data/pk_suite.txt
+        (rt_suite_figures.py; x_V ~ 0.5, 0.8, 0.97 and after overlap)
 
 usage: python3 scripts/fig_pk.py   (writes figures/fig2_pk_xHII.{pdf,png} and
        figures/fig4_pk_gamma.{pdf,png})
@@ -62,6 +62,18 @@ def read_blocks(path):
     return blocks
 
 
+def read_xv(path):
+    """step -> the reference run's (first column's) volume-weighted x_HII."""
+    out, on = {}, False
+    for line in open(path):
+        if line.startswith("#"):
+            on = line.startswith("# volume-weighted x_HII")
+        elif on and line.strip():
+            t = line.split()
+            out[int(t[0])] = float(t[2])
+    return out
+
+
 def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3)):
     """ylim_ratio: one (lo, hi) for every panel, or a list with one per panel."""
     plt.rcParams.update({"font.size": 9, "axes.labelsize": 10, "xtick.labelsize": 8.5,
@@ -114,11 +126,14 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3)):
 
 
 def main():
-    bx = read_blocks(os.path.join(DATA, "pk_xHII_21cmfast.txt"))
-    keys = {round(float(re.search(r" z ([\d.]+)", h).group(1)), 2): h for h in bx}
-    xv = {6.97: 0.49, 6.2: 0.79, 5.7: 0.97}
-    sel = [bx[keys[z]] for z in (6.97, 6.2, 5.7)]
-    panel_grid(sel, [f"$z={z:.2f}$, $x_V={xv[z]:.2f}$" for z in (6.97, 6.20, 5.70)],
+    path = os.path.join(DATA, "pk_xHII_21cmfast.txt")
+    bx = read_blocks(path)
+    xv = read_xv(path)
+    heads = {int(re.match(r"# step (\d+)", h).group(1)): h for h in bx}
+    steps = sorted(heads)
+    titles = [f"$z={float(re.search(r' z ([0-9.]+)', heads[s]).group(1)):.2f}$, $x_V={xv[s]:.2f}$"
+              for s in steps]
+    panel_grid([bx[heads[s]] for s in steps], titles,
                r"$\Delta^2_{x_{\rm HII}}(k)$", os.path.join(FIG, "fig2_pk_xHII"))
 
     bs = read_blocks(os.path.join(DATA, "pk_suite.txt"))

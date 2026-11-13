@@ -98,7 +98,7 @@ def main():
             a0.errorbar(d[:, 0], d[:, 1], yerr=[d[:, 3], d[:, 2]], fmt=mk, ms=4, color=OBS, mfc="white",
                         ecolor=OBS, elinewidth=0.8, capsize=2, label=name)
     a0.plot([], [], "o", color=INK2, ms=3.5, mfc="white", label="exponential fit")
-    log_axis(a0, [0.5, 1, 2, 5, 10, 20, 50])
+    log_axis(a0, [0.2, 0.5, 1, 2, 5, 10, 20, 50])
     a0.set_ylabel(r"$\lambda_{\rm mfp}$ (912 \AA) [pMpc]" if plt.rcParams["text.usetex"] else
                   r"$\lambda_{\rm mfp}$ (912 Å) [pMpc]")
     log_axis(a1, [0.5, 0.7, 1, 1.5, 2, 3])
