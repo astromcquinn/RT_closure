@@ -9,7 +9,11 @@ and the command of each final figure here.
 the late-end 512³ suite on klone, `/gscratch/astro/mcquinn/radhydro/runs/reion512late*`
 (rays, case A + RR, M1, OTVET with the Gnedin & Abel 2001 background
 `otvet_background = ga01`, screen, cone; f6 = 0.10, P11, no SN heating; binary
-and analysis tools NewRadHydroCode main 6658086). The split was not rerun. The
+and analysis tools NewRadHydroCode main 6658086). The OTVET run is labelled
+"thin OTVET" in the figures since 2026-11-13: its background stays inactive
+(Λ = 0 until the last per cent of the volume ionises, 2 % of the photons at
+z = 5; a run without it, `$R/reion512late_otvet`, agrees to 1e-5 in x_HII and
+3 % in P_Γ at z = 4.99). The split is being rerun (`$R/reion512late_otvet_split`). The
 older `*_draft` files and rows below are from the earlier suite (f6 = 0.11).
 `R = /gscratch/astro/mcquinn/radhydro/runs`; the data job is
 `$R/reion512late_figures/paper/paper_data.sh`, the map job `maps.sh` beside it.

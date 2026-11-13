@@ -69,7 +69,7 @@ with it. (3) We study three closures, one a new HI-attenuated tensor built
 by cone tracing.
 
 %======================================================================
-\section{Simulations and radiative transfer}
+\section{Simulations and radiative transfer}\label{sec:methods}
 
 
 All runs use a C++ port of the cosmological radiation-hydrodynamics code
@@ -163,13 +163,24 @@ The advantage of M1 is that it needs only each cell's own moments and is exact f
   once the mean free path exceeds the box \citep{wu21}. \citet{gnedin01}
   and CROC \citep{gnedin14} apply it only to a local part of the field
   and carry the rest as an isotropic background, whose share is set by a
-  global opacity. Our OTVET run does the same, following \citet{gnedin01}:
-  each RT substep every cell moves up to $\Lambda\bar s$ of its photons, with
-  $\bar s$ the mean emission per cell and
+  global opacity. Our OTVET run includes this background, following
+  \citet{gnedin01}: each RT substep every cell moves up to $\Lambda\bar s$
+  of its photons, with $\bar s$ the mean emission per cell and
   $\Lambda=\exp(-\langle\kappa\rangle\,0.61L)$ for box length $L$, into a
   second, isotropic field ($\mathsf D=\mathsf I/3$) absorbed like the
-  first. Before overlap $\Lambda\approx0$ and this is the thin tensor alone.
-\item \textbf{Split} (new) \draft{not in the late-end suite of 2026-11-11; keep or drop}: a local version of the background
+  first. In our runs the background stays inactive, and we call the run
+  thin OTVET. The volume-mean opacity $\langle\kappa\rangle$ is set by the
+  last neutral gas, so $\Lambda$ is zero until the last per cent of the
+  volume ionizes and only 0.03--0.7 (by frequency group) at $z=5$; and since
+  only newly emitted photons enter the background, it holds 2\% of the
+  photons in flight at $z=5$. A run without the background agrees with it
+  to $10^{-5}$ in the ionized fraction and to 3\% in the $\Gamma$ power
+  spectrum at $z=4.99$. \draft{In a 20\,Mpc/h, $256^3$ test run to
+  $\Delta z\approx1$ after overlap, $\Lambda$ reaches 0.95--0.99 and the
+  background brings the $\Gamma$ power from 14--16 to 1.2--1.5 times the
+  rays' (split 1.0--1.1), but 0.3--0.5 in $z$ after overlap it is still
+  3--4 times; keep?}
+\item \textbf{Split} (new) \draft{late-end run in progress (2026-11-13)}: a local version of the background
   decomposition of \citet{gnedin01} and CROC \citep{gnedin14}. The OTVET
   tensor is applied only to the photons the optically thin approximation
   accounts for, $N_{\rm OT}$, and the rest of the cell's photons are
@@ -375,8 +386,8 @@ is the normalization error of \citet{wu21}. Applied to the whole field,
 the thin tensor treats all the photons as if they came from within half
 a box, and once the mean free path exceeds that, it beams the diffuse
 background along the source directions. The isotropic background of
-\citet{gnedin01} has not removed this by $z=4.99$, since only newly
-emitted photons move into it. M1 errs the other way, with 3--10
+\citet{gnedin01} does not remove this by $z=4.99$
+(Section~\ref{sec:methods}). M1 errs the other way, with 3--10
 times too little power at $k=0.5$--$2\hmpc$ and $r=0.05$ at $k=0.5\hmpc$.
 With one flux per cell it cannot represent a source's light on top of a
 nearly isotropic background, so it diffuses that light and the

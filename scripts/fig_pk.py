@@ -28,7 +28,7 @@ FIG = os.path.join(HERE, "..", "figures")
 # the paper's runs: key in the data, label, colour, line style, width
 RUNS = [("rays", "rays", "#000000", "-", 2.2),
         ("M1", "M1", "#2a78d6", "-", 1.5),
-        ("OTVET", "OTVET", "#eb6834", "-", 1.5),
+        ("OTVET", "thin OTVET", "#eb6834", "-", 1.5),
         ("OTVET_nobg", "OTVET, no background", "#eb6834", (0, (4, 1.5)), 1.0),
         ("split", "split", "#1baf7a", "--", 1.5),
         ("screen", "screen", "#eda100", "-.", 1.5),
