@@ -319,7 +319,12 @@ zones.}}
 \includegraphics[width=\linewidth]{figures/fig4_pk_gamma.pdf}
 \caption{As Fig.~\ref{fig:pkx}, for $\delta_\Gamma$ (\texttt{gammaHI\_avg}) at $\xv=0.54$, 0.80,
 0.96 and after overlap ($z=4.99$), every method and the case A + RR rays
-(\texttt{scripts/fig\_pk.py}). \draft{Alternative: at $z\approx6.0$, 5.5
+(\texttt{scripts/fig\_pk.py}). Bottom row: the volume-weighted PDF of
+$\log_{10}(\Gamma/\langle\Gamma\rangle_V)$ at the same snapshots, with
+$\langle\Gamma\rangle_V$ the volume mean of $\delta_\Gamma$; the neutral
+cells ($\Gamma<10^{-4}\langle\Gamma\rangle_V$; the fraction of the rays'
+volume is given) are off the left edge. The last panel has a narrower
+abscissa. \draft{Alternative: at $z\approx6.0$, 5.5
 and 5.0 (snapshots 5.97, 5.48, 4.99; needs a \texttt{--z} option in
 \texttt{rt\_suite\_figures.py}).}}
 \label{fig:pkg}
@@ -474,6 +479,34 @@ equals \citet{bosman22}'s.}
 
 
 \appendix
+
+\section{The earlier suite}
+\label{app:oldsuite}
+For comparison, Figs.~\ref{fig:pkx_old} and \ref{fig:pkg_old} repeat
+Figs.~\ref{fig:pkx} and \ref{fig:pkg} for the earlier suite of seven runs
+(the six here and the split; the same box and sources with $f_6=0.11$,
+reionization ending at $z_{99}=5.58$, OTVET without the isotropic
+background, and supernova heating on). \draft{For the comparison of trends
+with an earlier end; drop or shorten.}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig2_pk_xHII_oldsuite.pdf}
+\caption{As Fig.~\ref{fig:pkx}, for the earlier suite at $z=6.97$, 6.20
+and 5.70: every run, the split and 21cmFAST
+(\texttt{data/pk\_xHII\_21cmfast\_oldsuite.txt}).}
+\label{fig:pkx_old}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig4_pk_gamma_oldsuite.pdf}
+\caption{As Fig.~\ref{fig:pkg} (without the PDFs), for the earlier suite
+at $\xv=0.49$, 0.79, 0.97 and after overlap
+(\texttt{data/pk\_suite\_oldsuite.txt}).}
+\label{fig:pkg_old}
+\end{figure}
+
 
 
 

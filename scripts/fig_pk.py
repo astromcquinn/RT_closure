@@ -5,7 +5,9 @@
         excursion_set.py figure: every run and 21cmFAST), titled by the
         rays' z and x_V
   fig4: delta_Gamma (gammaHI_avg) at the 'gamma' panels of data/pk_suite.txt
-        (rt_suite_figures.py; x_V ~ 0.5, 0.8, 0.97 and after overlap)
+        (rt_suite_figures.py; x_V ~ 0.5, 0.8, 0.97 and after overlap), and
+        below them the volume-weighted PDF of log10(Gamma/<Gamma>_V) at the
+        same snapshots (data/pdf_gamma.txt)
 
 usage: python3 scripts/fig_pk.py   (writes figures/fig2_pk_xHII.{pdf,png} and
        figures/fig4_pk_gamma.{pdf,png})
@@ -27,6 +29,7 @@ FIG = os.path.join(HERE, "..", "figures")
 RUNS = [("rays", "rays", "#000000", "-", 2.2),
         ("M1", "M1", "#2a78d6", "-", 1.5),
         ("OTVET", "OTVET", "#eb6834", "-", 1.5),
+        ("OTVET_nobg", "OTVET, no background", "#eb6834", (0, (4, 1.5)), 1.0),
         ("split", "split", "#1baf7a", "--", 1.5),
         ("screen", "screen", "#eda100", "-.", 1.5),
         ("cone", "cone", "#e87ba4", ":", 2.0),
@@ -74,14 +77,47 @@ def read_xv(path):
     return out
 
 
-def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3)):
-    """ylim_ratio: one (lo, hi) for every panel, or a list with one per panel."""
+def read_pdf(path):
+    """[(header, {run: (x, dP/dlog10)}, {run: fraction below the first bin})] per panel."""
+    out, cur, runs, rows, below = [], None, None, [], None
+
+    def close():
+        if cur is not None and rows:
+            a = np.array(rows, dtype=float)
+            out.append((cur, {r: (a[:, 0], a[:, 1 + i]) for i, r in enumerate(runs)},
+                        dict(zip(runs, below))))
+
+    for line in open(path):
+        line = line.rstrip("\n").replace("rays A+RR", "rays_A+RR")
+        if line.startswith("# gamma: panel"):
+            close()
+            cur, rows = line, []
+        elif line.startswith("# runs:"):
+            runs = line.split(":", 1)[1].split()
+        elif line.startswith("# fraction below"):
+            below = [float(v) for v in line.split(":", 1)[1].split()]
+        elif line.strip() and not line.startswith("#") and cur is not None:
+            rows.append(line.split())
+    close()
+    return out
+
+
+def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None):
+    """ylim_ratio: one (lo, hi) for every panel, or a list with one per panel.
+    pdfs: optional read_pdf() panels, one per block, drawn in a fourth row."""
     plt.rcParams.update({"font.size": 9, "axes.labelsize": 10, "xtick.labelsize": 8.5,
                          "ytick.labelsize": 8.5, "axes.linewidth": 0.8, "axes.edgecolor": INK2})
     n = len(blocks)
-    fig, axs = plt.subplots(3, n, figsize=(6.5, 6.2), sharex=True, squeeze=False,
-                            gridspec_kw={"height_ratios": [1.3, 1, 1], "hspace": 0.08,
-                                         "wspace": 0.36 if n > 3 else 0.3})
+    hr = [1.3, 1, 1] + ([0.42, 1.2] if pdfs else [])
+    fig = plt.figure(figsize=(6.5, 6.2 + (2.3 if pdfs else 0)))
+    gs = fig.add_gridspec(len(hr), n, height_ratios=hr, hspace=0.08,
+                          wspace=0.36 if n > 3 else 0.3)
+    axs = np.empty((3, n), dtype=object)
+    for j in range(n):
+        for i in range(3):
+            axs[i, j] = fig.add_subplot(gs[i, j], sharex=axs[0, j] if i else None)
+            if i < 2:
+                axs[i, j].tick_params(labelbottom=False)
     handles = {}
     for j, ((runs, k, d), title) in enumerate(zip(blocks, titles)):
         a0, a1, a2 = axs[0, j], axs[1, j], axs[2, j]
@@ -115,11 +151,38 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3)):
             a0.set_ylabel(ylabel)
             a1.set_ylabel(r"$P/P_{\rm rays}$")
             a2.set_ylabel(r"$r(k)$ with the rays")
+        if pdfs:
+            a3 = fig.add_subplot(gs[4, j], sharey=None)
+            _, dp, below = pdfs[j]
+            for key, label, c, ls, lw in RUNS:
+                if key in dp:
+                    a3.plot(*dp[key], color=c, ls=ls, lw=lw)
+            a3.set_yscale("log")
+            a3.set_ylim(1e-3, 20)
+            if max(below.values()) > 0.005:
+                a3.set_xlim(-3, 1.5)
+                a3.set_xticks([-3, -2, -1, 0, 1])
+            else:   # after overlap: no neutral cells, a narrow distribution
+                a3.set_xlim(-1.2, 1.2)
+                a3.set_xticks([-1, -0.5, 0, 0.5, 1])
+                a3.set_xticklabels(["-1", "", "0", "", "1"])
+            a3.grid(alpha=0.3, lw=0.5)
+            a3.spines["top"].set_visible(False)
+            a3.spines["right"].set_visible(False)
+            a3.set_xlabel(r"$\log_{10}(\Gamma/\langle\Gamma\rangle_V)$")
+            if j == 0:
+                a3.set_ylabel(r"$dP/d\log_{10}\Gamma$")
+            if "rays" in below and below["rays"] > 0.005:
+                a3.text(0.03, 0.95, f"rays: {below['rays']:.0%}\n" + r"below $10^{-4}$", transform=a3.transAxes,
+                        ha="left", va="top", fontsize=7.5, color=INK2)
     order = [lab for _, lab, *_ in RUNS if lab in handles]
     fig.legend([handles[l] for l in order], order, loc="upper center", ncol=min(len(order), 4),
                frameon=False, fontsize=9, bbox_to_anchor=(0.5, 1.0), handlelength=2.8,
                columnspacing=1.2)
-    fig.subplots_adjust(left=0.1, right=0.99, bottom=0.08, top=0.83 if n > 3 else 0.87)
+    top = 0.83 if n > 3 else 0.87
+    if pdfs:
+        top = 1 - (1 - top) * 6.2 / 8.5
+    fig.subplots_adjust(left=0.1, right=0.99, bottom=0.08 * 6.2 / (8.5 if pdfs else 6.2), top=top)
     fig.savefig(out + ".pdf")
     fig.savefig(out + ".png", dpi=300)
     print("wrote", os.path.normpath(out) + ".{pdf,png}")
@@ -142,8 +205,13 @@ def main():
     for h in gam:
         m = re.search(r"x_V = ([\d.]+) z = ([\d.]+)", h)
         titles.append(f"$z={float(m.group(2)):.2f}$, $x_V={float(m.group(1)):.2f}$")
+    pdfs = read_pdf(os.path.join(DATA, "pdf_gamma.txt"))
+    zq = lambda h: float(re.search(r"z = ([\d.]+)", h).group(1))
+    assert len(pdfs) == len(gam) and all(abs(zq(p[0]) - zq(h)) < 0.002 for p, h in zip(pdfs, gam)), \
+        "the PDF panels are not the power-spectrum panels"
     panel_grid([bs[h] for h in gam], titles, r"$\Delta^2_{\delta_\Gamma}(k)$",
-               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=[(0.3, 3)] * (len(gam) - 1) + [(0.02, 30)])
+               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=[(0.3, 3)] * (len(gam) - 1) + [(0.02, 30)],
+               pdfs=pdfs)
 
 
 if __name__ == "__main__":
