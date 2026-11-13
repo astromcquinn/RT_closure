@@ -1,0 +1,13 @@
+# Bosman et al. 2022 (XQR-30; arXiv 2108.03699v2), Fig. A1: tau_eff CDFs in fixed 50 cMpc/h bins, read from the PDF's vector paths
+# (each CDF step is one sightline; N from the step sizes). Made 2026-11-13 on klone, radhydro/work/bosman22/{bz_extract,bz_width}.py
+# lo: non-detections at the detection limit (upper CDF); hi: at infinity (lower CDF)
+# bootstrap over sightlines, 20000 resamples: 16/50/84 % of the resampled width
+# columns: z zlo zhi N n_nondet width_lo b16 b50 b84 width_hi b16 b50 b84
+5.001 4.932 5.069 37 0 0.6306 0.4891 0.6060 0.6901 0.6306 0.4881 0.6043 0.6871
+5.140 5.069 5.211 52 0 0.4786 0.4287 0.5133 0.5976 0.4786 0.4264 0.5126 0.5966
+5.284 5.211 5.358 58 0 0.6139 0.4763 0.5717 0.6848 0.6139 0.4750 0.5702 0.6838
+5.434 5.358 5.510 65 0 1.0862 0.9615 1.0793 1.1999 1.0862 0.9645 1.0806 1.1999
+5.588 5.510 5.667 61 1 0.9732 0.8515 0.9541 1.1361 0.9732 0.8490 0.9544 1.1293
+5.749 5.667 5.830 48 7 1.7417 1.5546 1.7449 2.0190 2.7437 1.7206 2.7093 nan
+5.915 5.830 6.000 28 4 1.4901 1.3296 1.5850 2.1979 2.2740 1.9705 2.7203 nan
+6.088 6.000 6.175 12 5 2.3763 1.6002 2.3271 2.7349 inf nan nan nan

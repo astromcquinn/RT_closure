@@ -12,9 +12,15 @@ full-box snapshots only.
     10 Mpc/h of another), with tau rescaled at each snapshot so that the
     mean flux equals Bosman et al. 2022's.
 
+    The observed widths of Bosman et al. 2022 (Fig. A1, fixed 50 cMpc/h
+    bins; data/taueff_width_obs.txt): non-detections at the detection limit,
+    error bars the 16-84 % of a bootstrap over sightlines; where
+    non-detections at tau = infinity widen it, a dotted line up to that
+    width (an arrow where it is unbounded).
+
 Data: data/taueff_mfp_snap_A.txt (NewRadHydroCode taueff_z.py --full --norm;
-the '#S' lines give lambda_mfp and whether it is the fit) and
-data/lambda_mfp_obs.txt.
+the '#S' lines give lambda_mfp and whether it is the fit),
+data/lambda_mfp_obs.txt and data/taueff_width_obs.txt.
 
 usage: python3 scripts/fig_mfp_width.py   (writes figures/fig_mfp_width.{pdf,png})
 """
@@ -66,6 +72,18 @@ def read_obs(path):
     return {k: np.array(v) for k, v in out.items()}
 
 
+def read_width_obs(path):
+    """z, width (non-detections at the limit), its bootstrap 16/84 %, and the
+    width with non-detections at infinity (inf: unbounded)"""
+    rows = []
+    for line in open(path):
+        if line.startswith("#") or not line.strip():
+            continue
+        t = line.split()
+        rows.append([float(t[0]), float(t[5]), float(t[6]), float(t[8]), float(t[9])])
+    return np.array(rows)
+
+
 def log_axis(ax, ticks):
     ax.set_yscale("log")
     ax.yaxis.set_major_locator(FixedLocator(ticks))
@@ -97,11 +115,21 @@ def main():
             d = obs[ref]
             a0.errorbar(d[:, 0], d[:, 1], yerr=[d[:, 3], d[:, 2]], fmt=mk, ms=4, color=OBS, mfc="white",
                         ecolor=OBS, elinewidth=0.8, capsize=2, label=name)
+    wo = read_width_obs(os.path.join(DATA, "taueff_width_obs.txt"))
+    a1.errorbar(wo[:, 0], wo[:, 1], yerr=[wo[:, 1] - wo[:, 2], wo[:, 3] - wo[:, 1]], fmt="s", ms=4,
+                color=OBS, mfc="white", ecolor=OBS, elinewidth=0.8, capsize=2, zorder=5,
+                label="Bosman et al. 2022")
+    for z, w0, _, _, w1 in wo:
+        if w1 > w0 * 1.02:
+            top = w1 if np.isfinite(w1) else 3.6
+            a1.plot([z, z], [w0, top], ls=":", color=OBS, lw=0.9, zorder=4)
+            a1.plot([z], [top], marker="^" if not np.isfinite(w1) else "_", color=OBS, ms=4, zorder=4)
     a0.plot([], [], "o", color=INK2, ms=3.5, mfc="white", label="exponential fit")
     log_axis(a0, [0.2, 0.5, 1, 2, 5, 10, 20, 50])
     a0.set_ylabel(r"$\lambda_{\rm mfp}$ (912 \AA) [pMpc]" if plt.rcParams["text.usetex"] else
                   r"$\lambda_{\rm mfp}$ (912 Å) [pMpc]")
     log_axis(a1, [0.5, 0.7, 1, 1.5, 2, 3])
+    a1.set_ylim(0.4, 3.8)
     a1.set_ylabel(r"$\tau_{\rm eff}(84\%)-\tau_{\rm eff}(16\%)$, $\langle F\rangle$ = observed")
     for ax, tag in [(a0, "(a)"), (a1, "(b)")]:
         ax.set_xlim(ZMIN, ZMAX)
