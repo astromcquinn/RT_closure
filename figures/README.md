@@ -13,7 +13,10 @@ and analysis tools NewRadHydroCode main 6658086). The OTVET run is labelled
 "thin OTVET" in the figures since 2026-11-13: its background stays inactive
 (Λ = 0 until the last per cent of the volume ionises, 2 % of the photons at
 z = 5; a run without it, `$R/reion512late_otvet`, agrees to 1e-5 in x_HII and
-3 % in P_Γ at z = 4.99). The split is being rerun (`$R/reion512late_otvet_split`). The
+3 % in P_Γ at z = 4.99). The split's late-end rerun (`$R/reion512late_otvet_split`) finished
+2026-11-15 and is in Figs. 2 and 4 and `fig_mfp_width` (data job
+`$R/reion512late_figures/paper/split_data.sh`: the same tools on the seven runs; the six
+earlier runs' rows are unchanged). The
 older `*_draft` files and rows below are from the earlier suite (f6 = 0.11).
 `R = /gscratch/astro/mcquinn/radhydro/runs`; the data job is
 `$R/reion512late_figures/paper/paper_data.sh`, the map job `maps.sh` beside it.
