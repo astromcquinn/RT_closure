@@ -1,18 +1,18 @@
 84 'rays': /gscratch/astro/mcquinn/radhydro/runs/reion512late/run/step_0084 z = 5.6953 xHII_V = 0.8026
 84 'M1': /gscratch/astro/mcquinn/radhydro/runs/reion512late_m1/run/step_0084 z = 5.6953 xHII_V = 0.8225
-84 'thin OTVET': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_ga01/run/step_0083 z = 5.7496 xHII_V = 0.7967
+84 'OTVET': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_ga01/run/step_0083 z = 5.7496 xHII_V = 0.7967
 84 'screen': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_screen/run/step_0083 z = 5.7491 xHII_V = 0.8058
 84 'cone': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_cone/run/step_0083 z = 5.7492 xHII_V = 0.7931
 84 'rays\ncase A + RR': /gscratch/astro/mcquinn/radhydro/runs/reion512late_caseA/run/step_0084 z = 5.6992 xHII_V = 0.8109
 93 'rays': /gscratch/astro/mcquinn/radhydro/runs/reion512late/run/step_0093 z = 5.2431 xHII_V = 0.9626
 93 'M1': /gscratch/astro/mcquinn/radhydro/runs/reion512late_m1/run/step_0093 z = 5.2432 xHII_V = 0.9838
-93 'thin OTVET': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_ga01/run/step_0093 z = 5.2427 xHII_V = 0.9788
+93 'OTVET': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_ga01/run/step_0093 z = 5.2427 xHII_V = 0.9788
 93 'screen': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_screen/run/step_0093 z = 5.2422 xHII_V = 0.9847
 93 'cone': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_cone/run/step_0093 z = 5.2424 xHII_V = 0.9727
 93 'rays\ncase A + RR': /gscratch/astro/mcquinn/radhydro/runs/reion512late_caseA/run/step_0093 z = 5.2455 xHII_V = 0.9665
 99 'rays': /gscratch/astro/mcquinn/radhydro/runs/reion512late/run/step_0099 z = 4.9871 xHII_V = 0.9992
 99 'M1': /gscratch/astro/mcquinn/radhydro/runs/reion512late_m1/run/step_0099 z = 4.9872 xHII_V = 1.0000
-99 'thin OTVET': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_ga01/run/step_0099 z = 4.9870 xHII_V = 1.0000
+99 'OTVET': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_ga01/run/step_0099 z = 4.9870 xHII_V = 1.0000
 99 'screen': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_screen/run/step_0099 z = 4.9864 xHII_V = 1.0000
 99 'cone': /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_cone/run/step_0099 z = 4.9866 xHII_V = 0.9998
 99 'rays\ncase A + RR': /gscratch/astro/mcquinn/radhydro/runs/reion512late_caseA/run/step_0099 z = 4.9897 xHII_V = 0.9995

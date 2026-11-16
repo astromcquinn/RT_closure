@@ -10,7 +10,9 @@ the late-end 512³ suite on klone, `/gscratch/astro/mcquinn/radhydro/runs/reion5
 (rays, case A + RR, M1, OTVET with the Gnedin & Abel 2001 background
 `otvet_background = ga01`, screen, cone; f6 = 0.10, P11, no SN heating; binary
 and analysis tools NewRadHydroCode main 6658086). The OTVET run is labelled
-"thin OTVET" in the figures since 2026-11-13: its background stays inactive
+"OTVET" in the figures (it was "thin OTVET" 2026-11-13 to 2026-11-15; back to
+"OTVET" at the user's request, and drawn wider since the split's dashed curve
+follows it before overlap): its background stays inactive
 (Λ = 0 until the last per cent of the volume ionises, 2 % of the photons at
 z = 5; a run without it, `$R/reion512late_otvet`, agrees to 1e-5 in x_HII and
 3 % in P_Γ at z = 4.99). The split's late-end rerun (`$R/reion512late_otvet_split`) finished
