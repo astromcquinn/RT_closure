@@ -36,7 +36,7 @@ We compare reionizations simulations run different moment closures, such as M1 a
 
 %======================================================================
 \section{Introduction}
-Moment methods that assume some closure ansatz for the second moments of the intensity are the workhorse of radiative transfer in large reionization
+Moment methods that assume some closure ansatz for the second angular-moments of the intensity are the workhorse of radiative transfer in large reionization
 simulations. The M1 method underlies RAMSES-RT \citep{rosdahl13}, ATON
 \citep{aubert08} and AREPO-RT \citep{kannan19}, and through AREPO-RT the
 Thesan simulations \citep{kannan22}; the optically thin variable Eddington
@@ -53,10 +53,7 @@ $\Gamma_{\rm HI}$ and the sources, and he noted that no ray-tracing
 calculation exists to decide between them.
 
 The natural improvement is to estimate the second order closure tensor by accounting for intervening
-absorbers, as has been done with long characteristics \citep{finlator09},
-short characteristics \citep{davis12} and tree-based column densities
-\citep{pawlik08,clark12,hopkins20,wunsch21}.  Even more ambitious would be to follow the second moments of the intensity and instead close at third order. {\bf text previously said second order?}  However, second-order closures are
-unstable \citep{gnedinkatz26}, and all of these improvements are computationally expensive.
+absorbers, as has been done by ray tracing along long characteristics on long time steps compared to the timestep for following the fluxes \citep{finlator09}.  Even more ambitious would be to follow the second moments of the intensity and instead close at third order.  However, natural closures at the third-moment are unstable \citep{gnedinkatz26}, and all of these improvements are computationally expensive.
 
 Here we test first order closure ideas against the exact answer. One code holds every
 closure and adaptive ray tracing \citep{trac07}, with all other physics
