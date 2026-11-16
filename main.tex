@@ -36,16 +36,13 @@ We compare reionizations simulations run different moment closures, such as M1 a
 
 %======================================================================
 \section{Introduction}
-Moment methods are the workhorse of radiative transfer in large reionization
-simulations. M1 underlies RAMSES-RT \citep{rosdahl13}, ATON
+Moment methods that assume some closure ansatz for the second moments of the intensity are the workhorse of radiative transfer in large reionization
+simulations. The M1 method underlies RAMSES-RT \citep{rosdahl13}, ATON
 \citep{aubert08} and AREPO-RT \citep{kannan19}, and through AREPO-RT the
 Thesan simulations \citep{kannan22}; the optically thin variable Eddington
-tensor (OTVET; \citealt{gnedin01}) underlies the CROC simulations
-\citep{gnedin14}. Before overlap, the transfer sets the morphology of reionization that
-21\,cm experiments will map \citep{Furlanetto2006}; after it, the $\Gamma_{\rm HI}$
-these methods return sets the Ly$\alpha$ forest, the mean free path, the
-scatter in $\tau_{\rm eff}$ \citep{davies16,davies17}; so closure errors become
-errors in the observables.
+tensor (OTVET; \citealt{gnedin01}) method underlies the CROC simulations
+\citep{gnedin14}. Before overlap, radiative transfer sets the morphology of reionization that
+21\,cm experiments will map \citep{Furlanetto2006}; after it, it sets the mean opacity and and it scatter observed in the Ly$\alpha$ forest \citep{davies16,davies17} as well as the mean free path of ionizing photons probed by Lyman-limit absorption.  Therefore, errors these closures make become errors in the observables.
 
 The closures have known problems. M1 carries one flux direction per cell,
 so crossing beams merge and the proximity zones of individual sources are
@@ -55,10 +52,10 @@ size \citep{wu21}. \citet{gnedin25} showed that CROC and Thesan disagree on the 
 $\Gamma_{\rm HI}$ and the sources, and he noted that no ray-tracing
 calculation exists to decide between them.
 
-The natural improvement is to attenuate the tensor by the intervening
+The natural improvement is to estimate the second order closure tensor by accounting for intervening
 absorbers, as has been done with long characteristics \citep{finlator09},
 short characteristics \citep{davis12} and tree-based column densities
-\citep{pawlik08,clark12,hopkins20,wunsch21}, or two go to second-order.  However, second-order closures are
+\citep{pawlik08,clark12,hopkins20,wunsch21}.  Even more ambitious would be to follow the second moments of the intensity and instead close at third order. {\bf text previously said second order?}  However, second-order closures are
 unstable \citep{gnedinkatz26}, and all of these improvements are computationally expensive.
 
 Here we test first order closure ideas against the exact answer. One code holds every
@@ -78,7 +75,7 @@ photoheating. With its original settings the port reproduces the Fortran
 code bit for bit on a set of validation problems. %The runs here enable a set of bookkeeping and physics corrections to the original (among them photon-conserving ray deposition). They also replace its moving-frame hydrodynamics scheme with an unsplit MUSCL--Hancock scheme with HLLC fluxes and a dual-energy formulation \citep{toro09}, which removes the spurious heating of cold, supersonically moving gas.
 
 The comparison uses one uniform suite of six runs that differ only in
-the radiative transfer (Table~\ref{tab:runs}). The box is $40\mpch$ on a
+the radiative transfer. The box is $40\mpch$ on a
 side, with $512^3$ gas and RT cells ($78\,h^{-1}$\,kpc) and $1024^3$ dark
 matter particles of $6.4\times10^6\,M_\odot$, whose forces are computed on
 a $2048^3$ PM mesh. The cosmology is $\Omega_m=0.27$,
