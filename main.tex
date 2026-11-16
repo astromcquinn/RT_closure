@@ -31,7 +31,7 @@
 \maketitle
 
 \begin{abstract}
-We compare reionizations simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty (and significantly better than 21cmFast).  OTVET and espeically M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  However, we show that even M1 likely captures $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ with sufficient accuracy.  We also argue that current simulations without subgrid prescriptions for absorbers and that try to match Ly$\alpha$ forest statistics are almost certainty biased for reionization to end at lower redshifts than it actually does.
+We compare reionizations simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty (and significantly better than 21cmFast).  OTVET and espeically M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  However, we show that even M1 likely captures $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ with sufficient accuracy. 
 \end{abstract}
 
 %======================================================================
@@ -59,14 +59,11 @@ The natural improvement is to attenuate the tensor by the intervening
 absorbers, as has been done with long characteristics \citep{finlator09},
 short characteristics \citep{davis12} and tree-based column densities
 \citep{pawlik08,clark12,hopkins20,wunsch21}, or two go to second-order.  However, second-order closures are
-unstable \citep{gnedinkatz26}.
+unstable \citep{gnedinkatz26}, and all of these improvements are computationally expensive.
 
-Here we test first order closure ideas against the exact answer. (1) One code holds every
+Here we test first order closure ideas against the exact answer. One code holds every
 closure and adaptive ray tracing \citep{trac07}, with all other physics
-shared, so differences between runs come from the transfer alone. (2) We
-measure the true Eddington tensor from the rays and compare each closure
-with it. (3) We study three closures, one a new HI-attenuated tensor built
-by cone tracing.
+shared, so differences between runs come from the transfer alone.  In addition, we study three new closures that are better than the standard ones applied for reionization research.
 
 %======================================================================
 \section{Simulations and radiative transfer}\label{sec:methods}
@@ -469,7 +466,10 @@ only 3--13\% at $k\ge0.5\hmpc$, less than any closure does.
 \end{itemize}
 
 \section{Conclusions}
-\todo{write.}
+ We also argue that current simulations without subgrid prescriptions for absorbers and that match to Ly$\alpha$ forest statistics are almost certainty biased for reionization to end at redshifts a couple tenth than it actually does.
+
+
+\paragraph{acknowledgemetns} The updates to the RadHydro code, including the addition of different radiative transfer algorithms in addition to the ray tracing, were added by Claude with MM checking them both with tests and by looking at the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occuring at the paragraph level and then assembled into a full document.
 
 %======================================================================
 \begin{figure}[h]
