@@ -285,12 +285,11 @@ Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$ deep slab thr
 box at three stages of reionization. All the RT methods agree reasonablly well on the morphology, at least smoothed on scales above a few Mpc the $x_{\rm HII}$ fields are
 nearly identical.  Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure as has been shown previously \citep{zahn07,zahn11,mesinger11},  % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
 
- Of the closure approximations, M1 is the most discrepant from the  ray tracing method (rays),  which we use as the truth.  It is still closer to the than tow 21cmFAST. M1's local closure merges the
+ Of the closure approximations, M1 is the most discrepant from the  ray tracing simulation (rays), which is our proxy for the truth.  It is still closer to the than to 21cmFAST. M1's local closure merges the
 light of several sources into one flux per cell, so the
-fronts become somewhat rounde. OTVET keeps that
-geometry, since its tensor points at the sources, but it illuminates
-every front from all sides at the optically thin rate. Its fronts are
-somewwhat more rounded than rays, and its last islands are eroded early. The cone, our most sophisticated closure approximation that attenuates the light by
+fronts become somewhat rounder than in rays and can be more or less advanced. OTVET's fronts reflect better the positions seen in rays, likely since its tensor points at the sources. Nevertheless, its fronts are also
+somewhat more rounded than rays likely because it illuminates
+every front from all sides at the optically thin rate. The cone, our most sophisticated closure approximation that attenuates the light by
 the HI along each direction, produces a very similar morphology to the rays' at every stage.
 
 %21cmFAST, applied to the same density field with sources matched to thesuite's, differs far more from the rays than any RT method does.  21cmFast does essentially no radiative transfer, assigning ionization based on smoothing the distribution of emission and asking if there are enough photons on any sphere around a pixel to ionize that sphere, and marking it as ionized if the answer is `yes'. It ionizes the largest overdense region completely and early, while many of the isolated bubbles the rays grow around individual sources are absent.
