@@ -41,7 +41,7 @@ simulations. The M1 method underlies RAMSES-RT \citep{rosdahl13}, ATON
 Thesan simulations \citep{kannan22}. The optically thin variable Eddington
 tensor (OTVET; \citealt{gnedin01}) method underlies the CROC simulations
 \citep{gnedin14}. Before overlap, radiative transfer sets the morphology of reionization that
-21\,cm experiments will map \citep{Furlanetto2006}; after it, it shapes the fluctuations of the ionizing background, which set the scatter of the opacity observed in the Ly$\alpha$ forest \citep{davies16,davies17} and are coupled to the mean free path of ionizing photons probed by Lyman-limit absorption \citep{becker21,zhu23}. \textcolor{red}{[Changed from ``sets the mean opacity'': in our runs every closure gives the same mean $\Gamma_{\rm HI}$, mean flux and $\lambda_{\rm mfp}$ to 10--20\%, since the photon budget fixes them; the closures change the fluctuations. -- I disagree for this section can you change back ]} Therefore, any errors these closures make may become errors in predicting the observables.
+21\,cm experiments will map \citep{Furlanetto2006}; after it, it sets the mean opacity and its scatter observed in the Ly$\alpha$ forest \citep{davies16,davies17}, as well as the mean free path of ionizing photons probed by Lyman-limit absorption \citep{becker21,zhu23}. Therefore, any errors these closures make may become errors in predicting the observables.
 
 The closures have known problems. M1 carries one flux direction per cell,
 so the light of several sources is merged into a single flux, and a source's light on top of a nearly isotropic background is transported isotropically instead of streaming outward, so the excess near the source falls off as $1/r$ rather than $1/r^2$ once it reaches steady state.  The optically thin tensor ignores intervening absorbers, so
@@ -236,7 +236,7 @@ with $\mathsf h_{\rm split}$ the split tensor above, $\mathsf h_{\rm cone}$
 the tensor of the cones' light, and $G_\sigma$ a Gaussian of width
 $\sigma=4$ cells.}
 \end{itemize}
-The wall time of every moment run is 9--10 hours on 192 cores (the cone's no longer than OTVET's), and the ray runs take 21--22 hours. At $256^3$, computing the Eddington tensor takes 0.7\,s per hydro step for OTVET, 1.2\,s for the screen and 3.2\,s for the cone. \textcolor{red}{[Give the tensor times at $512^3$, like the wall times, or say why $256^3$; add M1 and the split.]}
+The wall time of every moment run is 9--10 hours on 192 cores (the cone's no longer than OTVET's), and the ray runs take 21--22 hours. M1 needs no separate tensor calculation. In test runs at $256^3$ on 192 cores, computing the Eddington tensor takes 0.7\,s per hydro step for OTVET and the split, 1.2\,s for the screen and 3.2\,s for the cone. \textcolor{red}{[$512^3$ times: from the \texttt{OTVET :} lines of each late-end run's \texttt{ray.log} on klone.]}
 
 We also compare the radiative transfer models with the excursion-set
 model of 21cmFAST \citep{mesinger11,murray20}, which does no radiative
@@ -283,7 +283,7 @@ and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
 
 Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$ deep slab through the
 box at three stages of reionization. All the RT methods agree reasonablly well on the morphology, at least smoothed on scales above a few Mpc the $x_{\rm HII}$ fields are
-nearly identical.  Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure as has been shown previously \citep{zahn??, zahn??, mesinger??},  % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
+nearly identical.  Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure as has been shown previously \citep{zahn07,zahn11,mesinger11},  % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
 
  Of the closure approximations, M1 is the most discrepant from the  ray tracing method (rays),  which we use as the truth.  It is still closer to the than tow 21cmFAST. M1's local closure merges the
 light of several sources into one flux per cell, so the
