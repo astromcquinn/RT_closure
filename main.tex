@@ -25,13 +25,12 @@
 
 \title{Moment closures against ray tracing for modeling reionization}
 \author{\todo{authors}}
-\date{Outline, 2026-11-06}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We compare reionization simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty (and significantly better than 21cmFast).  OTVET and espeically M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  However, we show that even M1 likely captures $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ with sufficient accuracy. 
+We compare reionization simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty (and significantly better than 21cmFast).  OTVET and especially M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  However, we show that even M1 likely captures $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ with sufficient accuracy. 
 \end{abstract}
 
 %======================================================================
@@ -45,11 +44,9 @@ tensor (OTVET; \citealt{gnedin01}) method underlies the CROC simulations
 21\,cm experiments will map \citep{Furlanetto2006}; after it, it sets the mean opacity and and it scatter observed in the Ly$\alpha$ forest \citep{davies16,davies17} as well as the mean free path of ionizing photons probed by Lyman-limit absorption.  Therefore, any errors these closures make may become errors in predicting the observables.
 
 The closures have known problems. M1 carries one flux direction per cell,
-so the light of several sources is merged into a single flux, and a
-source's light on top of a nearly isotropic background diffuses instead
-of streaming. {\bf [It's still not a diffusion equation?]} The optically thin tensor ignores intervening absorbers, so
+so the light of several sources is merged into a single flux, and a source’s light on top of a nearly isotropic background is transported isotropically instead of streaming outward, so the excess near the source falls off as $1/r$ rather than $1/r^2$ once it reaches steady state.  The optically thin tensor ignores intervening absorbers, so
 it casts no sharp shadows \citep{gnedin01,petkova09}, and its
-normalisation depends on box size \citep{wu21}. CROC and Thesan disagree
+normalisation depends on the simulation box size so the statistics of the radiation are shaped by the box size \citep{wu21}. CROC (using M1) and Thesan (using OTVET) disagree
 on the power spectrum of the photoionization rate, although controlled
 tests suggest the choice of closure is not the dominant cause
 \citep{gnedin25}. These tests compare moment methods with each other or
@@ -90,7 +87,7 @@ matter particles of $6.4\times10^6\,M_\odot$, whose forces are computed on
 a $2048^3$ PM mesh. The cosmology is $\Omega_m=0.27$,
 $\Omega_\Lambda=0.73$, $\Omega_b=0.045$, $h=0.70$, $\sigma_8=0.80$ and
 $n_s=0.96$. The initial conditions are a Zel'dovich realization at $z=100$
-of the no-wiggle linear power spectrum of \citet{eisenstein98}..
+of the no-wiggle linear power spectrum of \citet{eisenstein98}.
 
 Sources are the friends-of-friends halos (linking length 0.2) found on the
 fly at every hydro step, down to 20 particles
@@ -101,8 +98,7 @@ refit to the friends-of-friends halos of this box
 this gives $L_{\rm UV}\propto M^{1.43\textrm{--}1.46}$ at $z=7$--5.7. The
 ionizing photon production efficiency is
 $\log\xi_{\rm ion}=25.38$ \citep{pahl25}, and the escape fraction is
-$f_{\rm esc}(z)=f_6\,[(1+z)/7]^{2.5}$ with $f_6=0.10$, chosen so that
-reionization ends with ionized fraction $\xv=0.99$ at $z\approx5.2$, a redshift scaling motivated by \todo{cite D'Aloisio in prep}.
+$f_{\rm esc}(z)=f_6\,[(1+z)/7]^{2.5}$ with $f_6=0.10$, a value tuned to match Ly$\alpha$ forest and opacity measurements (with reionization ending at $z\approx 5.3$) \todo{cite D'Aloisio in prep}.
 % f6 = 0.10 and the continuous c-hat schedule: the late-end suite reion512late* of
 % 2026-11-11 (NewRadHydroCode main 6658086, legacy_physics = 0 with P11, no SN heating).
 
@@ -120,14 +116,12 @@ in $z$, we compare them at fixed redshift.
 %Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
 
 
-The six runs differ only in how the radiation is transported.
+The different radiative transfer methods we consider are
 
-\paragraph{Rays.} The reference. Each source emits rays along HEALPix
+\paragraph{Rays} This is our ray tracing method that we use as a reference. Each source emits rays along HEALPix
 directions \citep{gorski05}, which split as they travel so that every cell
 they reach is crossed by several rays \citep{abel02,trac07}, and deposit
-their photoionizations cell by cell, conserving photons. One comparison run uses
-case-B recombination, the other case A with the recombination radiation
-transported.
+their photoionizations cell by cell, conserving photons. %One comparison run uses case-B recombination, the other case A with the recombination radiation transported.
 
 \paragraph{Moment methods.} For each frequency group, we evolve the photon
 density $N$ and the flux $\chat\,\mathbf F$,
@@ -137,19 +131,34 @@ density $N$ and the flux $\chat\,\mathbf F$,
 \end{align}
 with a first-order Godunov scheme using global Lax--Friedrichs fluxes of
 wave speed $\chat$. The sources $S$, the absorption $\kappa$ and the
-redshifting are those of the ray runs. The methods differ only in the
-Eddington tensor $\mathsf D$ (trace 1). M1 and OTVET are the two closures
-in common use in reionization simulations; we also consider new
-ones, described in \S\ref{sec:closures}:
+redshifting are those of the ray runs. The methods differ only in their ansatz for the
+Eddington tensor $\mathsf D$, the trace 1 second angular moment of the intensity. M1 and OTVET are the two closures
+in common use in reionization simulations; we also consider new ones we refer to as `Split', `Screen', and `Cone'.  All methods are briefly described here:
 \begin{itemize}
 \item \textbf{M1} \citep{levermore84} takes $\mathsf D$ from the local
   reduced flux $f=|\mathbf F|/N$:
   $\mathsf D=\frac{1-\chi}{2}\mathsf I+\frac{3\chi-1}{2}\hat{\mathbf u}\hat{\mathbf u}\T$,
   with $\chi=(3+4f^2)/(5+2\sqrt{4-3f^2})$ and $\hat{\mathbf u}=\mathbf F/|\mathbf F|$.
-The advantage of M1 is that it needs only each cell's own moments and is exact for a single beam,
-  which makes it cheap and local. With one flux direction
-  per cell, however, it cannot represent light arriving from several
-  directions, which it merges and diffuses.
+M1 assumes that the light in each cell is symmetric about the direction of
+its flux, so the Eddington tensor depends on a single number that is set by
+the reduced flux $f=|\mathbf{F}|/(\hat c N)$ \citep{levermore84,dubroca99}.\footnote{If the light is symmetric about
+the flux direction $\hat{\mathbf{n}}$, then
+$\mathsf{D}=\frac{1-\chi}{2}\mathsf{I}+\frac{3\chi-1}{2}\hat{\mathbf{n}}\hat{\mathbf{n}}$,
+and $\chi(f)=(3+4f^2)/(5+2\sqrt{4-3f^2})$ follows from taking the light
+to be isotropic in some moving frame \citep{levermore84}, or equivalently
+from maximizing the photon entropy \citep{dubroca99}; it runs from
+$1/3$ (isotropic) to $1$ (a beam).}
+The closure is exact in the two limits where the energy density and flux fix
+the angular distribution: isotropic light ($f=0$, $\mathsf{D}=\mathsf{I}/3$),
+which includes diffusion through optically thick gas, and a single beam
+($f=1$, $\mathsf{D}=\hat{\mathbf{n}}\hat{\mathbf{n}}$). It needs only each
+cell's own moments, which makes it cheap and local, and the resulting
+equations conserve photons and never let the flux exceed $\hat c N$. With
+one flux direction per cell, however, it cannot represent light arriving
+from several directions: crossing beams merge into a single beam along
+their mean direction, and a source's light on top of a nearly isotropic
+background spreads isotropically instead of streaming outward.
+
 \item \textbf{OTVET} takes $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$,
   the optically thin Eddington tensor of the current sources
   \citep{gnedin01}, applied here to the whole radiation field,
@@ -166,25 +175,18 @@ The advantage of M1 is that it needs only each cell's own moments and is exact f
   once the mean free path exceeds the box \citep{wu21}. \citet{gnedin01}
   and CROC \citep{gnedin14} apply it only to a local part of the field
   and carry the rest as an isotropic background, whose share is set by a
-  global opacity. Our OTVET run includes this background, following
-  \citet{gnedin01}: each RT substep every cell moves up to $\Lambda\bar s$
+  global opacity. Our OTVET run includes this background following
+  \citet{gnedin01} but its inclusion has negligible effect on the simulations at the redshifts considered.\footnote{Each RT substep every cell moves up to $\Lambda\bar s$
   of its photons, with $\bar s$ the mean emission per cell and
   $\Lambda=\exp(-\langle\kappa\rangle\,0.61L)$ for box length $L$, into a
   second, isotropic field ($\mathsf D=\mathsf I/3$) absorbed like the
-  first. In our runs the background stays inactive, and we call the run
-  thin OTVET. The volume-mean opacity $\langle\kappa\rangle$ is set by the
-  last neutral gas, so $\Lambda$ is zero until the last per cent of the
-  volume ionizes and only 0.03--0.7 (by frequency group) at $z=5$; and since
-  only newly emitted photons enter the background, it holds 2\% of the
-  photons in flight at $z=5$. A run without the background agrees with it
-  to $10^{-5}$ in the ionized fraction and to 3\% in the $\Gamma$ power
-  spectrum at $z=4.99$. \draft{In a 20\,Mpc/h, $256^3$ test run to
-  $\Delta z\approx1$ after overlap, $\Lambda$ reaches 0.95--0.99 and the
-  background brings the $\Gamma$ power from 14--16 to 1.2--1.5 times the
-  rays' (split 1.0--1.1), but 0.3--0.5 in $z$ after overlap it is still
-  3--4 times; keep?}
-\item \textbf{Split} (new) \draft{late-end run in progress (2026-11-13)}: a local version of the background
-  decomposition of \citet{gnedin01} and CROC \citep{gnedin14}. The OTVET
+  first.  The volume-mean opacity $\langle\kappa\rangle$ is set by the
+  last neutral gas, so $\Lambda$ is essentially zero until the last percent of the
+  volume ionizes. Since  only newly emitted photons enter the background, it holds 2\% of the
+  photons in flight at the lowest redshifts we consider of $z=5$. %A run without the background agrees with it to $10^{-5}$ in the ionized fraction and to 3\% in the $\Gamma$ power spectrum at $z=4.99$. \draft{In a 20\,Mpc/h, $256^3$ test run to   $\Delta z\approx1$ after overlap, $\Lambda$ reaches 0.95--0.99 and the background brings the $\Gamma$ power from 14--16 to 1.2--1.5 times the   rays' (split 1.0--1.1), but 0.3--0.5 in $z$ after overlap it is still 3--4 times; keep?}
+  }
+\item \textbf{Split} (new method) is a local version of the background
+  decomposition of \citet{gnedin01} and that is used in the CROC simulatons \citep{gnedin14}. The OTVET
   tensor is applied only to the photons the optically thin approximation
   accounts for, $N_{\rm OT}$, and the rest of the cell's photons are
   isotropic, $\mathsf D=\mathsf I/3+\min(1,N_{\rm OT}/N)\,(\mathsf h-\mathsf I/3)$.
@@ -192,46 +194,67 @@ The advantage of M1 is that it needs only each cell's own moments and is exact f
   observed mean free path and transport it as a second field, the split
   takes it cell by cell from the solution's own photons, with no free
   parameter and at no extra cost.
-\item \textbf{Screen} (new): Rather than the optically thin approximation as in equation~\ref{eqn:otvet}, $\mathsf h$ from the sources' light
-  attenuated by $e^{-r/\lambda}$ and summed over all periodic images, with
+\item \textbf{Screen} (new method) improves upon OTVET by attenuating the sources' light
+  attenuated by $e^{-r/\lambda}$, summed over all periodic images, with
   $\lambda$ the photons' mean path from the photon budget. This is the
   remedy \citet{wu21} propose: attenuating at the mean free path gives the
   right anisotropy on average, but with one $\lambda$ for every
   direction.  Here $\lambda$ is calculated from the photon budget at the start of each
-hydro step, $\lambda=\sum N/(\dot N_{\rm inj}\,\Delta t_{\rm RT})$: the
-photons the solution holds divided by those the sources inject per RT
-substep. Since a substep is one cell of light travel, this is $\chat$
+hydro step, $\lambda=\sum N/(\dot N_{\rm inj}\,\Delta t_{\rm RT})$, the
+summed photons in the box $N$ divided by the rate sources inject photons per RT timestep.\footnote{Since a substep is one cell of light travel, this is $\chat$
 times the mean photon lifetime, so that the screened light,
 $\int e^{-r/\lambda}/(4\pi r^2)\,d^3r=\lambda$ per unit emission, totals
-the photons in the box.
-\item \textbf{Cone} (new): our most sophisticated closure. The cone tensor therefore attenuates
-  each source's light by the HI along the way. Receivers, one every 4
-  cells, each cast 192 HEALPix cones (half-opening $\approx8^\circ$). Each
-  cone is marched outward through coarsened copies (mip-maps) of the
-  emissivity and of the HI column, sampling at each step the level whose
-  cells match the cone's width, so the number of steps grows only
-  logarithmically with distance and the cost does not depend on the
-  number of sources. Along the way the light is attenuated by
-  $T=\sum_g W_g\,e^{-\sigma_g N_{\rm HI}}$, the transmission of the
-  source spectrum weighted by each group's contribution to
-  $\Gamma_{\rm HI}$. The optical depth of each cell is capped at unity,
-  a stand-in for the covering fraction of absorbers smaller than a cone.
-  The march continues through the periodic images to 8 box lengths.
-  Within $r_c=8$ cells of the receiver, where cones are narrower than a
-  cell, the thin tensor (by FFT) is used instead. After overlap the
-  diffuse IGM barely attenuates the cones, so their light is cut by an
-  extra $e^{-s/\lambda_x}$, with $\lambda_x$ set each hydro step so that
-  the light in the ionized cells equals the photons the solution holds
-  there. The receivers' tensors are interpolated to every cell and blended
-  with the split on scales below $\sigma=4$ cells,
-  $\mathsf h=\mathsf h_{\rm split}+G_\sigma*(\mathsf h_{\rm cone}-\mathsf h_{\rm split})$,
-  because the cones are too coarse to resolve structure within a few
-  cells of a source. The cone tensor costs about 4 times the thin tensor
-  per hydro step, and 7\% more wall time in the 512$^3$ runs.
+the photons in the box.  This method is also analogous to the CROC simulations that instead use the observationally-measured value from quasar absorption spectra for $\lambda$ \citep{}.}
+\item \textbf{Cone} (new method) is our most complete closure. It
+  attenuates the sources' light by the HI along each direction, so that
+  neutral gas casts shadows. From receivers spaced every 4 cells, 192
+  cones that together cover the sky are marched outward through
+  progressively coarser copies of the source emissivity and of the HI
+  column, matched to each cone's width. The cost therefore grows only
+  logarithmically with distance and does not depend on the number of
+  sources.\footnote{The cones are HEALPix pixels \citep{gorski05}
+  (half-opening $\approx8^\circ$), the coarse copies are mip-maps
+  \citep{crassin11}, and the march continues through the periodic images
+  to 8 box lengths. The emission found at each step is attenuated by the
+  transmission of the HI column, averaged over the source spectrum with
+  weights proportional to each frequency's contribution to
+  $\Gamma_{\rm HI}$. Before the column is coarsened, each cell's optical
+  depth at the ionization edge is capped at unity, so that one dense cell
+  cannot block a whole cone. This stands in for the covering fraction of
+  absorbers smaller than a cone.}
+ Each cone's attenuated light then enters the tensor along the cone's
+direction, as the sources do in Eq.~(\ref{eqn:otvet}).  Within 8 cells if a receiver the receivers are too sparse to follow the changing
+  direction to nearby sources, so there the optically thin tensor is used
+  instead.  The cones count the present light of every source out to 8 box lengths
+as if it had always been shining, whereas the solution's photons travel
+at $\hat c$ and have been in flight only since their emission, so the
+cones' light is further attenuated by $e^{-r/\lambda_x}$, with
+$\lambda_x$ set to reproduce the number of photons that the algorithm finds in the cell.\footnote{Each hydro step, $\lambda_x$ is chosen so that the
+cones' light in the ionized cells equals the photons the solution holds
+there; when it does not exceed them, as during most of overlap, there is
+no cutoff.}  The receivers' tensors are interpolated to every cell, and on scales of
+a few cells, which the receivers cannot resolve, the tensor follows the
+split.\footnote{$\mathsf h=\mathsf h_{\rm split}+G_\sigma*(\mathsf h_{\rm cone}-\mathsf h_{\rm split})$,
+with $\mathsf h_{\rm split}$ the split tensor above, $\mathsf h_{\rm cone}$
+the tensor of the cones' light, and $G_\sigma$ a Gaussian of width
+$\sigma=4$ cells.}
 \end{itemize}
 The walltime for all the simple clsures is 9--10 hours on 192 cores (the cone no longer than OTVET), and the runs with rays take 21--22 hours.  The time computing the Eddington tensor time per step at 256$^3$ is 0.7\,s for OTVET, 1.2\,s for screen, and 3.2\,s for the cone.
 
-We also will compare the radiative transfer models agains 21cmFAST. \todo{describe}
+We also compare the radiative transfer models with the excursion-set
+model of 21cmFAST \citep{mesinger11,murray20}, which does no radiative
+transfer. It smooths the density field on spheres of decreasing radius
+around each cell, computes the ionizing photons that the halos inside
+each sphere produce, and marks the cell ionized if, on any sphere, they
+outnumber the hydrogen atoms in it. We run it on the simulation's own
+density field, without recombinations, and with its default maximum
+radius $R_{\rm max}=15$\,Mpc, which stands in for the mean free path set
+by Lyman-limit systems. Its sources are matched to ours: the photons of
+a halo of mass $M$ scale as $M^{1+\alpha_\star}$, with
+$\alpha_\star\approx0.45$ from our abundance matching
+($L_{\rm UV}\propto M^{1.45}$), and the normalization at each redshift
+gives the rays' volume-weighted ionized fraction.
+
 
 
 %======================================================================
@@ -246,23 +269,16 @@ We also will compare the radiative transfer models agains 21cmFAST. \todo{descri
 middle at $z=6.48$, 5.70 and 5.24 ($\xv=0.54$, 0.80, 0.96 in the rays;
 the middle row of OTVET and the cone is their $z=5.75$ snapshot, at
 $\xv=0.80$ and 0.79):
-the rays, M1, OTVET, the cone, and 21cmFAST's excursion-set
-criterion on the suite's own gas density ($R_{\rm max}=15$\,Mpc), with
-mass-dependent sources matched to the suite's (\texttt{E-INTEGRAL},
-$\alpha_\star=a(z)-1=0.43$--0.45 from the abundance matching,
-$\alpha_{\rm esc}=0$, the normalisation chosen at each $z$ to give the
-rays' $\xv$).}
-\label{fig:maps}
+the rays, M1, OTVET, the cone, and 21cmFAST.\label{fig:maps}}
 \end{figure}
 
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig2_pk_xHII.pdf}
-\caption{$\Delta^2$ of $x_{\rm HII}$ (top), the ratio to the rays (middle)
+\caption{The dimensionless power spectrum of the ionization fraction, $\Delta_{x_{\rm HII$}}^2$ (top), the ratio of the power in this method to that of rays (middle)
 and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
-5.70 and 5.24: every run and 21cmFAST (\texttt{scripts/fig\_pk.py}). At
-$z=5.70$ the OTVET, screen and cone curves are their $z=5.75$ snapshot.}
+5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods})as well as 21cmFAST. }
 \label{fig:pkx}
 \end{figure}
 
@@ -272,25 +288,18 @@ $z=5.70$ the OTVET, screen and cone curves are their $z=5.75$ snapshot.}
 
 
 Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$ deep slab through the
-box at three stages of reionization. All the RT methods agree on where
-the ionized regions are: the bubbles grow around the same source
-clusters, and on scales above a few Mpc the $x_{\rm HII}$ fields are
-nearly identical. The methods differ at the fronts and in the
-last neutral islands. All the methods match the rays' $\xv$ at each redshift to
-within 0.02.  % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
+box at three stages of reionization. All the RT methods agree reasonablly well on the morphology, at least smoothed on scales above a few Mpc the $x_{\rm HII}$ fields are
+nearly identical.  Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure as has been shown previously \citep{zahn??, zahn??, mesinger??},  % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
 
- M1's local closure merges the
-light of several sources into one flux per cell and diffuses it, so the
-fronts lose the geometry leading to rounder fronts and that are most geometrically distinct from the other methods. OTVET keeps that
+ Of the closure approximations, M1 is the most discrepant from the  ray tracing method (rays),  which we use as the truth.  It is still closer to the than tow 21cmFAST. M1's local closure merges the
+light of several sources into one flux per cell, so the
+fronts become somewhat rounde. OTVET keeps that
 geometry, since its tensor points at the sources, but it illuminates
 every front from all sides at the optically thin rate. Its fronts are
-more diffuse than rays, and its last islands are eroded early. The cone, which attenuates the light by
+somewwhat more rounded than rays, and its last islands are eroded early. The cone, our most sophisticated closure approximation that attenuates the light by
 the HI along each direction, produces a very similar morphology to the rays' at every stage.
 
-21cmFAST, applied to the same density field with sources matched to the
-suite's, differs far more from the rays than any RT method does.  21cmFast does essentially no radiative transfer, assigning ionization based on smoothing the distribution of emission and asking if there are enough photons on any sphere around a pixel to ionize that sphere, and marking it as ionized if the answer is `yes'. It
-ionizes the largest overdense region completely and early, while many of
-the isolated bubbles the rays grow around individual sources are absent.
+%21cmFAST, applied to the same density field with sources matched to thesuite's, differs far more from the rays than any RT method does.  21cmFast does essentially no radiative transfer, assigning ionization based on smoothing the distribution of emission and asking if there are enough photons on any sphere around a pixel to ionize that sphere, and marking it as ionized if the answer is `yes'. It ionizes the largest overdense region completely and early, while many of the isolated bubbles the rays grow around individual sources are absent.
 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
