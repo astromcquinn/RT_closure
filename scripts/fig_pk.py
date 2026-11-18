@@ -3,7 +3,8 @@
 
   fig2: x_HII at every step of data/pk_xHII_21cmfast.txt (NewRadHydroCode
         excursion_set.py figure: every run and 21cmFAST), titled by the
-        rays' z and x_V
+        rays' z and x_V; the split is left out (it equals OTVET to < 1 % in
+        power and 0.001 in r(k) at these epochs)
   fig4: delta_Gamma (gammaHI_avg) at the 'gamma' panels of data/pk_suite.txt
         (rt_suite_figures.py; x_V ~ 0.5, 0.8, 0.97 and after overlap), and
         below them the volume-weighted PDF of log10(Gamma/<Gamma>_V) at the
@@ -102,8 +103,9 @@ def read_pdf(path):
     return out
 
 
-def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None):
+def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip=()):
     """ylim_ratio: one (lo, hi) for every panel, or a list with one per panel.
+    skip: run keys left out of the figure.
     pdfs: optional read_pdf() panels, one per block, drawn in a fourth row."""
     plt.rcParams.update({"font.size": 9, "axes.labelsize": 10, "xtick.labelsize": 8.5,
                          "ytick.labelsize": 8.5, "axes.linewidth": 0.8, "axes.edgecolor": INK2})
@@ -122,7 +124,7 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None):
     for j, ((runs, k, d), title) in enumerate(zip(blocks, titles)):
         a0, a1, a2 = axs[0, j], axs[1, j], axs[2, j]
         for key, label, c, ls, lw in RUNS:
-            if key not in d:
+            if key not in d or key in skip:
                 continue
             D2, ratio, r = d[key]
             h, = a0.plot(k, D2, color=c, ls=ls, lw=lw)
@@ -197,7 +199,8 @@ def main():
     titles = [f"$z={float(re.search(r' z ([0-9.]+)', heads[s]).group(1)):.2f}$, $x_V={xv[s]:.2f}$"
               for s in steps]
     panel_grid([bx[heads[s]] for s in steps], titles,
-               r"$\Delta^2_{x_{\rm HII}}(k)$", os.path.join(FIG, "fig2_pk_xHII"))
+               r"$\Delta^2_{x_{\rm HII}}(k)$", os.path.join(FIG, "fig2_pk_xHII"),
+               skip=("split",))  # = OTVET to < 1 % in power before overlap
 
     bs = read_blocks(os.path.join(DATA, "pk_suite.txt"))
     gam = [h for h in bs if h.startswith("# gamma")]
