@@ -155,7 +155,7 @@ equations conserve photons and keep $f\le1$. With
 one flux direction per cell, however, it cannot represent light arriving
 from several directions: crossing beams merge into a single beam along
 their mean direction, and a source's light on top of a nearly isotropic
-background spreads isotropically instead of streaming outward.
+background spreads isotropically instead of streaming outward. 
 
 \item \textbf{OTVET} takes $\mathsf D=\mathsf h=\mathsf S/{\rm tr}\,\mathsf S$,
   the optically thin Eddington tensor of the current sources
@@ -183,15 +183,14 @@ background spreads isotropically instead of streaming outward.
   volume ionizes. Since only newly emitted photons enter the background, it holds 2\% of the
   photons in flight at $z=5$, the lowest redshift we consider. %A run without the background agrees with it to $10^{-5}$ in the ionized fraction and to 3\% in the $\Gamma$ power spectrum at $z=4.99$. \draft{In a 20\,Mpc/h, $256^3$ test run to   $\Delta z\approx1$ after overlap, $\Lambda$ reaches 0.95--0.99 and the background brings the $\Gamma$ power from 14--16 to 1.2--1.5 times the   rays' (split 1.0--1.1), but 0.3--0.5 in $z$ after overlap it is still 3--4 times; keep?}
   }
-\item \textbf{Split} (new method) is a local version of the background
-  decomposition of \citet{gnedin01} that is used in the CROC simulations \citep{gnedin14}. The OTVET
+\item \textbf{Split} (new method) is a simple tweak of OTVET that improves its major diffency, that it does not capture the ionizing background when the mean free path becomes larger than the box.  In this new method, OTVET
   tensor is applied only to the photons the optically thin approximation
   accounts for, $N_{\rm OT}$, and the rest of the cell's photons are
   isotropic, $\mathsf D=\mathsf I/3+\min(1,N_{\rm OT}/N)\,(\mathsf h-\mathsf I/3)$.
   Where those schemes set the isotropic share with a global opacity or an
   observed mean free path and transport it as a second field, the split
   takes it cell by cell from the solution's own photons, with no free
-  parameter and at no extra cost.
+  parameter and at no extra cost.  This cures pathologies in OTVET
 \item \textbf{Screen} (new method) improves upon OTVET by attenuating the sources' light
   by $e^{-r/\lambda}$, summed over all periodic images. This is the
   remedy \citet{wu21} propose: attenuating at the mean free path gives the
@@ -262,7 +261,7 @@ gives the rays' volume-weighted ionized fraction.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig1_maps_xHII.png}
-\caption{Comparison of $x_{\rm HII}$  for different radiative transfer methods in 8-cell ($0.625\mpch$) slabs through the box
+\caption{Comparison of $x_{\rm HII}$  for different radiative transfer methods in 8-cell ($0.625\mpch$) slabs through the $40~$Mpc$/h$ box
 middle at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80, 0.96 in the rays simulation.\label{fig:maps}}
 \end{figure}
 
@@ -297,7 +296,7 @@ the HI along each direction, produces a very similar morphology to the rays' at 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
 coefficient $r(k)$ with the rays. While our $40$~Mpc/$h$ boxsize is too mall to be converged on these statistics, the relative comparison of methods is likely to be similar in a larger box. On large scales, every RT method has the
-rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which overshoots by a factor of 2-3 lfor the largest modes in the box.  What distinguishes the more accurate from less accurate colousre approximations is how well they perform at high wavenumbers, with cone fairing the best.  This is particularly seen in the cross correlation coefficients shown in the bottom panels.
+rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which overshoots by a factor of 2-3 for the largest modes in the box.  What distinguishes the more accurate from less accurate colosure approximations like cones from the least like M1 is how well they perform at high wavenumbers, with cone fairing the best.  This is particularly seen in the cross correlation coefficients shown in the bottom panels.
 
 Also shown is a ray tracing calculation that uses case-A recombinations and follows the recombination radiation.  This simulation is considerably closer to the fiducial rays (which uses the on-the-spot case B approximation) in all metrics. 
 
@@ -310,22 +309,17 @@ Also shown is a ray tracing calculation that uses case-A recombinations and foll
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig3_gamma_maps.png}
-\caption{$\Gamma_{\rm HI}$ (\texttt{gammaHI\_avg}) in 8-cell slabs through the box
+\caption{$40~$Mpc\;$h^{-1} \times 40~$Mpc\;$h^{-1}$ images of $\Gamma_{\rm HI}$ averaged over 8-cell slabs through the box
 middle at $z=5.70$, 5.24 and 4.99 ($\xv=0.80$, 0.96, 1.00 in the rays;
 the top row of OTVET, the screen and the cone is their $z=5.75$
 snapshot), all six runs, divided by the rays' median $\Gamma_{\rm HI}$
-of the ionized cells at that redshift, $\bar\Gamma_{\rm rays}=8.6\times10^{-14}$,
-$1.6\times10^{-13}$ and $2.9\times10^{-13}\,{\rm s^{-1}}$. Grey: within
-25\% of $\bar\Gamma_{\rm rays}$; red: above it, in bands at $\times1.25$,
-2 and 4; blue: below it, at $1/1.25$, $1/2$ and $1/4$; black: neutral
-($x_{\rm HII}<0.5$ in the slab). \draft{Possibly a zoom on a source
-cluster to show the proximity zones.}}
+of the ionized cells at that redshift.}
 \label{fig:mapsg}
 \end{figure}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{figures/fig4_pk_gamma.pdf}
+\includegraphics[width=.8\linewidth]{figures/fig4_pk_gamma.pdf}
 \caption{As Fig.~\ref{fig:pkx}, for $\delta_\Gamma$ (\texttt{gammaHI\_avg}) at $\xv=0.54$, 0.80,
 0.96 and after overlap ($z=4.99$), every method and the case A + RR rays
 (\texttt{scripts/fig\_pk.py}). Bottom row: the volume-weighted PDF of
@@ -341,32 +335,26 @@ and 5.0 (snapshots 5.97, 5.48, 4.99; needs a \texttt{--z} option in
 
 
 The closures differ more in the photoionization rate than in the
-ionized fraction. Figure~\ref{fig:mapsg} shows $\Gamma_{\rm HI}$ in the
-same slab. The mean rate is set by the photon budget and roughly agrees between
-the methods: the median $\Gamma_{\rm HI}$ of the ionized cells
+ionized fraction, especially after reionization (as highlighted in \citet{wu21}). Figure~\ref{fig:mapsg} shows $\Gamma_{\rm HI}$ in the
+same slab. The median $\Gamma_{\rm HI}$ of the ionized cells
 ($x_{\rm HI}<10^{-2}$) is within 10\% of the rays' at every snapshot from
 $z=6.9$ to 5 for M1, the cone and the case A + RR rays, while OTVET and the
-screen are 12--25\% low at $z=5.2$--6.2. Its distribution is not. Inside the
+screen are 12--25\% low at $z=5.2$--6.2. Its spatial distribution is, however, quite discrepant between models. Inside the
 bubbles the rays, the cone and the case A + RR rays show a rate that
 falls away from each source, the proximity zones resolved. M1 fills its
-bubbles with a nearly uniform rate: once a cell's photons are mostly a
-nearly isotropic background, a source's flux is a small part of the
-cell's, M1's closure becomes almost isotropic, and the source's light
-diffuses instead of streaming. OTVET has the rays'
-structure inside the bubbles but at a lower level, and the screen gives
-a mottled field during reionization, its single attenuation length
-over-weighting the nearest sources. After overlap ($z=4.99$) all the
-runs are smooth except OTVET, which keeps bright patches around the
-source clusters. The one-point distribution shows the same: between its
-0.1 and 99.9 percentiles, $\Gamma/\langle\Gamma\rangle$ in ionized
-cells at $z=4.99$ spans 0.30--2.5 for the rays, 0.40--3.0 for the cone,
-0.74--3.1 for the screen, 0.85--1.6 for M1, which has no proximity zones,
-and 0.66--4.2 for OTVET.
+bubbles with a more uniform rate. OTVET has the rays'
+structure inside the bubbles but at a lower level as it over counts distant sources reducing local ehnahcments. The screen gives
+a more mottled field during reionization, its single attenuation length
+over-weighting the nearest sources where the local mean free path is larger. After overlap (see the bottom $z=4.99$panels) OTVET is the most inhomogeneous as it does not count sources that are further than a {\bf [or half a?]} box length away. We do not show split, which is almost identical to OTVET until overlap where it looks quite similar to screen.
 
-Figure~\ref{fig:pkg} shows the power spectrum of
-$\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ and its
-cross-correlation with the rays. During reionization ($\xv=0.54$ and
-0.80) OTVET follows the rays closely ($r\ge0.96$ at
+
+
+
+
+Figure~\ref{fig:pkg} shows the dimensionless power spectrum of
+$\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ (top), the ratio of the power spectrum with that of rays, and $$\delta_\Gamma=\Gamma_{\rm HI}$'s
+cross-correlation with that of the rays for the different methods. During reionization ($\xv=0.54$ and
+0.80) OTVET and slplit follows the rays most closely ($r\ge0.96$ at
 $k\le2\hmpc$ and the power within 25\%), and the cone has the same
 correlation with 1.1--1.6 times the rays' power at $k=0.5$--$2\hmpc$;
 the screen has 2--3 times the rays' power at $k\approx2\hmpc$, the
@@ -376,6 +364,13 @@ scale on which its fronts are displaced. Near the end ($\xv=0.96$) OTVET
 and the screen have 1.2--2.1 times the rays' power at $k=0.5$--$2\hmpc$
 and M1 0.4 times, while the cone has 1.1--1.4 times and keeps
 $r\ge0.95$.
+
+
+The one-point distribution shows the same: between its
+0.1 and 99.9 percentiles, $\Gamma/\langle\Gamma\rangle$ in ionized
+cells at $z=4.99$ spans 0.30--2.5 for the rays, 0.40--3.0 for the cone,
+0.74--3.1 for the screen, 0.85--1.6 for M1, which has no proximity zones,
+and 0.66--4.2 for OTVET.
 
 After overlap the methods separate sharply. At $z=4.99$ OTVET has
 4 times the rays' power at $k=0.5$--$5\hmpc$, yet its correlation with the
@@ -395,59 +390,66 @@ $k=0.2$--$10\hmpc$ after overlap, with $r=0.91$--0.97, and the cone is
 closest on large scales (1.00, 1.38 and 2.02 times the rays' power at
 $k=0.5$, 1.8 and $4.9\hmpc$, against 1.41, 1.94 and 2.07 for the screen).
 
-\draft{Not rechecked for the late-end suite:} All the moment methods share an excess of 1.6--1.9 at $k\approx5\hmpc$,
+All the moment methods share an excess of 1.6--1.9 at $k\approx5\hmpc$,
 rising at higher $k$. It comes from the source cells, which hold their
 own photons for one absorption step and are brighter than in the rays,
 not from the closures: capping $\Gamma$ at $3\langle\Gamma\rangle$
-removes it and leaves the ordering above unchanged. Case-A recombination
+removes it and leaves the ordering above unchanged. {\bf [what do we mean ordering unchanged?]} 
+
+
+Case-A recombination
 with the recombination radiation transported changes the rays' power by
 only 3--13\% at $k\ge0.5\hmpc$, less than any closure does.
 
 
+%======================================================================
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_mfp_width.pdf}
+\caption{The left panel {\rm [remove (a)]} The 912\,\AA\ mean free path
+from random starts (the distance where $\langle F\rangle=1/e$; open: the
+exponential fit from ionised starts at $z\approx5$, where that distance
+exceeds the sightlines), and the measurements of \citet{becker21} and
+\citet{zhu23}. (b) The 84--16\% width of $\tau_{\rm eff}$ over $50\mpch$
+segments ($3\times8192$ redshift-space skewers; a box-length skewer joined
+to $10\mpch$ of another), with $\tau$ rescaled so that the mean flux
+equals \citet{bosman22}'s. Squares: the width of \citet{bosman22}'s
+$\tau_{\rm eff}$ in fixed $50\mpch$ bins (their Fig.~A1; 12--65 sightlines
+per bin), with non-detections at the detection limit; error bars, the
+16--84\% range of a bootstrap over sightlines; dotted, the width with the
+non-detections at $\tau_{\rm eff}=\infty$ (arrow: unbounded).
+\draft{values read from the vector CDFs of the arXiv PDF, each step one sightline; the
+online tables would be better}}
+\label{fig:taueff}
+\end{figure}
 
-\begin{itemize}
-\item Histories (Table~\ref{tab:runs}): $z_{50}=6.62$--6.65 in every run;
-  $z_{99}=5.11$ (rays), 5.12 (case A + RR), 5.15 (cone), 5.18 (OTVET),
-  5.21 (M1, screen); $\tau_{\rm es}=0.0560$--0.0565 (photon budget); the
-  cone ends closest of the closures ($\Delta z_{99}=0.04$).
-\item $\lambda_{\rm mfp}$ and the $\tau_{\rm eff}$ scatter over $50\mpch$
-  segments, full snapshots only (Fig.~\ref{fig:taueff}):
-  \begin{itemize}
-  \item $\lambda_{\rm mfp}$: every method 0.7--1.6$\times$ the data at
-    $z=5.1$--5.9 (the rays 0.7--1.4$\times$); at $z\le5.5$ OTVET 11--25\%
-    longer than the rays, the screen 15--35\%, the cone 9--18\%, M1
-    9--20\%, case A + RR 3--6\%.
-  \item The 84--16\% width of $\tau_{\rm eff}$ at the observed $\langle
-    F\rangle$ (snapshots at the rays' $z$; not $z\approx5.7$, where the
-    OTVET-type runs' snapshot is at 5.75): M1 broadest (+2--7\%), OTVET
-    ($-7$ to $-14\%$) and the screen ($-2$ to $-18\%$) narrowest, the cone
-    within 9\% of the rays, case A + RR within 2\%.
-  \item The reverse of the $P_\Gamma$ ordering: with a uniform $\Gamma$
-    every method gives the same width, and after overlap $\langle\Gamma
-    \rangle$ and $\langle\rho\rangle$ of a segment are correlated
-    ($\tau\propto\rho^2/\Gamma$), so a method with too much $\Gamma$ power
-    near the sources (OTVET) narrows the distribution and one with
-    too little (M1) broadens it. The 40\,Mpc/$h$ box makes the scatter a
-    lower bound (NewRadHydroCode \texttt{docs/taueff\_21cmfast.md} A.3, A.6).
-  \end{itemize}
-\item 21cmFAST on the same density field, with sources matched to the
-  suite's mass weighting (Figs.~\ref{fig:maps}, \ref{fig:pkx}): far
-  from every RT method. 21--17\% of the cells differ from the rays by more
-  than 0.5 in $x_{\rm HII}$ at $\xv=0.54$--0.80 (M1 7\%, OTVET and the
-  screen 3\%, the cone 2\%); $r(k)$ with the rays falls below 0.5 by
-  $k\approx0.5$--$1\hmpc$; 1.7--3.1$\times$ the rays' power at
-  $k\approx0.2\hmpc$, 0.5--0.7$\times$ at 1--3$\hmpc$. Matching the source
-  weighting makes it slightly worse than constant $\zeta$ (19\% of cells
-  off at $\xv=0.49$ \draft{in the earlier suite}): the limit is the criterion itself (EPS collapsed
-  fractions on a nonlinear density, no recombinations beyond
-  $R_{\rm max}$, spheres ionised whole). Its upturn at $k\gtrsim20\hmpc$ is
-  its sharp ionised/neutral boundaries.
-  \citep{mesinger11,murray20}
-\item IGM statistics: nearly the same for every method against the data
-  \citep{gaikwad23,becker21,zhu23,bosman22}; at $z=5.1$--5.9,
-  $\Gamma_{\rm HI}$ is 0.3--0.6$\times$ and $\lambda_{\rm mfp}$
-  0.7--1.6$\times$ the data in every run.
-\end{itemize}
+
+
+These differences in $\Gamma_{\rm HI}$ could manifest in differences in the observables, namely $\lambda_{\rm mfp}$ and the Lyman-$\alpha$ forest transmission.  For the latter, we concentrate on $\tau_{\rm eff}$ scatter over $50\mpch$ segments that has been studied in depth to show that there are large fluctuations in the transmission that cannot be explained by IGM density \citep{ADD}.  This observable has been the main one used to argue that reionzation must end below $z\approx 5.5$ \citep{ADD}.  The left panel in Fig.~\ref{fig:taueff} shows the mean free path in all these runs is quite similar, the right panel shows that the 84--16\% width of $\tau_{\rm eff}$ distribution is only changed at the $<20$\% level.  For $\tau_{\rm eff}$, we have renormalized all simulations to have the observd mean free path but the results are the same if we do not {\bf [check this]} and so, despite the 
+
+% {\bf [do we think this is converged or we need a larger box]}
+%   \begin{itemize}
+%   \item $\lambda_{\rm mfp}$: every method 0.7--1.6$\times$ the data at
+%     $z=5.1$--5.9 (the rays 0.7--1.4$\times$); at $z\le5.5$ OTVET 11--25\%
+%     longer than the rays, the screen 15--35\%, the cone 9--18\%, M1
+%     9--20\%, case A + RR 3--6\%.
+%   \item The 84--16\% width of $\tau_{\rm eff}$ at the observed $\langle
+%     F\rangle$ (snapshots at the rays' $z$; not $z\approx5.7$, where the
+%     OTVET-type runs' snapshot is at 5.75): M1 broadest (+2--7\%), OTVET
+%     ($-7$ to $-14\%$) and the screen ($-2$ to $-18\%$) narrowest, the cone
+%     within 9\% of the rays, case A + RR within 2\%.
+%   \item The reverse of the $P_\Gamma$ ordering: with a uniform $\Gamma$
+%     every method gives the same width, and after overlap $\langle\Gamma
+%     \rangle$ and $\langle\rho\rangle$ of a segment are correlated
+%     ($\tau\propto\rho^2/\Gamma$), so a method with too much $\Gamma$ power
+%     near the sources (OTVET) narrows the distribution and one with
+%     too little (M1) broadens it. The 40\,Mpc/$h$ box makes the scatter a
+%     lower bound (NewRadHydroCode \texttt{docs/taueff\_21cmfast.md} A.3, A.6).
+% \item IGM statistics: nearly the same for every method against the data
+%   \citep{gaikwad23,becker21,zhu23,bosman22}; at $z=5.1$--5.9,
+%   $\Gamma_{\rm HI}$ is 0.3--0.6$\times$ and $\lambda_{\rm mfp}$
+%   0.7--1.6$\times$ the data in every run.
+% \end{itemize}
 
 %======================================================================
 \section{Discussion}
@@ -472,58 +474,37 @@ only 3--13\% at $k\ge0.5\hmpc$, less than any closure does.
 
 \paragraph{acknowledgemetns} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
 
-%======================================================================
-\begin{figure}[h]
-\centering
-\includegraphics[width=\linewidth]{figures/fig_mfp_width.pdf}
-\caption{The full-box snapshots of every run
-(\texttt{scripts/fig\_mfp\_width.py}). (a) The 912\,\AA\ mean free path
-from random starts (the distance where $\langle F\rangle=1/e$; open: the
-exponential fit from ionised starts at $z\approx5$, where that distance
-exceeds the sightlines), and the measurements of \citet{becker21} and
-\citet{zhu23}. (b) The 84--16\% width of $\tau_{\rm eff}$ over $50\mpch$
-segments ($3\times8192$ redshift-space skewers; a box-length skewer joined
-to $10\mpch$ of another), with $\tau$ rescaled so that the mean flux
-equals \citet{bosman22}'s. Squares: the width of \citet{bosman22}'s
-$\tau_{\rm eff}$ in fixed $50\mpch$ bins (their Fig.~A1; 12--65 sightlines
-per bin), with non-detections at the detection limit; error bars, the
-16--84\% range of a bootstrap over sightlines; dotted, the width with the
-non-detections at $\tau_{\rm eff}=\infty$ (arrow: unbounded).
-\draft{values read from the vector CDFs of the arXiv PDF, each step one sightline; the
-online tables would be better}}
-\label{fig:taueff}
-\end{figure}
 
 
 
-\appendix
+% \appendix
 
-\section{The earlier suite}
-\label{app:oldsuite}
-For comparison, Figs.~\ref{fig:pkx_old} and \ref{fig:pkg_old} repeat
-Figs.~\ref{fig:pkx} and \ref{fig:pkg} for the earlier suite of seven runs
-(the six here and the split; the same box and sources with $f_6=0.11$,
-reionization ending at $z_{99}=5.58$, OTVET without the isotropic
-background, and supernova heating on). \draft{For the comparison of trends
-with an earlier end; drop or shorten.}
+% \section{The earlier suite}
+% \label{app:oldsuite}
+% For comparison, Figs.~\ref{fig:pkx_old} and \ref{fig:pkg_old} repeat
+% Figs.~\ref{fig:pkx} and \ref{fig:pkg} for the earlier suite of seven runs
+% (the six here and the split; the same box and sources with $f_6=0.11$,
+% reionization ending at $z_{99}=5.58$, OTVET without the isotropic
+% background, and supernova heating on). \draft{For the comparison of trends
+% with an earlier end; drop or shorten.}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\linewidth]{figures/fig2_pk_xHII_oldsuite.pdf}
-\caption{As Fig.~\ref{fig:pkx}, for the earlier suite at $z=6.97$, 6.20
-and 5.70: every run, the split and 21cmFAST
-(\texttt{data/pk\_xHII\_21cmfast\_oldsuite.txt}).}
-\label{fig:pkx_old}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=\linewidth]{figures/fig2_pk_xHII_oldsuite.pdf}
+% \caption{As Fig.~\ref{fig:pkx}, for the earlier suite at $z=6.97$, 6.20
+% and 5.70: every run, the split and 21cmFAST
+% (\texttt{data/pk\_xHII\_21cmfast\_oldsuite.txt}).}
+% \label{fig:pkx_old}
+% \end{figure}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\linewidth]{figures/fig4_pk_gamma_oldsuite.pdf}
-\caption{As Fig.~\ref{fig:pkg} (without the PDFs), for the earlier suite
-at $\xv=0.49$, 0.79, 0.97 and after overlap
-(\texttt{data/pk\_suite\_oldsuite.txt}).}
-\label{fig:pkg_old}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=\linewidth]{figures/fig4_pk_gamma_oldsuite.pdf}
+% \caption{As Fig.~\ref{fig:pkg} (without the PDFs), for the earlier suite
+% at $\xv=0.49$, 0.79, 0.97 and after overlap
+% (\texttt{data/pk\_suite\_oldsuite.txt}).}
+% \label{fig:pkg_old}
+% \end{figure}
 
 
 
@@ -549,23 +530,23 @@ at $\xv=0.49$, 0.79, 0.97 and after overlap
 
 %======================================================================
 
-\section{Cone parameters}
-\begin{itemize}
-\item nside 2$\to$4, receiver spacing 2$\to$4, $r_c$ 4$\to$8, the cutoff
-  variants ($\lambda_x\in\{\infty,\lambda_{\rm eff},2\lambda_{\rm eff},$
-  budget$\}$), blend $\sigma$: the \texttt{cmp\_*} tables of
-  \texttt{docs/otvet\_closure.md} \S3.
-\end{itemize}
+% \section{Cone parameters}
+% \begin{itemize}
+% \item nside 2$\to$4, receiver spacing 2$\to$4, $r_c$ 4$\to$8, the cutoff
+%   variants ($\lambda_x\in\{\infty,\lambda_{\rm eff},2\lambda_{\rm eff},$
+%   budget$\}$), blend $\sigma$: the \texttt{cmp\_*} tables of
+%   \texttt{docs/otvet\_closure.md} \S3.
+% \end{itemize}
 
-\section{The minimum-image normalisation}\label{app:norm}
-\begin{itemize}
-\item $\int_{\rm cube}d^3r/(4\pi r^2)=0.610\,L$, so $L_O=4\pi\times0.610\,L=7.66\,L$
-  in the notation of \citet{wu21}.
-\item Box budget: $\sum N=q\sum L\,\lambda_{\rm eff}$,
-  $\sum\Ndir=q\sum L\times0.61L$, so $\sum N/\sum\Ndir\approx\lambda_{\rm eff}/0.61L$.
-\item Link to the $k$-independent amplitude ratio $4\pi\lambda/L_O$ of
-  \citet{wu21}.
-\end{itemize}
+% \section{The minimum-image normalisation}\label{app:norm}
+% \begin{itemize}
+% \item $\int_{\rm cube}d^3r/(4\pi r^2)=0.610\,L$, so $L_O=4\pi\times0.610\,L=7.66\,L$
+%   in the notation of \citet{wu21}.
+% \item Box budget: $\sum N=q\sum L\,\lambda_{\rm eff}$,
+%   $\sum\Ndir=q\sum L\times0.61L$, so $\sum N/\sum\Ndir\approx\lambda_{\rm eff}/0.61L$.
+% \item Link to the $k$-independent amplitude ratio $4\pi\lambda/L_O$ of
+%   \citet{wu21}.
+% \end{itemize}
 
 
 
