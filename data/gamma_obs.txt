@@ -1,0 +1,15 @@
+# Gamma_HI measurements of Gaikwad et al. 2023 (arXiv:2304.02038v2, Table 3, total 1 sigma),
+# copied from NewRadHydroCode data/igm/igm_z5_6.txt (transcribed there from the paper on 2026-10-10).
+# z  Gamma_HI[1e-12 s^-1]  +err  -err  ref
+4.90  0.501  0.275  0.232  Gaikwad23
+5.00  0.557  0.376  0.218  Gaikwad23
+5.10  0.508  0.324  0.192  Gaikwad23
+5.20  0.502  0.292  0.193  Gaikwad23
+5.30  0.404  0.272  0.147  Gaikwad23
+5.40  0.372  0.217  0.126  Gaikwad23
+5.50  0.344  0.219  0.130  Gaikwad23
+5.60  0.319  0.194  0.120  Gaikwad23
+5.70  0.224  0.223  0.112  Gaikwad23
+5.80  0.178  0.194  0.078  Gaikwad23
+5.90  0.151  0.151  0.079  Gaikwad23
+6.00  0.145  0.157  0.087  Gaikwad23

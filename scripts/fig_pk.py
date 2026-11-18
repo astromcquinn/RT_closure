@@ -6,9 +6,9 @@
         rays' z and x_V; the split is left out (it equals OTVET to < 1 % in
         power and 0.001 in r(k) at these epochs)
   fig4: delta_Gamma (gammaHI_avg) at the 'gamma' panels of data/pk_suite.txt
-        (rt_suite_figures.py; x_V ~ 0.5, 0.8, 0.97 and after overlap), and
-        below them the volume-weighted PDF of log10(Gamma/<Gamma>_V) at the
-        same snapshots (data/pdf_gamma.txt)
+        (rt_suite_figures.py; x_V ~ 0.5, 0.8, 0.97 and after overlap); the
+        PDFs of data/pdf_gamma.txt are read only to check the snapshots (the
+        z = 4.99 PDF is drawn by fig_history.py)
 
 usage: python3 scripts/fig_pk.py   (writes figures/fig2_pk_xHII.{pdf,png} and
        figures/fig4_pk_gamma.{pdf,png})
@@ -212,9 +212,9 @@ def main():
     zq = lambda h: float(re.search(r"z = ([\d.]+)", h).group(1))
     assert len(pdfs) == len(gam) and all(abs(zq(p[0]) - zq(h)) < 0.002 for p, h in zip(pdfs, gam)), \
         "the PDF panels are not the power-spectrum panels"
+    # the PDF row was moved to fig_history.py (z = 4.99 only), 2026-11-18
     panel_grid([bs[h] for h in gam], titles, r"$\Delta^2_{\delta_\Gamma}(k)$",
-               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=[(0.3, 3)] * (len(gam) - 1) + [(0.02, 30)],
-               pdfs=pdfs)
+               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=[(0.3, 3)] * (len(gam) - 1) + [(0.02, 30)])
 
 
 if __name__ == "__main__":
