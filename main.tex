@@ -269,7 +269,7 @@ middle at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80, 0.96 in th
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{figures/fig2_pk_xHII.pdf}
+\includegraphics[width=0.8\linewidth]{figures/fig2_pk_xHII.pdf}
 \caption{The dimensionless power spectrum of the ionization fraction, $\Delta_{x_{\rm HII}}^2$ (top), the ratio of the power in this method to that of rays (middle)
 and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
 5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods}) as well as 21cmFAST. }
@@ -297,7 +297,10 @@ the HI along each direction, produces a very similar morphology to the rays' at 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
 coefficient $r(k)$ with the rays. On large scales every RT method has the
-rays' power to within 20\% until $\xv\approx0.8$. The cross-correlation
+rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which can overshoot at the factor of few level.  What distinguishes the more accurate form less accurate methods is how well they perform at high wavenumbers.  Still, for $x_v < 0.8$  It's reallyoat the end of ionization where the differences become most manifest. 
+
+
+The cross-correlation
 then separates the methods. M1 decorrelates first: $r=0.83$ already at
 $k\approx1\hmpc$ at $\xv=0.54$, falling to 0.42 at $\xv=0.96$, the
 displaced fronts of Figure~\ref{fig:maps}. On smaller scales
@@ -315,6 +318,7 @@ $k\approx0.2\hmpc$, its ionized regions too clustered on the largest
 scales, and 0.5--0.7 times on scales of 1--$3\hmpc$, and its $r(k)$
 falls below 0.5 by $k\approx0.5$--$1\hmpc$.
 
+{\bf should put some cveat about the smallness of our box meaning that these predictions for power are not converged, but that we expect relative comparison to be in tact.}
 \subsection{Fluctuations in the photoionization rate}
 
 
