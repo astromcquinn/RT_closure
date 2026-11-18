@@ -380,19 +380,14 @@ The closures built on the thin tensor (OTVET, the split, the screen and the cone
 rising at higher $k$; M1 does not (0.6--1.1). It comes from the source cells, which hold their
 own photons for one absorption step and are brighter than in the rays,
 not from the closures: capping $\Gamma$ at $3\langle\Gamma\rangle$
-removes it and leaves the ranking of the methods at $k\lesssim2\hmpc$ unchanged. \textcolor{red}{[The cap test was done on the earlier suite, where M1 shared the excess. In this suite it does not, which suggests the excess comes from the thin tensor's light near the sources rather than the source cells. Redo the cap test on the late-end suite, or reword.]}
-
-The one-point distributions show the same differences cell by cell, and they separate the two tails: proximity zones at high $\Gamma_{\rm HI}$ and shadows at low $\Gamma_{\rm HI}$. Figure~\ref{fig:taueff} (left) shows the distribution after overlap; we describe the earlier epochs without showing them. \textcolor{red}{[Now that only $z=4.99$ is plotted, keep the first two bullets as ``not shown'', shorten them, or cut them?]}
-\begin{itemize}
-\item \emph{During reionization} the distribution is bimodal: 39\% of the volume is neutral at $\xv=0.54$ (off the left edge), and the ionization fronts lie in between. Every moment method has more cells than the rays at $10^{-4}$--$10^{-1}\langle\Gamma_{\rm HI}\rangle_V$: 18--20\% of the cells above $10^{-4}\langle\Gamma_{\rm HI}\rangle_V$, against 16\% for the rays. Their fronts are thicker, as expected from the numerical diffusion of first-order transport.
-\item \emph{Near the end} ($\xv=0.96$), the width of the distribution between its 16th and 84th percentiles is 0.25\,dex in the rays, 0.24 in the cone and 0.23 in the case A + RR rays, but only 0.14--0.19 in the other closures. The difference is in the low tail. In the rays, 2.5\% of the cells above $10^{-4}\langle\Gamma_{\rm HI}\rangle_V$ have $\Gamma_{\rm HI}<0.17\langle\Gamma_{\rm HI}\rangle_V$, and in the cone $\Gamma_{\rm HI}<0.22\langle\Gamma_{\rm HI}\rangle_V$; in M1, OTVET, the split and the screen, the same 2.5\% reaches only 0.5--0.6$\langle\Gamma_{\rm HI}\rangle_V$. These are the shadows behind self-shielded gas and the last neutral islands, which only the cone's attenuated tensor reproduces.
-\item \emph{After overlap} ($z=4.99$), the rays' distribution is narrow (0.09\,dex between the 16th and 84th percentiles), with tails in both directions: its 0.1th and 99.9th percentiles are at 0.16 and 2.6$\langle\Gamma_{\rm HI}\rangle_V$. The cone has the same width and tails of nearly the same extent (0.33 and 3.0). OTVET is twice as broad (0.18\,dex) with five times the rays' fraction of cells above $3\langle\Gamma_{\rm HI}\rangle_V$ (0.24\% against 0.05\%) and almost no shadowed ones. The split and the screen lie in between (0.11--0.13\,dex; twice the rays' upper tail, no lower tail). M1's core is as narrow as the rays', but it has neither tail (0.79--1.6$\langle\Gamma_{\rm HI}\rangle_V$), consistent with its missing proximity zones.
-\end{itemize}
-\textcolor{red}{[The percentiles are from the 0.05-dex binned PDFs of \texttt{data/pdf\_gamma.txt}; recompute the tail values from the cubes for the final version. The earlier text had 0.30--2.5 for the rays at $z=4.99$, probably for $x_{\rm HI}<10^{-2}$ cells and relative to the median.]}
-
+removes it and leaves the ranking of the methods at $k\lesssim2\hmpc$ unchanged. \textcolor{red}{[The cap test was done on the earlier suite, where M1 shared the excess. In this suite it does not, which suggests the excess comes from the thin tensor's light near the sources rather than the source cells. Redo the cap test on the late-end suite, or reword.]} 
 Case-A recombination
 with the recombination radiation transported changes the rays' power by
 only 3--13\% at $k\ge0.5\hmpc$, less than any closure does, and leaves the one-point distribution almost unchanged (widths within 0.02\,dex).
+
+
+Figure~\ref{fig:taueff} shows the 1`point distributions of $\Gamm_{\rm HI}$ after overlap at $z=4.99$.  The agreement between the emethods is better before overlap.  Other than cone, all the closure methods do not predict the tail to small underdensities and somewhat overpredict the overdensities.  This is because they don't attenuate properly the radiation into more opaque regions and remaing neutral regions (0.1\% of the volume is neutral in rays).  Note that the axis is logged, and so this tail ioccurpies a small fraciton of the volume. OTVET overpredicts the overdense tail because after the mean free path becomes larger than the box, it waits too heavity local contributions to the flux.
+
 
 
 %======================================================================
@@ -456,7 +451,7 @@ We have compared five two-moment closures with adaptive ray tracing in one code,
 \item \textbf{Absorbers.} We also argue that current simulations without subgrid prescriptions for absorbers that are matched to Ly$\alpha$ forest statistics are almost certainly biased to end reionization a few tenths in redshift later than it actually does. \textcolor{red}{[Your sentence, reworded; ``later'' is my reading, so check the direction. Nothing in Sections 2--3 supports it yet: add the argument, or cite D'Aloisio et al.\ in prep.]}
 \end{itemize}
 
-\paragraph{Acknowledgements.} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
+\paragraph{Acknowledgements.} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  This updated code is available: \url{https://github.com/astromcquinn/NewRadHydroCode}.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
 
 
 
