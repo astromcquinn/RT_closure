@@ -17,7 +17,7 @@
 \newcommand{\draft}[1]{\textcolor{orange}{[draft: #1]}}
 \newcommand{\chat}{\hat{c}}
 \newcommand{\hmpc}{\,h\,\mathrm{Mpc}^{-1}}
-\newcommand{\mpch}{\,\mathrm{Mpc}/h}
+\newcommand{\mpch}{\,h^{-1}\,\mathrm{Mpc}}
 \newcommand{\xv}{x_{\rm V}}
 \newcommand{\Ndir}{N_{\rm OT}}
 \newcommand{\T}{^{\mathsf T}}
@@ -176,7 +176,7 @@ background spreads isotropically instead of streaming outward.
   global opacity. Our OTVET run includes this background following
   \citet{gnedin01}, but it has a negligible effect at the redshifts we consider.\footnote{In each RT substep, every cell moves up to $\Lambda\bar s$
   of its photons, with $\bar s$ the mean emission per cell and
-  $\Lambda=\exp(-\langle\kappa\rangle\,0.61L)$ for box length $L$, into a
+  $\Lambda=\exp(-\langle\kappa\rangle\,0.61L)$ for box length $L$ (\citealt{gnedin01} define this length as an integral over the box; for the minimum-image cube it is $\int_{\rm cube}d^3r/(4\pi r^2)=0.61L$), into a
   second, isotropic field ($\mathsf D=\mathsf I/3$) absorbed like the
   first.  The volume-mean opacity $\langle\kappa\rangle$ is set by the
   last neutral gas, so $\Lambda$ is essentially zero until the last percent of the
@@ -261,8 +261,8 @@ gives the rays' volume-weighted ionized fraction.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig1_maps_xHII.png}
-\caption{Comparison of $x_{\rm HII}$  for different radiative transfer methods in 8-cell ($0.625\mpch$) slabs through the $40~$Mpc$/h$ box
-middle at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80, 0.96 in the rays simulation.\label{fig:maps}}
+\caption{Comparison of $x_{\rm HII}$ for different radiative transfer methods in 8-cell ($0.625\mpch$) slabs through the middle of the $40\mpch$ box
+at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80 and 0.96 in the rays simulation. \textcolor{red}{[The middle row of OTVET and the cone is their $z=5.75$ snapshot ($\xv=0.80$, 0.79); say so here, since $\Delta z=0.05$ is visible.]}\label{fig:maps}}
 \end{figure}
 
 
@@ -280,26 +280,25 @@ and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
 
 
 
-Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$ deep slab through the
-box at three stages of reionization. All the RT methods agree reasonablly well on the morphology, at least smoothed on scales above a few Mpc the $x_{\rm HII}$ fields are
-nearly identical.  Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure as has been shown previously \citep{zahn07,zahn11,mesinger11},  % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
+Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$-thick slab through the
+box at three stages of reionization. All the RT methods agree reasonably well on the morphology: smoothed on scales above a few$\mpch$, their $x_{\rm HII}$ fields are
+nearly identical. Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure, as has been shown previously \citep{zahn07,zahn11,mesinger11}. \textcolor{red}{[Suggest quantifying with the fraction of cells whose $x_{\rm HII}$ differs from the rays' by more than 0.5: 1.9--2.0\% for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, 7.1--7.4\% for M1 (the comment below); 21cmFAST's is still to compute for this suite (17--21\% in the earlier one).]} % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
 
- Of the closure approximations, M1 is the most discrepant from the  ray tracing simulation (rays), which is our proxy for the truth.  It is still closer to the than to 21cmFAST. M1's local closure merges the
-light of several sources into one flux per cell, so the
-fronts become somewhat rounder than in rays and can be more or less advanced. OTVET's fronts reflect better the positions seen in rays, likely since its tensor points at the sources. Nevertheless, its fronts are also
-somewhat more rounded than rays likely because it illuminates
-every front from all sides at the optically thin rate. The cone, our most sophisticated closure approximation that attenuates the light by
-the HI along each direction, produces a very similar morphology to the rays' at every stage.
+Of the closures, M1 departs most from the ray-tracing simulation (rays), our proxy for the truth, although it is still much closer to the rays than 21cmFAST is. M1's local closure merges the
+light of several sources into one flux per cell, so its
+fronts are rounder than the rays' and can be either ahead of or behind them. OTVET's fronts follow the rays' positions better, likely because its tensor points at the sources. Nevertheless, its fronts are also
+somewhat rounder than the rays', likely because it illuminates
+every front from all sides at the optically thin rate. The cone, our most complete closure, which attenuates the light by
+the HI along each direction, gives a morphology very similar to the rays' at every stage.
 
 %21cmFAST, applied to the same density field with sources matched to thesuite's, differs far more from the rays than any RT method does.  21cmFast does essentially no radiative transfer, assigning ionization based on smoothing the distribution of emission and asking if there are enough photons on any sphere around a pixel to ionize that sphere, and marking it as ionized if the answer is `yes'. It ionizes the largest overdense region completely and early, while many of the isolated bubbles the rays grow around individual sources are absent.
 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
-coefficient $r(k)$ with the rays. While our $40$~Mpc/$h$ boxsize is too mall to be converged on these statistics, the relative comparison of methods is likely to be similar in a larger box. On large scales, every RT method has the
-rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which overshoots by a factor of 2-3 for the largest modes in the box.  What distinguishes the more accurate from less accurate closure approximations like cones from the least like M1 is how well they perform at high wavenumbers, with cone fairing the best.  This is particularly seen in the cross correlation coefficients shown in the bottom panels.
+coefficient $r(k)$ with the rays. Although our $40\mpch$ box is too small for these statistics to be converged, the relative comparison of the methods is likely to be similar in a larger box. On large scales ($k\lesssim0.5\hmpc$), every RT method has the
+rays' power to within 20\% until $\xv\approx0.8$, whereas 21cmFAST has up to 3 times the rays' power on the largest scales in the box and $r<0.5$ at $k\gtrsim1\hmpc$. The closures differ mainly at higher wavenumbers, which is clearest in the cross-correlation coefficient (bottom panels): at $k=2\hmpc$ and $\xv=0.80$, $r=0.96$ for the cone, 0.92--0.93 for OTVET and the screen, and 0.54 for M1. Near the end of reionization ($\xv=0.96$) every closure has too little power (0.4--0.8 times the rays'), the cone the least (0.7--0.8 at $k\le2\hmpc$), and only the cone keeps $r>0.9$ at $k\approx1\hmpc$. \textcolor{red}{[At $z=5.24$ the moment runs are further along ($\xv=0.97$--0.98 against the rays' 0.963; Fig.~1 panels file), so part of this deficit reflects the history rather than the morphology. Compare this panel at fixed $\xv$, or say so.]}
 
-Also shown is a ray tracing calculation that uses case-A recombinations and follows the recombination radiation.  This simulation is considerably closer to the fiducial rays (which uses the on-the-spot case B approximation) in all metrics. 
-
+Also shown is a ray-tracing run that uses case-A recombination and transports the recombination radiation. It is much closer to the fiducial rays (case B, on the spot) than any closure is, with 0.9--1.0 times their power and $r\ge0.98$ at $k\le2\hmpc$, so the treatment of recombination radiation matters less than the closure. \textcolor{red}{[Suggestion: use this run to set the scale of differences that matter, e.g.\ in the conclusions.]}
 
 
 
@@ -309,24 +308,22 @@ Also shown is a ray tracing calculation that uses case-A recombinations and foll
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig3_gamma_maps.png}
-\caption{$40~$Mpc\;$h^{-1} \times 40~$Mpc\;$h^{-1}$ images of $\Gamma_{\rm HI}$ averaged over 8-cell slabs through the box
-middle at $z=5.70$, 5.24 and 4.99 ($\xv=0.80$, 0.96, 1.00 in the rays;
+\caption{$\Gamma_{\rm HI}$ in the $40\mpch\times40\mpch$ slabs of Fig.~\ref{fig:maps} (8 cells thick) at $z=5.70$, 5.24 and 4.99 ($\xv=0.80$, 0.96 and 1.00 in the rays;
 the top row of OTVET, the screen and the cone is their $z=5.75$
-snapshot), all six runs, divided by the rays' median $\Gamma_{\rm HI}$
-of the ionized cells at that redshift.}
+snapshot), for all six runs, divided by the rays' median $\Gamma_{\rm HI}$
+of the ionized cells at that redshift and shown in bands at factors of 1.25, 2 and 4; neutral gas is black. The split is not shown (see text).}
 \label{fig:mapsg}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=.8\linewidth]{figures/fig4_pk_gamma.pdf}
-\caption{As Fig.~\ref{fig:pkx}, for $\delta_\Gamma$ (\texttt{gammaHI\_avg}) at $\xv=0.54$, 0.80,
-0.96 and after overlap ($z=4.99$), every method and the case A + RR rays
-(\texttt{scripts/fig\_pk.py}). Bottom row: the volume-weighted PDF of
-$\log_{10}(\Gamma/\langle\Gamma\rangle_V)$ at the same snapshots, with
-$\langle\Gamma\rangle_V$ the volume mean of $\delta_\Gamma$; the neutral
-cells ($\Gamma<10^{-4}\langle\Gamma\rangle_V$; the fraction of the rays'
-volume is given) are off the left edge. The last panel has a narrower
+\caption{As Fig.~\ref{fig:pkx}, for $\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ at $\xv=0.54$, 0.80,
+0.96 and after overlap ($z=4.99$), for every method. Bottom row: the volume-weighted PDF of
+$\log_{10}(\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle_V)$ at the same snapshots, with
+$\langle\Gamma_{\rm HI}\rangle_V$ the volume mean; the neutral
+cells ($\Gamma_{\rm HI}<10^{-4}\langle\Gamma_{\rm HI}\rangle_V$; the rays' fraction of the
+volume is given) are off the left edge, and the last panel has a narrower
 abscissa. \draft{Alternative: at $z\approx6.0$, 5.5
 and 5.0 (snapshots 5.97, 5.48, 4.99; needs a \texttt{--z} option in
 \texttt{rt\_suite\_figures.py}).}}
@@ -335,81 +332,77 @@ and 5.0 (snapshots 5.97, 5.48, 4.99; needs a \texttt{--z} option in
 
 
 The closures differ more in the photoionization rate than in the
-ionized fraction, especially after reionization (as highlighted in \citet{wu21}). Figure~\ref{fig:mapsg} shows $\Gamma_{\rm HI}$ in the
-same slab. The median $\Gamma_{\rm HI}$ of the ionized cells
+ionized fraction, especially after reionization, as \citet{wu21} also found. Figure~\ref{fig:mapsg} shows $\Gamma_{\rm HI}$ in the
+same slab, relative to the rays' median in the ionized gas. The median $\Gamma_{\rm HI}$ of the ionized cells
 ($x_{\rm HI}<10^{-2}$) is within 10\% of the rays' at every snapshot from
 $z=6.9$ to 5 for M1, the cone and the case A + RR rays, while OTVET and the
-screen are 12--25\% low at $z=5.2$--6.2. Its spatial distribution is, however, quite discrepant between models. Inside the
-bubbles the rays, the cone and the case A + RR rays show a rate that
-falls away from each source, the proximity zones resolved. M1 fills its
+screen are 12--25\% low at $z=5.2$--6.2. Its spatial distribution, however, differs considerably between the methods. Inside the
+bubbles, the rays, the cone and the case A + RR rays show a rate that
+falls away from each source: the proximity zones are resolved. M1 fills its
 bubbles with a more uniform rate. OTVET has the rays'
-structure inside the bubbles but at a lower level as it over counts distant sources reducing local ehnahcments. The screen gives
+structure inside the bubbles but at a lower level, as it over-counts distant sources, which reduces the local enhancements. \textcolor{red}{[Mechanism not checked; an alternative is that OTVET's unshadowed tensor pushes light into the fronts and the neutral gas, leaving less in the bubbles.]} The screen gives
 a more mottled field during reionization, its single attenuation length
-over-weighting the nearest sources where the local mean free path is larger. After overlap (see the bottom $z=4.99$panels) OTVET is the most inhomogeneous as it does not count sources that are further than a {\bf [or half a?]} box length away. We do not show split, which is almost identical to OTVET until overlap where it looks quite similar to screen.
+over-weighting the nearest sources where the local mean free path is longer. After overlap ($z=4.99$, bottom row), OTVET is the most inhomogeneous: its tensor counts only the sources within half a box (the minimum-image cube around each cell), so once the photons' mean path exceeds that, it concentrates the light around the source clusters. We do not show the split, which is identical to OTVET until overlap and similar to the screen after it.
 
-
-
-
-
-Figure~\ref{fig:pkg} shows the dimensionless power spectrum of
-$\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ (top), the ratio of the power spectrum with that of rays, and the cross correlation coefficient of  $\delta_\Gamma=\Gamma_{\rm HI}${\bf fix} with that of the rays for the different methods. During reionization ($\xv=0.54$ and
-0.80) OTVET and slplit follows the rays most closely ($r\ge0.96$ at
+Figure~\ref{fig:pkg} quantifies this with the power spectrum of
+$\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ (top), its ratio to the rays' (second row) and its cross-correlation coefficient with the rays (third row). During reionization ($\xv=0.54$ and
+0.80), OTVET and the split, which are identical then, follow the rays most closely ($r\ge0.96$ at
 $k\le2\hmpc$ and the power within 25\%), and the cone has the same
-correlation with 1.1--1.6 times the rays' power at $k=0.5$--$2\hmpc$;
-the screen has 2--3 times the rays' power at $k\approx2\hmpc$, the
+correlation with 1.1--1.6 times the rays' power at $k=0.5$--$2\hmpc$.
+The screen has 2--3 times the rays' power at $k\approx2\hmpc$, the
 mottling of Figure~\ref{fig:mapsg}. M1 is 20--40\% low, and its
 correlation with the rays falls to 0.6--0.7 at $k=0.5$--$1\hmpc$, the
-scale on which its fronts are displaced. Near the end ($\xv=0.96$) OTVET
+scale on which its fronts are displaced. Near the end ($\xv=0.96$), OTVET, the split
 and the screen have 1.2--2.1 times the rays' power at $k=0.5$--$2\hmpc$
 and M1 0.4 times, while the cone has 1.1--1.4 times and keeps
 $r\ge0.95$.
 
-
-The one-point distribution shows the same: between its
-0.1 and 99.9 percentiles, $\Gamma/\langle\Gamma\rangle$ in ionized
-cells at $z=4.99$ spans 0.30--2.5 for the rays, 0.40--3.0 for the cone,
-0.74--3.1 for the screen, 0.85--1.6 for M1, which has no proximity zones,
-and 0.66--4.2 for OTVET.
-
 After overlap the methods separate sharply. At $z=4.99$ OTVET has
-$4\times$ the rays' power at $k=0.5$--$5\hmpc$, yet its correlation with the
+4 times the rays' power at $k=0.5$--$5\hmpc$ (8 times at $k=0.2\hmpc$), yet its correlation with the
 rays stays at 0.83--0.96: the pattern is right and the amplitude wrong. This
 is the normalization error of \citet{wu21}. Applied to the whole field,
 the thin tensor treats all the photons as if they came from within half
-a box, and once the mean free path exceeds that, it beams the diffuse
+a box, and once their mean path exceeds that, it beams the diffuse
 background along the source directions. The isotropic background of
 \citet{gnedin01} does not remove this by $z=4.99$
 (Section~\ref{sec:methods}). M1 errs the other way, with 3--10
 times too little power at $k=0.5$--$2\hmpc$ and $r=0.05$ at $k=0.5\hmpc$.
-With one flux per cell it cannot represent a source's light on top of a
-nearly isotropic background, so it diffuses that light and the
-proximity zones vanish. The new closures largely remove both errors. The
-screen and cone are within 1.0--2.2 times the rays' power at
+With one flux per cell, it cannot represent a source's light on top of a
+nearly isotropic background, so that light spreads isotropically and the
+proximity zones vanish. The new closures reduce both errors. The split halves OTVET's excess, to about twice the rays' power at $k=0.5$--$10\hmpc$, at no extra cost. \textcolor{red}{[In the $256^3$ tests the split removed the excess almost entirely (1.1--1.3); here it leaves a factor 2. Worth a sentence on why, e.g.\ the later end of reionization in this suite.]} The
+screen and the cone have 1.0--2.2 times the rays' power at
 $k=0.2$--$10\hmpc$ after overlap, with $r=0.91$--0.97, and the cone is
 closest on large scales (1.00, 1.38 and 2.02 times the rays' power at
 $k=0.5$, 1.8 and $4.9\hmpc$, against 1.41, 1.94 and 2.07 for the screen).
 
-All the moment methods share an excess of 1.6--1.9 at $k\approx5\hmpc$,
-rising at higher $k$. It comes from the source cells, which hold their
+The closures built on the thin tensor (OTVET, the split, the screen and the cone) also share an excess of 1.5--3.6 times the rays' power at $k\approx5\hmpc$ at every epoch,
+rising at higher $k$; M1 does not (0.6--1.1). It comes from the source cells, which hold their
 own photons for one absorption step and are brighter than in the rays,
 not from the closures: capping $\Gamma$ at $3\langle\Gamma\rangle$
-removes it and leaves the ordering above unchanged. {\bf [what do we mean ordering unchanged?]} 
+removes it and leaves the ranking of the methods at $k\lesssim2\hmpc$ unchanged. \textcolor{red}{[The cap test was done on the earlier suite, where M1 shared the excess. In this suite it does not, which suggests the excess comes from the thin tensor's light near the sources rather than the source cells. Redo the cap test on the late-end suite, or reword.]}
 
+The one-point distributions (bottom row of Figure~\ref{fig:pkg}) show the same differences cell by cell, and they separate the two tails: proximity zones at high $\Gamma_{\rm HI}$ and shadows at low $\Gamma_{\rm HI}$.
+\begin{itemize}
+\item \emph{During reionization} the distribution is bimodal: 39\% of the volume is neutral at $\xv=0.54$ (off the left edge), and the ionization fronts lie in between. Every moment method has more cells than the rays at $10^{-4}$--$10^{-1}\langle\Gamma_{\rm HI}\rangle_V$: 18--20\% of the cells above $10^{-4}\langle\Gamma_{\rm HI}\rangle_V$, against 16\% for the rays. Their fronts are thicker, as expected from the numerical diffusion of first-order transport.
+\item \emph{Near the end} ($\xv=0.96$), the width of the distribution between its 16th and 84th percentiles is 0.25\,dex in the rays, 0.24 in the cone and 0.23 in the case A + RR rays, but only 0.14--0.19 in the other closures. The difference is in the low tail. In the rays, 2.5\% of the cells above $10^{-4}\langle\Gamma_{\rm HI}\rangle_V$ have $\Gamma_{\rm HI}<0.17\langle\Gamma_{\rm HI}\rangle_V$, and in the cone $\Gamma_{\rm HI}<0.22\langle\Gamma_{\rm HI}\rangle_V$; in M1, OTVET, the split and the screen, the same 2.5\% reaches only 0.5--0.6$\langle\Gamma_{\rm HI}\rangle_V$. These are the shadows behind self-shielded gas and the last neutral islands, which only the cone's attenuated tensor reproduces.
+\item \emph{After overlap} ($z=4.99$), the rays' distribution is narrow (0.09\,dex between the 16th and 84th percentiles), with tails in both directions: its 0.1th and 99.9th percentiles are at 0.16 and 2.6$\langle\Gamma_{\rm HI}\rangle_V$. The cone has the same width and tails of nearly the same extent (0.33 and 3.0). OTVET is twice as broad (0.18\,dex) with five times the rays' fraction of cells above $3\langle\Gamma_{\rm HI}\rangle_V$ (0.24\% against 0.05\%) and almost no shadowed ones. The split and the screen lie in between (0.11--0.13\,dex; twice the rays' upper tail, no lower tail). M1's core is as narrow as the rays', but it has neither tail (0.79--1.6$\langle\Gamma_{\rm HI}\rangle_V$), consistent with its missing proximity zones.
+\end{itemize}
+\textcolor{red}{[The percentiles are from the 0.05-dex binned PDFs of \texttt{data/pdf\_gamma.txt}; recompute the tail values from the cubes for the final version. The earlier text had 0.30--2.5 for the rays at $z=4.99$, probably for $x_{\rm HI}<10^{-2}$ cells and relative to the median.]}
 
 Case-A recombination
 with the recombination radiation transported changes the rays' power by
-only 3--13\% at $k\ge0.5\hmpc$, less than any closure does.
+only 3--13\% at $k\ge0.5\hmpc$, less than any closure does, and leaves the one-point distribution almost unchanged (widths within 0.02\,dex).
 
 
 %======================================================================
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig_mfp_width.pdf}
-\caption{The left panel {\rm [remove (a)]} The 912\,\AA\ mean free path
+\caption{Left: the 912\,\AA\ mean free path
 from random starts (the distance where $\langle F\rangle=1/e$; open: the
 exponential fit from ionised starts at $z\approx5$, where that distance
 exceeds the sightlines), and the measurements of \citet{becker21} and
-\citet{zhu23}. (b) The 84--16\% width of $\tau_{\rm eff}$ over $50\mpch$
+\citet{zhu23}. Right: the 84--16\% width of $\tau_{\rm eff}$ over $50\mpch$
 segments ($3\times8192$ redshift-space skewers; a box-length skewer joined
 to $10\mpch$ of another), with $\tau$ rescaled so that the mean flux
 equals \citet{bosman22}'s. Squares: the width of \citet{bosman22}'s
@@ -424,7 +417,7 @@ online tables would be better}}
 
 
 
-These differences in $\Gamma_{\rm HI}$ could manifest in differences in the observables, namely $\lambda_{\rm mfp}$ and the Lyman-$\alpha$ forest transmission.  For the latter, we concentrate on $\tau_{\rm eff}$ scatter over $50\mpch$ segments that has been studied in depth to show that there are large fluctuations in the transmission that cannot be explained by IGM density \citep{ADD}.  This observable has been the main one used to argue that reionzation must end below $z\approx 5.5$ \citep{ADD}.  The left panel in Fig.~\ref{fig:taueff} shows the mean free path in all these runs is quite similar, the right panel shows that the 84--16\% width of $\tau_{\rm eff}$ distribution is only changed at the $<20$\% level.  For $\tau_{\rm eff}$, we have renormalized all simulations to have the observd mean free path but the results are the same if we do not {\bf [check this]} and so, despite the 
+These differences in $\Gamma_{\rm HI}$ could affect the observables: the mean free path and the Ly$\alpha$ forest transmission. For the latter we use the scatter of $\tau_{\rm eff}$ over $50\mpch$ segments, whose large fluctuations cannot be explained by the IGM density alone \citep{becker15,bosman18,eilers18,bosman22} and have been the main evidence that reionization ends below $z\approx5.5$ \citep{kulkarni19,keating20,bosman22}. The left panel of Fig.~\ref{fig:taueff} shows that the mean free path is similar in every run; at $z\le5.5$ the moment methods' is 9--35\% longer than the rays'. The right panel shows that the 84--16\% width of the $\tau_{\rm eff}$ distribution, with every run rescaled to the observed mean flux, changes by less than 20\%. M1's is the broadest (2--7\% above the rays'), OTVET's and the screen's the narrowest (up to 14 and 18\% below), and the cone's is within 9\%. This ordering is the reverse of that of the $\Gamma_{\rm HI}$ power. After overlap $\Gamma_{\rm HI}$ and the density of a segment are correlated ($\tau\propto\rho^2/\Gamma_{\rm HI}$), so a method with too much $\Gamma_{\rm HI}$ power near the sources narrows the distribution, and one with too little broadens it. The $\tau_{\rm eff}$ scatter is therefore insensitive to the closure: even M1 reproduces the rays' width to better than 10\%. \textcolor{red}{[Check: the same without the mean-flux rescaling (the earlier text said so, unverified); and the $40\mpch$ box makes the scatter a lower bound.]}
 
 % {\bf [do we think this is converged or we need a larger box]}
 %   \begin{itemize}
@@ -451,27 +444,22 @@ These differences in $\Gamma_{\rm HI}$ could manifest in differences in the obse
 % \end{itemize}
 
 %======================================================================
-\section{Discussion}
+\section{Discussion and conclusions}\label{sec:conclusions}
+We have compared five two-moment closures with adaptive ray tracing in one code, with all other physics shared, in a $40\mpch$, $512^3$ reionization simulation. Our main conclusions are as follows.
 \begin{itemize}
-\item Which closure: the cone for reionization runs; the split as a free
-  fix of existing OTVET codes after overlap; not the screen.
-\item Shared limits: no shadows of self-shielded gas (lower $\Gamma$ tail
-  too narrow late); too little power at $k\gtrsim10\hmpc$; first-order GLF
-  diffusion.
-\item Relation to \citet{gnedin25} and \citet{wu21}.
-\item Flux-limited diffusion, not run; expected failures: no shadows; no
-  light through light (like M1); after overlap $R=\lambda_{\rm mfp}|\nabla\ln N|\gg1$,
-  so every photon becomes a beam down the gradient, the opposite extreme
-  from M1; sign of the $P_\Gamma$ error unknown without a run.
-  FLD is used for reionization in, e.g., Enzo \citep{reynolds09,norman15}.
-\item Extensions: per-group cones, retarded sources, AMR levels.
+\item \textbf{Morphology of reionization.} Every closure reproduces the rays' ionization morphology on large scales: the $x_{\rm HII}$ power is within 20\% of the rays' at $k\lesssim0.5\hmpc$ until $\xv\approx0.8$. The closures differ at $k\gtrsim1\hmpc$, where the cone correlates best with the rays and M1 worst. All of them are far closer to the rays than 21cmFAST with matched sources, so on the scales of 21\,cm experiments the closure is not a major modelling uncertainty.
+\item \textbf{The photoionization rate during reionization.} OTVET and the split follow the rays' $\Gamma_{\rm HI}$ power to within 25\%, and the cone to within a factor of 1.6. M1 has 20--40\% too little power and weak proximity zones, and the screen's single attenuation length makes the field mottled.
+\item \textbf{After overlap.} OTVET has 4 times the rays' $\Gamma_{\rm HI}$ power, the normalization error of \citet{wu21}, and the background of \citet{gnedin01} does not remove it by $z=5$. M1 has 3--10 times too little power and no proximity zones. The split halves OTVET's excess at no cost. The cone has 1.0--1.4 times the rays' power at $k\le2\hmpc$ and is the only closure that reproduces the one-point distribution of $\Gamma_{\rm HI}$, including the low tail of shadowed gas.
+\item \textbf{Observables.} Every closure gives the rays' mean $\Gamma_{\rm HI}$ to 10--25\% and a mean free path 9--35\% longer. The 84--16\% width of the $\tau_{\rm eff}$ distribution changes by less than 20\%, in the opposite order to the $\Gamma_{\rm HI}$ power. Even M1 is therefore adequate for the $\tau_{\rm eff}$ scatter, the main evidence for a late end of reionization. \textcolor{red}{[Compare with the observational errors before claiming ``adequate''.]}
+\item \textbf{Which closure.} The cone for simulations in which the fluctuations of the ionizing background matter; its tensor adds little to the wall time. The split as a free fix for existing OTVET codes after overlap. We do not recommend the screen.
+\item \textbf{Shared limitations.} Only the cone casts shadows, and only of structures larger than about four cells; on smaller scales its tensor is the split's. The closures built on the thin tensor have 1.5--3.6 times the rays' $\Gamma_{\rm HI}$ power at $k\approx5\hmpc$. The first-order transport thickens the ionization fronts. All our results come from one $40\mpch$ box, whose size the mean free path exceeds after overlap, so the after-overlap statistics, and the $\tau_{\rm eff}$ scatter in particular, are limited by the box.
+\item \textbf{Relation to previous work.} \citet{gnedin25} found that the choice of Eddington tensor is not the dominant cause of the different $\Gamma_{\rm HI}$ power spectra of CROC and Thesan. We find that OTVET and M1 differ from the rays by 25--40\% during reionization, but by factors of 4 and 3--10 in opposite directions after overlap, so the importance of the closure depends strongly on the epoch. \textcolor{red}{[Check against the epochs and scales of \citet{gnedin25}.]}
+\item \textbf{Flux-limited diffusion}, used for reionization in Enzo \citep{reynolds09,norman15}, was not run. We expect it to fail in the same ways as M1, since it has one flux per cell and so no shadows and no crossing beams. After overlap, $R=\lambda_{\rm mfp}|\nabla\ln N|\gg1$ would turn every photon into a beam down the gradient, the opposite extreme from M1; the sign of the error in the $\Gamma_{\rm HI}$ power cannot be predicted without a run.
+\item \textbf{Extensions.} Cones per frequency group, sources retarded by their light-travel time, and the closures on adaptive-mesh levels.
+\item \textbf{Absorbers.} We also argue that current simulations without subgrid prescriptions for absorbers that are matched to Ly$\alpha$ forest statistics are almost certainly biased to end reionization a few tenths in redshift later than it actually does. \textcolor{red}{[Your sentence, reworded; ``later'' is my reading, so check the direction. Nothing in Sections 2--3 supports it yet: add the argument, or cite D'Aloisio et al.\ in prep.]}
 \end{itemize}
 
-\section{Conclusions}
- We also argue that current simulations without subgrid prescriptions for absorbers and that match to Ly$\alpha$ forest statistics are almost certainty biased for reionization to end at redshifts a couple tenth than it actually does.
-
-
-\paragraph{acknowledgemetns} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
+\paragraph{Acknowledgements.} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
 
 
 

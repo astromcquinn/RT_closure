@@ -2,12 +2,12 @@
 """The mean free path and the tau_eff scatter of every RT method, from the
 full-box snapshots only.
 
-(a) lambda_mfp (912 A, pMpc) at the snapshots: the distance at which the
+Left: lambda_mfp (912 A, pMpc) at the snapshots: the distance at which the
     mean transmission from random starts falls to 1/e; at z ~ 5, where
     that exceeds the sightlines, the exponential fit from ionised starts
     (open symbols). The observed values of Becker et al. 2021 and Zhu et
     al. 2023 in grey.
-(b) tau_eff(84 %) - tau_eff(16 %) over 50 Mpc/h segments (3 x 8192
+Right: tau_eff(84 %) - tau_eff(16 %) over 50 Mpc/h segments (3 x 8192
     redshift-space skewers per snapshot; a box-length skewer joined to
     10 Mpc/h of another), with tau rescaled at each snapshot so that the
     mean flux equals Bosman et al. 2022's.
@@ -131,15 +131,14 @@ def main():
     log_axis(a1, [0.5, 0.7, 1, 1.5, 2, 3])
     a1.set_ylim(0.4, 3.8)
     a1.set_ylabel(r"$\tau_{\rm eff}(84\%)-\tau_{\rm eff}(16\%)$, $\langle F\rangle$ = observed")
-    for ax, tag in [(a0, "(a)"), (a1, "(b)")]:
+    for ax in (a0, a1):
         ax.set_xlim(ZMIN, ZMAX)
         ax.set_xlabel(r"$z$")
         ax.grid(alpha=0.3, lw=0.5)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
-        ax.set_title(tag, loc="left", fontsize=9)
-    # the observations and the fit marker in (a), upper right (empty there);
-    # the runs in (b), upper left
+    # the observations and the fit marker in the left panel, upper right (empty there);
+    # the runs in the right panel, upper left
     h0, l0 = a0.get_legend_handles_labels()
     keep = [i for i, l in enumerate(l0) if l in ("Becker et al. 2021", "Zhu et al. 2023", "exponential fit")]
     a0.legend([h0[i] for i in keep], [l0[i] for i in keep], fontsize=6.5, frameon=False, loc="upper right")
