@@ -296,7 +296,7 @@ the HI along each direction, produces a very similar morphology to the rays' at 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
 coefficient $r(k)$ with the rays. While our $40$~Mpc/$h$ boxsize is too mall to be converged on these statistics, the relative comparison of methods is likely to be similar in a larger box. On large scales, every RT method has the
-rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which overshoots by a factor of 2-3 for the largest modes in the box.  What distinguishes the more accurate from less accurate colosure approximations like cones from the least like M1 is how well they perform at high wavenumbers, with cone fairing the best.  This is particularly seen in the cross correlation coefficients shown in the bottom panels.
+rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which overshoots by a factor of 2-3 for the largest modes in the box.  What distinguishes the more accurate from less accurate closure approximations like cones from the least like M1 is how well they perform at high wavenumbers, with cone fairing the best.  This is particularly seen in the cross correlation coefficients shown in the bottom panels.
 
 Also shown is a ray tracing calculation that uses case-A recombinations and follows the recombination radiation.  This simulation is considerably closer to the fiducial rays (which uses the on-the-spot case B approximation) in all metrics. 
 
@@ -352,8 +352,7 @@ over-weighting the nearest sources where the local mean free path is larger. Aft
 
 
 Figure~\ref{fig:pkg} shows the dimensionless power spectrum of
-$\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ (top), the ratio of the power spectrum with that of rays, and $$\delta_\Gamma=\Gamma_{\rm HI}$'s
-cross-correlation with that of the rays for the different methods. During reionization ($\xv=0.54$ and
+$\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ (top), the ratio of the power spectrum with that of rays, and the cross correlation coefficient of  $\delta_\Gamma=\Gamma_{\rm HI}${\bf fix} with that of the rays for the different methods. During reionization ($\xv=0.54$ and
 0.80) OTVET and slplit follows the rays most closely ($r\ge0.96$ at
 $k\le2\hmpc$ and the power within 25\%), and the cone has the same
 correlation with 1.1--1.6 times the rays' power at $k=0.5$--$2\hmpc$;
@@ -373,7 +372,7 @@ cells at $z=4.99$ spans 0.30--2.5 for the rays, 0.40--3.0 for the cone,
 and 0.66--4.2 for OTVET.
 
 After overlap the methods separate sharply. At $z=4.99$ OTVET has
-4 times the rays' power at $k=0.5$--$5\hmpc$, yet its correlation with the
+$4\times$ the rays' power at $k=0.5$--$5\hmpc$, yet its correlation with the
 rays stays at 0.83--0.96: the pattern is right and the amplitude wrong. This
 is the normalization error of \citet{wu21}. Applied to the whole field,
 the thin tensor treats all the photons as if they came from within half
