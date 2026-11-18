@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-"""The reionization history, the median photoionization rate and the
-one-point distribution of Gamma_HI after overlap, for every run.
+"""The reionization history, the median photoionization rate and the mean
+free path of every run.
 
-  left:   x_HII,V (solid) and x_HII,M (dashed) against z
+  left:   the mass-weighted neutral fraction x_HI,M = 1 - x_HII,M against z
   middle: the median Gamma_HI of the ionised cells (x_HI < 1e-2) against z,
-          with the measurements of Gaikwad et al. 2023 (data/gamma_obs.txt)
-  right:  the volume-weighted PDF of log10(Gamma/<Gamma>_V) at z = 4.99, the
-          last panel of data/pdf_gamma.txt
+          with the measurements of Gaikwad et al. 2023 (data/gamma_obs.txt,
+          squares)
+  right:  lambda_mfp (912 A, pMpc) at the snapshots, as in fig_mfp_width.py
+          (open symbols: the exponential fit), with Becker et al. 2021
+          (squares) and Zhu et al. 2023 (diamonds)
 
 Data: data/history.txt, one line per run and snapshot,
   label  z  xHII_V  xHII_M  GammaHI_ion_med[s^-1]
 (labels as in data/pk_suite.txt: rays M1 OTVET split screen cone rays_A+RR;
-'#' lines are comments), and data/pdf_gamma.txt.
+'#' lines are comments), data/taueff_mfp_snap_A.txt ('#S' lines) and
+data/lambda_mfp_obs.txt.
 
 usage: python3 scripts/fig_history.py [--history PATH]
        (writes figures/fig_history.{pdf,png})
@@ -25,7 +28,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
-import fig_pk  # noqa: E402  (the paper's run colours and the PDF reader)
+import fig_mfp_width as fm  # noqa: E402  (the mean free path readers)
+import fig_pk  # noqa: E402  (the paper's run colours)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "data")
@@ -51,14 +55,11 @@ def read_gamma_obs(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--history", default=os.path.join(DATA, "history.txt"))
-    ap.add_argument("--neutral", action="store_true",
-                    help="left panel: the mass-weighted neutral fraction 1 - x_HII,M on a log axis "
-                         "(writes figures/fig_history_neutral.{pdf,png})")
     a = ap.parse_args()
     hist = read_history(a.history)
     gobs = read_gamma_obs(os.path.join(DATA, "gamma_obs.txt"))
-    head, dp, below = fig_pk.read_pdf(os.path.join(DATA, "pdf_gamma.txt"))[-1]
-    zpdf = float(head.split("z = ")[1].split()[0].rstrip(";"))
+    _, lam = fm.read_runs(os.path.join(DATA, "taueff_mfp_snap_A.txt"))
+    lobs = fm.read_obs(os.path.join(DATA, "lambda_mfp_obs.txt"))
 
     plt.rcParams.update({"font.size": 9, "axes.labelsize": 10, "xtick.labelsize": 8.5,
                          "ytick.labelsize": 8.5, "axes.linewidth": 0.8, "axes.edgecolor": fig_pk.INK2})
@@ -67,46 +68,37 @@ def main():
     for key, label, c, ls, lw in fig_pk.RUNS:
         if key in hist:
             h = hist[key]
-            if a.neutral:
-                ln, = a0.plot(h[:, 0], 1 - h[:, 2], color=c, ls=ls, lw=lw)
-            else:
-                ln, = a0.plot(h[:, 0], h[:, 1], color=c, ls=ls, lw=lw)
-                a0.plot(h[:, 0], h[:, 2], color=c, ls=ls, lw=lw * 0.6, alpha=0.6)
+            ln, = a0.plot(h[:, 0], 1 - h[:, 2], color=c, ls=ls, lw=lw)
             ion = h[:, 3] > 0
             a1.plot(h[ion, 0], h[ion, 3] / 1e-12, color=c, ls=ls, lw=lw)
             handles[label] = ln
-        if key in dp:
-            ln, = a2.plot(*dp[key], color=c, ls=ls, lw=lw)
+        if key in lam:
+            d = lam[key]
+            ln, = a2.plot(d[:, 0], d[:, 1], color=c, ls=ls, lw=lw)
+            fit = d[:, 2] > 0
+            a2.plot(d[~fit, 0], d[~fit, 1], "o", color=c, ms=2.5)
+            a2.plot(d[fit, 0], d[fit, 1], "o", color=c, ms=2.5, mfc="white")
             handles.setdefault(label, ln)
+    for ref, mk in [("Becker21", "s"), ("Zhu23", "D")]:
+        if ref in lobs:
+            d = lobs[ref]
+            a2.errorbar(d[:, 0], d[:, 1], yerr=[d[:, 3], d[:, 2]], fmt=mk, ms=3.5, color=OBS, mfc="white",
+                        ecolor=OBS, elinewidth=0.8, capsize=2, zorder=5)
     a1.errorbar(gobs[:, 0], gobs[:, 1], yerr=[gobs[:, 3], gobs[:, 2]], fmt="s", ms=3.5, color=OBS,
                 mfc="white", ecolor=OBS, elinewidth=0.8, capsize=2, zorder=5)
-    if not a.neutral:
-        a0.plot([], [], color=fig_pk.INK2, lw=1.4, label=r"$x_{\rm HII,V}$")
-        a0.plot([], [], color=fig_pk.INK2, lw=0.9, alpha=0.6, label=r"$x_{\rm HII,M}$")
-        a0.legend(fontsize=7.5, frameon=False, loc="lower left")
 
     zlo = min(h[:, 0].min() for h in hist.values())
     zhi = max(h[:, 0].max() for h in hist.values())
-    for ax in (a0, a1):
+    for ax in (a0, a1, a2):
         ax.set_xlim(max(zlo, 4.9), min(zhi, 9.0))
         ax.invert_xaxis()
         ax.set_xlabel(r"$z$")
-    if a.neutral:
-        a0.set_yscale("log")
-        a0.set_ylabel(r"$x_{\rm HI,M}$")
-    else:
-        a0.set_ylim(0, 1.02)
-        a0.set_ylabel(r"ionized fraction")
+    a0.set_yscale("log")
+    a0.set_ylabel(r"$x_{\rm HI,M}$")
     a1.set_yscale("log")
     a1.set_ylabel(r"median $\Gamma_{\rm HI}$ [$10^{-12}$ s$^{-1}$]")
-    a2.set_yscale("log")
-    a2.set_ylim(1e-3, 20)
-    a2.set_xlim(-1.2, 1.2)
-    a2.set_xticks([-1, -0.5, 0, 0.5, 1])
-    a2.set_xticklabels(["-1", "", "0", "", "1"])
-    a2.set_xlabel(r"$\log_{10}(\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle_V)$")
-    a2.set_ylabel(r"$dP/d\log_{10}\Gamma_{\rm HI}$")
-    a2.set_title(f"$z={zpdf:.2f}$", fontsize=9)
+    fm.log_axis(a2, [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30])
+    a2.set_ylabel(r"$\lambda_{\rm mfp}$ (912 Å) [pMpc]")
     for ax in (a0, a1, a2):
         ax.grid(alpha=0.3, lw=0.5)
         ax.spines["top"].set_visible(False)
@@ -115,7 +107,7 @@ def main():
     fig.legend([handles[l] for l in order], order, loc="upper center", ncol=min(len(order), 7),
                frameon=False, fontsize=8, handlelength=2.6, columnspacing=1.0, bbox_to_anchor=(0.5, 1.0))
     fig.tight_layout(rect=(0, 0, 1, 0.9))
-    out = os.path.join(FIG, "fig_history_neutral" if a.neutral else "fig_history")
+    out = os.path.join(FIG, "fig_history")
     fig.savefig(out + ".pdf")
     fig.savefig(out + ".png", dpi=300)
     print("wrote", os.path.normpath(out) + ".{pdf,png}")
