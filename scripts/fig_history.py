@@ -51,6 +51,9 @@ def read_gamma_obs(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--history", default=os.path.join(DATA, "history.txt"))
+    ap.add_argument("--neutral", action="store_true",
+                    help="left panel: the mass-weighted neutral fraction 1 - x_HII,M on a log axis "
+                         "(writes figures/fig_history_neutral.{pdf,png})")
     a = ap.parse_args()
     hist = read_history(a.history)
     gobs = read_gamma_obs(os.path.join(DATA, "gamma_obs.txt"))
@@ -64,8 +67,11 @@ def main():
     for key, label, c, ls, lw in fig_pk.RUNS:
         if key in hist:
             h = hist[key]
-            ln, = a0.plot(h[:, 0], h[:, 1], color=c, ls=ls, lw=lw)
-            a0.plot(h[:, 0], h[:, 2], color=c, ls=ls, lw=lw * 0.6, alpha=0.6)
+            if a.neutral:
+                ln, = a0.plot(h[:, 0], 1 - h[:, 2], color=c, ls=ls, lw=lw)
+            else:
+                ln, = a0.plot(h[:, 0], h[:, 1], color=c, ls=ls, lw=lw)
+                a0.plot(h[:, 0], h[:, 2], color=c, ls=ls, lw=lw * 0.6, alpha=0.6)
             ion = h[:, 3] > 0
             a1.plot(h[ion, 0], h[ion, 3] / 1e-12, color=c, ls=ls, lw=lw)
             handles[label] = ln
@@ -73,11 +79,11 @@ def main():
             ln, = a2.plot(*dp[key], color=c, ls=ls, lw=lw)
             handles.setdefault(label, ln)
     a1.errorbar(gobs[:, 0], gobs[:, 1], yerr=[gobs[:, 3], gobs[:, 2]], fmt="s", ms=3.5, color=OBS,
-                mfc="white", ecolor=OBS, elinewidth=0.8, capsize=2, zorder=5, label="Gaikwad et al. 2023")
-    a0.plot([], [], color=fig_pk.INK2, lw=1.4, label=r"$x_{\rm HII,V}$")
-    a0.plot([], [], color=fig_pk.INK2, lw=0.9, alpha=0.6, label=r"$x_{\rm HII,M}$")
-    a0.legend(fontsize=7.5, frameon=False, loc="lower left")
-    a1.legend(fontsize=7.5, frameon=False, loc="lower right")
+                mfc="white", ecolor=OBS, elinewidth=0.8, capsize=2, zorder=5)
+    if not a.neutral:
+        a0.plot([], [], color=fig_pk.INK2, lw=1.4, label=r"$x_{\rm HII,V}$")
+        a0.plot([], [], color=fig_pk.INK2, lw=0.9, alpha=0.6, label=r"$x_{\rm HII,M}$")
+        a0.legend(fontsize=7.5, frameon=False, loc="lower left")
 
     zlo = min(h[:, 0].min() for h in hist.values())
     zhi = max(h[:, 0].max() for h in hist.values())
@@ -85,8 +91,12 @@ def main():
         ax.set_xlim(max(zlo, 4.9), min(zhi, 9.0))
         ax.invert_xaxis()
         ax.set_xlabel(r"$z$")
-    a0.set_ylim(0, 1.02)
-    a0.set_ylabel(r"ionized fraction")
+    if a.neutral:
+        a0.set_yscale("log")
+        a0.set_ylabel(r"$x_{\rm HI,M}$")
+    else:
+        a0.set_ylim(0, 1.02)
+        a0.set_ylabel(r"ionized fraction")
     a1.set_yscale("log")
     a1.set_ylabel(r"median $\Gamma_{\rm HI}$ [$10^{-12}$ s$^{-1}$]")
     a2.set_yscale("log")
@@ -105,7 +115,7 @@ def main():
     fig.legend([handles[l] for l in order], order, loc="upper center", ncol=min(len(order), 7),
                frameon=False, fontsize=8, handlelength=2.6, columnspacing=1.0, bbox_to_anchor=(0.5, 1.0))
     fig.tight_layout(rect=(0, 0, 1, 0.9))
-    out = os.path.join(FIG, "fig_history")
+    out = os.path.join(FIG, "fig_history_neutral" if a.neutral else "fig_history")
     fig.savefig(out + ".pdf")
     fig.savefig(out + ".png", dpi=300)
     print("wrote", os.path.normpath(out) + ".{pdf,png}")
