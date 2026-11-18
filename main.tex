@@ -113,7 +113,14 @@ and constant outside them, a schedule chosen so that the ionization history is c
 $\Gamma_{\rm HI}$ averaged over the RT substeps of the hydro step, which
 removes most of the rays' sampling noise. Since the runs share their
 initial conditions and sources, and their histories agree to within 0.1
-in $z$ (Fig.~\ref{fig:hist}, left), we compare them at fixed redshift.
+in $z$ (Fig.~\ref{fig:hist}, left), we compare them at fixed redshift. Figure~\ref{fig:hist} also shows the median $\Gamma_{\rm HI}$ of the ionized gas and the mean free path of every run, with the measurements at $z=5$--6.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/fig_history.pdf}
+\caption{Left: the mass-weighted neutral fraction of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), with the measurements of \citet{gaikwad23} (squares). Right: the 912\,\AA\ mean free path from random starts (the distance where $\langle F\rangle=1/e$), with the measurements of \citet{becker21} (squares) and \citet{zhu23} (diamonds). The split is not shown: it is similar to OTVET (the median $\Gamma_{\rm HI}$ and the mean free path within 1.5\% of OTVET's before overlap, and within 5\% at $z=4.99$).}
+\label{fig:hist}
+\end{figure}
 %Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
 
 
@@ -325,14 +332,6 @@ and 5.0 (snapshots 5.97, 5.48, 4.99; needs a \texttt{--z} option in
 \label{fig:pkg}
 \end{figure}
 
-\begin{figure}[h]
-\centering
-\IfFileExists{figures/fig_history.pdf}{\includegraphics[width=\linewidth]{figures/fig_history.pdf}}{\placeholder{Three panels (\texttt{scripts/fig\_history.py}): $x_{\rm HII,V}$ and $x_{\rm HII,M}$ against $z$; the median $\Gamma_{\rm HI}$ of the ionized cells against $z$ with \citet{gaikwad23}; the PDF of $\log_{10}(\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle_V)$ at $z=4.99$. Needs \texttt{data/history.txt} from klone.}}
-\caption{Left: the volume-weighted (solid) and mass-weighted (thin) ionized fractions of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), with the measurements of \citet{gaikwad23}. Right: the volume-weighted PDF of $\log_{10}(\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle_V)$ after overlap ($z=4.99$), with $\langle\Gamma_{\rm HI}\rangle_V$ the volume mean.}
-\label{fig:hist}
-\end{figure}
-
-
 The closures differ more in the photoionization rate than in the
 ionized fraction, especially after reionization, as \citet{wu21} also found. Figure~\ref{fig:mapsg} shows $\Gamma_{\rm HI}$ in the
 same slab, relative to the rays' median in the ionized gas. The median $\Gamma_{\rm HI}$ of the ionized cells
@@ -383,7 +382,7 @@ own photons for one absorption step and are brighter than in the rays,
 not from the closures: capping $\Gamma$ at $3\langle\Gamma\rangle$
 removes it and leaves the ranking of the methods at $k\lesssim2\hmpc$ unchanged. \textcolor{red}{[The cap test was done on the earlier suite, where M1 shared the excess. In this suite it does not, which suggests the excess comes from the thin tensor's light near the sources rather than the source cells. Redo the cap test on the late-end suite, or reword.]}
 
-The one-point distributions show the same differences cell by cell, and they separate the two tails: proximity zones at high $\Gamma_{\rm HI}$ and shadows at low $\Gamma_{\rm HI}$. Figure~\ref{fig:hist} (right) shows the distribution after overlap; we describe the earlier epochs without showing them. \textcolor{red}{[Now that only $z=4.99$ is plotted, keep the first two bullets as ``not shown'', shorten them, or cut them?]}
+The one-point distributions show the same differences cell by cell, and they separate the two tails: proximity zones at high $\Gamma_{\rm HI}$ and shadows at low $\Gamma_{\rm HI}$. Figure~\ref{fig:taueff} (left) shows the distribution after overlap; we describe the earlier epochs without showing them. \textcolor{red}{[Now that only $z=4.99$ is plotted, keep the first two bullets as ``not shown'', shorten them, or cut them?]}
 \begin{itemize}
 \item \emph{During reionization} the distribution is bimodal: 39\% of the volume is neutral at $\xv=0.54$ (off the left edge), and the ionization fronts lie in between. Every moment method has more cells than the rays at $10^{-4}$--$10^{-1}\langle\Gamma_{\rm HI}\rangle_V$: 18--20\% of the cells above $10^{-4}\langle\Gamma_{\rm HI}\rangle_V$, against 16\% for the rays. Their fronts are thicker, as expected from the numerical diffusion of first-order transport.
 \item \emph{Near the end} ($\xv=0.96$), the width of the distribution between its 16th and 84th percentiles is 0.25\,dex in the rays, 0.24 in the cone and 0.23 in the case A + RR rays, but only 0.14--0.19 in the other closures. The difference is in the low tail. In the rays, 2.5\% of the cells above $10^{-4}\langle\Gamma_{\rm HI}\rangle_V$ have $\Gamma_{\rm HI}<0.17\langle\Gamma_{\rm HI}\rangle_V$, and in the cone $\Gamma_{\rm HI}<0.22\langle\Gamma_{\rm HI}\rangle_V$; in M1, OTVET, the split and the screen, the same 2.5\% reaches only 0.5--0.6$\langle\Gamma_{\rm HI}\rangle_V$. These are the shadows behind self-shielded gas and the last neutral islands, which only the cone's attenuated tensor reproduces.
@@ -399,12 +398,9 @@ only 3--13\% at $k\ge0.5\hmpc$, less than any closure does, and leaves the one-p
 %======================================================================
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{figures/fig_mfp_width.pdf}
-\caption{Left: the 912\,\AA\ mean free path
-from random starts (the distance where $\langle F\rangle=1/e$; open: the
-exponential fit from ionised starts at $z\approx5$, where that distance
-exceeds the sightlines), and the measurements of \citet{becker21} and
-\citet{zhu23}. Right: the 84--16\% width of $\tau_{\rm eff}$ over $50\mpch$
+\includegraphics[width=\linewidth]{figures/fig_pdf_width.pdf}
+\caption{Left: the volume-weighted PDF of $\log_{10}(\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle_V)$ after overlap ($z=4.99$), with $\langle\Gamma_{\rm HI}\rangle_V$ the volume mean.
+Right: the 84--16\% width of $\tau_{\rm eff}$ over $50\mpch$
 segments ($3\times8192$ redshift-space skewers; a box-length skewer joined
 to $10\mpch$ of another), with $\tau$ rescaled so that the mean flux
 equals \citet{bosman22}'s. Squares: the width of \citet{bosman22}'s
@@ -419,7 +415,7 @@ online tables would be better}}
 
 
 
-These differences in $\Gamma_{\rm HI}$ could affect the observables: the mean free path and the Ly$\alpha$ forest transmission. For the latter we use the scatter of $\tau_{\rm eff}$ over $50\mpch$ segments, whose large fluctuations cannot be explained by the IGM density alone \citep{becker15,bosman18,eilers18,bosman22} and have been the main evidence that reionization ends below $z\approx5.5$ \citep{kulkarni19,keating20,bosman22}. The left panel of Fig.~\ref{fig:taueff} shows that the mean free path is similar in every run; at $z\le5.5$ the moment methods' is 9--35\% longer than the rays'. The right panel shows that the 84--16\% width of the $\tau_{\rm eff}$ distribution, with every run rescaled to the observed mean flux, changes by less than 20\%. M1's is the broadest (2--7\% above the rays'), OTVET's and the screen's the narrowest (up to 14 and 18\% below), and the cone's is within 9\%. This ordering is the reverse of that of the $\Gamma_{\rm HI}$ power. After overlap $\Gamma_{\rm HI}$ and the density of a segment are correlated ($\tau\propto\rho^2/\Gamma_{\rm HI}$), so a method with too much $\Gamma_{\rm HI}$ power near the sources narrows the distribution, and one with too little broadens it. The $\tau_{\rm eff}$ scatter is therefore insensitive to the closure: even M1 reproduces the rays' width to better than 10\%. \textcolor{red}{[Check: the same without the mean-flux rescaling (the earlier text said so, unverified); and the $40\mpch$ box makes the scatter a lower bound.]}
+These differences in $\Gamma_{\rm HI}$ could affect the observables: the mean free path and the Ly$\alpha$ forest transmission. For the latter we use the scatter of $\tau_{\rm eff}$ over $50\mpch$ segments, whose large fluctuations cannot be explained by the IGM density alone \citep{becker15,bosman18,eilers18,bosman22} and have been the main evidence that reionization ends below $z\approx5.5$ \citep{kulkarni19,keating20,bosman22}. The right panel of Fig.~\ref{fig:hist} shows that the mean free path is similar in every run; at $z\le5.5$ the moment methods' is 9--35\% longer than the rays'. The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\tau_{\rm eff}$ distribution, with every run rescaled to the observed mean flux, changes by less than 20\%. M1's is the broadest (2--7\% above the rays'), OTVET's and the screen's the narrowest (up to 14 and 18\% below), and the cone's is within 9\%. This ordering is the reverse of that of the $\Gamma_{\rm HI}$ power. After overlap $\Gamma_{\rm HI}$ and the density of a segment are correlated ($\tau\propto\rho^2/\Gamma_{\rm HI}$), so a method with too much $\Gamma_{\rm HI}$ power near the sources narrows the distribution, and one with too little broadens it. The $\tau_{\rm eff}$ scatter is therefore insensitive to the closure: even M1 reproduces the rays' width to better than 10\%. \textcolor{red}{[Check: the same without the mean-flux rescaling (the earlier text said so, unverified); and the $40\mpch$ box makes the scatter a lower bound.]}
 
 % {\bf [do we think this is converged or we need a larger box]}
 %   \begin{itemize}

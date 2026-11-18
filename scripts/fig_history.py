@@ -66,6 +66,8 @@ def main():
     fig, (a0, a1, a2) = plt.subplots(1, 3, figsize=(7.2, 2.7))
     handles = {}
     for key, label, c, ls, lw in fig_pk.RUNS:
+        if key == "split":  # not shown: similar to OTVET (said in the caption)
+            continue
         if key in hist:
             h = hist[key]
             ln, = a0.plot(h[:, 0], 1 - h[:, 2], color=c, ls=ls, lw=lw)
