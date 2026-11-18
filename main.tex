@@ -62,7 +62,7 @@ extensions of M1 and OTVET, and any local closure for the third moment
 that depends only on the energy density and flux, are unstable
 \citep{gnedinkatz26}. Both routes are expensive.
 
-Here we test two-moment closures against adaptive ray tracing. One code
+Here we test two-moment closures against adaptive ray tracing on the full problem of reionization, and not on more ideallized problems considered in many previous works \citep{iliev, wu21, gnedin25}. One code
 holds every closure and the rays of \citet{trac07}, with all other
 physics shared, so differences between runs come from the transfer alone.
 We also introduce three new closures; the most complete of them, which
@@ -271,7 +271,7 @@ middle at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80, 0.96 in th
 \includegraphics[width=0.8\linewidth]{figures/fig2_pk_xHII.pdf}
 \caption{The dimensionless power spectrum of the ionization fraction, $\Delta_{x_{\rm HII}}^2$ (top), the ratio of the power in this method to that of rays (middle)
 and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
-5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods}) as well as 21cmFAST. The split method is not shown: before overlap it agrees with OTVET to within 1\% in power and 0.001 in $r(k)$.}
+5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods}) as well as 21cmFAST. The split method is not shown as it agrees with OTVET to within 1\% in power and 0.001 in $r(k)$ for the three cases shown.}
 \label{fig:pkx}
 \end{figure}
 
@@ -471,7 +471,7 @@ These differences in $\Gamma_{\rm HI}$ could manifest in differences in the obse
  We also argue that current simulations without subgrid prescriptions for absorbers and that match to Ly$\alpha$ forest statistics are almost certainty biased for reionization to end at redshifts a couple tenth than it actually does.
 
 
-\paragraph{acknowledgemetns} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
+\paragraph{acknowledgemetns} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  The updated C++ code is available here: \url{https://github.com/astromcquinn/NewRadHydroCode}.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
 
 
 
