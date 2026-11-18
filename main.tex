@@ -272,7 +272,7 @@ middle at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80, 0.96 in th
 \includegraphics[width=0.8\linewidth]{figures/fig2_pk_xHII.pdf}
 \caption{The dimensionless power spectrum of the ionization fraction, $\Delta_{x_{\rm HII}}^2$ (top), the ratio of the power in this method to that of rays (middle)
 and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
-5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods}) as well as 21cmFAST. The split is not shown: before overlap it agrees with OTVET to within 1\% in power and 0.001 in $r(k)$.}
+5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods}) as well as 21cmFAST. The split method is not shown: before overlap it agrees with OTVET to within 1\% in power and 0.001 in $r(k)$.}
 \label{fig:pkx}
 \end{figure}
 
@@ -296,29 +296,14 @@ the HI along each direction, produces a very similar morphology to the rays' at 
 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
-coefficient $r(k)$ with the rays. On large scales every RT method has the
-rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which can overshoot at the factor of few level.  What distinguishes the more accurate form less accurate methods is how well they perform at high wavenumbers.  Still, for $x_v < 0.8$  It's reallyoat the end of ionization where the differences become most manifest. 
+coefficient $r(k)$ with the rays. While our $40$~Mpc/$h$ boxsize is too mall to be converged on these statistics, the relative comparison of methods is likely to be similar in a larger box. On large scales, every RT method has the
+rays' power to within 20\% until $\xv\approx0.8$, unlike 21cmFAST which overshoots by a factor of 2-3 lfor the largest modes in the box.  What distinguishes the more accurate from less accurate colousre approximations is how well they perform at high wavenumbers, with cone fairing the best.  This is particularly seen in the cross correlation coefficients shown in the bottom panels.
+
+Also shown is a ray tracing calculation that uses case-A recombinations and follows the recombination radiation.  This simulation is considerably closer to the fiducial rays (which uses the on-the-spot case B approximation) in all metrics. 
 
 
-The cross-correlation
-then separates the methods. M1 decorrelates first: $r=0.83$ already at
-$k\approx1\hmpc$ at $\xv=0.54$, falling to 0.42 at $\xv=0.96$, the
-displaced fronts of Figure~\ref{fig:maps}. On smaller scales
-($k\approx5\hmpc$) the cone stays the closest, with $r=0.91$, 0.82 and
-0.47 at $\xv=0.54$, 0.80 and 0.96, against 0.83, 0.72 and 0.23 for OTVET,
-0.84, 0.73 and 0.08 for the screen, and 0.62, 0.44 and 0.17 for M1. At
-the end of reionization ($\xv=0.96$) every closure has less power than
-the rays, since its last islands are further eroded ($\xv=0.97$--0.98 in
-the moment runs): about half the rays' power at $k\gtrsim1\hmpc$ for M1,
-OTVET and the screen, and 0.73--0.81 of it at $k\le5\hmpc$ for the cone.
-Recombination radiation (case A + RR) changes the
-morphology less than any closure, with $r\ge0.98$ at $k\le2\hmpc$
-throughout. 21cmFAST has 1.7--3.1 times the rays' power at
-$k\approx0.2\hmpc$, its ionized regions too clustered on the largest
-scales, and 0.5--0.7 times on scales of 1--$3\hmpc$, and its $r(k)$
-falls below 0.5 by $k\approx0.5$--$1\hmpc$.
 
-{\bf should put some cveat about the smallness of our box meaning that these predictions for power are not converged, but that we expect relative comparison to be in tact.}
+
 \subsection{Fluctuations in the photoionization rate}
 
 
@@ -485,7 +470,7 @@ only 3--13\% at $k\ge0.5\hmpc$, less than any closure does.
  We also argue that current simulations without subgrid prescriptions for absorbers and that match to Ly$\alpha$ forest statistics are almost certainty biased for reionization to end at redshifts a couple tenth than it actually does.
 
 
-\paragraph{acknowledgemetns} The updates to the RadHydro code, including the addition of different radiative transfer algorithms in addition to the ray tracing, were added by Claude with MM checking them both with tests and by looking at the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occuring at the paragraph level and then assembled into a full document.
+\paragraph{acknowledgemetns} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
 
 %======================================================================
 \begin{figure}[h]
