@@ -23,6 +23,32 @@ older `*_draft` files and rows below are from the earlier suite (f6 = 0.11).
 `R = /gscratch/astro/mcquinn/radhydro/runs`; the data job is
 `$R/reion512late_figures/paper/paper_data.sh`, the map job `maps.sh` beside it.
 
+**Middle row at z = 5.695 (2026-11-19).** The middle row (z ≈ 5.70, x_V = 0.80) of
+Figs. 1–4, `data/pdf_gamma.txt` and the z ≈ 5.70 row of `fig_mfp_width` now take OTVET,
+split, screen and cone at their hydro step 84 (z = 5.6949, 5.6948, 5.6943, 5.6944;
+x_HII,V = 0.818, 0.818, 0.827, 0.814; the rays 0.803 at z = 5.6953) instead of step 83
+(z = 5.75), the snapshot their `zdata1 = 5.75` output had fallen on. Step 84 had no cubes
+and the restart files were gone, so the four runs were rerun from the start with the same
+binary (`$R/rt_late512_bin2/build/radhydro`, NewRadHydroCode 6658086), the original
+`params.txt` unchanged and the command-line overrides `fields_every=84 zdata2=5.70
+run_steps=85 restart_every=0 movie_dz=0` (fields and `Gas/u_gas` at step 84, stop after
+step 85; checked first on a small problem not to change the evolution), into
+`$R/<run>_z570` (46 GB each; jobs 43354553, 43357750–52). Each rerun is bit-for-bit the
+original: `stats.txt` of all 85 steps identical (the `idata2` output counter aside) and the
+step-83 cubes (`fHI`, `fHeI`, `fHeII`, `temp`, `rhog`, `gammaHI`, `gammaHI_avg`) identical
+under `tools/compare/compare.py --rtol 0 --atol-frac 0`. The figure tools read the runs
+through `$R/paper_view/<run>` (`make_views.sh` there): symlinks to the original run
+directory except `step_0084` (the rerun's) and `step_0083` (its `stats.txt` only, so that
+`igm_stats.py`, which measures every snapshot with cubes, sees the rays' snapshot set),
+and `Gas/` with the rerun's `u_gas.z=05.69xx` added. The data job is
+`$R/paper_view/regen.sh` (the commands of `paper_data.sh`, `split_data.sh` and `maps.sh`
+on the views, output in `$R/reion512late_figures/paper_z570`; the full `igm_stats` rerun
+on the views so that λ_mfp at z = 5.695 is measured, not interpolated). Diffed against
+the previous files, only the middle-row blocks and rows of the four runs changed (every
+other snapshot's numbers, including λ_mfp, identical); `fig_pk.py` and `fig_mfp_width.py`
+rerun on the new data. Not redone: `data/history.txt` (still the four runs' step 83) and
+`$R/reion512late_figures/paper/taueff/taueff_width_err.txt` (not used here).
+
 | file | paper | source (NewRadHydroCode) | made by | status |
 |---|---|---|---|---|
 | `fig1_maps_xHII_draft.png` | Fig. 1 | `docs/figures/taueff_21cmfast_fig8_maps.png` (branch `21cmfast-mass-sources`, 61b8312): rows z = 6.97, 6.20, 5.70; columns rays, M1, OTVET, cone, 21cmFAST (mass-dependent sources matched to the suite, R_max = 15 Mpc, on the suite's density) | `scripts/fig1_compose_draft.py` (this repository) | superseded by `fig1_maps_xHII.png` |
@@ -35,9 +61,9 @@ older `*_draft` files and rows below are from the earlier suite (f6 = 0.11).
 | — | Fig. 6 | — | from `docs/otvet_closure.md` §3 tables | to make: the normalisation |
 | `fig_mfp_width.{pdf,png}` | λ_mfp and τ_eff width | `data/taueff_mfp_snap_A.txt` (late-end suite: `igm_stats.py --taueff 50 --lya-only --nskew 8192 --seed 1`, `taueff_plot.py`, `taueff_z.py --norm --full`; λ_mfp from `$R/reion512late_igm/igm_*.json`) `data/lambda_mfp_obs.txt` and `data/taueff_width_obs.txt` (Bosman+22 Fig. A1 widths, read from the arXiv PDF's vector CDFs on klone, `radhydro/work/bosman22/bz_extract.py` and `bz_width.py`: each step one sightline, bootstrap over sightlines; 2026-11-13) (`data/igm/igm_z5_6.txt`) | `scripts/fig_mfp_width.py` (this repository) | final for the late-end suite |
 | `fig8_21cmfast_pk_draft.png` | 21cmFAST comparison | `docs/figures/taueff_21cmfast_fig8_pk.png` (branch `21cmfast-mass-sources`, 61b8312) | `excursion_set.py figure` | draft: colours to unify with Figs. 2–3 |
-| `fig1_maps_xHII.png` | Fig. 1 | cubes of `$R/reion512late{,_m1,_otvet_ga01,_otvet_cone}` and the 21cmFAST run-mass output `$R/rt_closure_paper/es_late/es_rmax15_mass` (E-INTEGRAL, R_max = 15 Mpc, α★ = a(z) − 1 = 0.447/0.433/0.433, α_esc = 0, normalised to the rays' x_V) | `scripts/fig_maps.py --field xHII --steps 69,84,93` (this repository; panels in `fig1_maps_xHII_panels.txt`) | final for the late-end suite |
+| `fig1_maps_xHII.png` | Fig. 1 | cubes of `$R/reion512late{,_m1,_otvet_ga01,_otvet_cone}` and the 21cmFAST run-mass output `$R/rt_closure_paper/es_late/es_rmax15_mass` (E-INTEGRAL, R_max = 15 Mpc, α★ = a(z) − 1 = 0.447/0.433/0.433, α_esc = 0, normalised to the rays' x_V) | `scripts/fig_maps.py --field xHII --steps 69,84,93` (this repository; panels in `fig1_maps_xHII_panels.txt`; since 2026-11-19 OTVET and the cone from `$R/paper_view/<run>`, middle row their step 84, see above) | final for the late-end suite |
 | `fig2_pk_xHII.{pdf,png}` | Fig. 2 | `data/pk_xHII_21cmfast.txt` (`excursion_set.py figure $R/rt_closure_paper/es_late RUN:label … --es rmax15_mass --steps 69,84,93`) | `scripts/fig_pk.py` (this repository); the split is left out (= OTVET to < 1 % in power, 0.001 in r(k), 2026-11-18) | final for the late-end suite |
-| `fig3_gamma_maps.png` | Fig. 3 | `gammaHI_avg` and `fHI` cubes of the six late-end runs | `R=/gscratch/astro/mcquinn/radhydro/runs; scripts/fig_maps.py --field gamma --relative --steps 84,93,99 --out figures/fig3_gamma_maps.png "$R/reion512late:rays" "$R/reion512late_m1:M1" "$R/reion512late_otvet_ga01:OTVET" "$R/reion512late_otvet_screen:screen" "$R/reion512late_otvet_cone:cone" "$R/reion512late_caseA:rays\ncase A + RR"` (this repository, fba6558; panels and the rays' reference medians in `fig3_gamma_maps_panels.txt`; 2026-11-18) | final for the late-end suite: Γ over the rays' median Γ of the ionised cells at each redshift, bands at ×1.25, 2, 4 (blue below, grey within 25 %, red above), neutral black |
+| `fig3_gamma_maps.png` | Fig. 3 | `gammaHI_avg` and `fHI` cubes of the six late-end runs | `R=/gscratch/astro/mcquinn/radhydro/runs; scripts/fig_maps.py --field gamma --relative --steps 84,93,99 --out figures/fig3_gamma_maps.png "$R/reion512late:rays" "$R/reion512late_m1:M1" "$R/reion512late_otvet_ga01:OTVET" "$R/reion512late_otvet_screen:screen" "$R/reion512late_otvet_cone:cone" "$R/reion512late_caseA:rays\ncase A + RR"` (this repository, fba6558; panels and the rays' reference medians in `fig3_gamma_maps_panels.txt`; 2026-11-18; remade 2026-11-19 with OTVET, the screen and the cone from `$R/paper_view/<run>`, top row their step 84, see above) | final for the late-end suite: Γ over the rays' median Γ of the ionised cells at each redshift, bands at ×1.25, 2, 4 (blue below, grey within 25 %, red above), neutral black |
 | `fig3_gamma_maps_own.png` | Fig. 3 alternative | as `fig3_gamma_maps.png` | the same command with `--rel-to own --out figures/fig3_gamma_maps_own.png` (each run's own median, logged in `fig3_gamma_maps_own_panels.txt`; 2026-11-18) | alternative, not in the paper |
 | `fig4_pk_gamma.{pdf,png}` | Fig. 4 | `data/pk_suite.txt` (`rt_suite_figures.py RUN:label … --xv 0.5,0.8,0.97 --xv-gamma 0.5,0.8,0.97,1.0`) | `scripts/fig_pk.py` (this repository) | epochs by x_V (0.54, 0.80, 0.96, 1.00); alternative at z ≈ 6.0, 5.5, 5.0. Bottom row (2026-11-12): the Γ PDF, `data/pdf_gamma.txt` (`$RUNS/reion512late_figures/paper/gamma_pdf.py` on the same snapshots, `suite/panels.txt`) |
 | `fig2_pk_xHII_oldsuite.{pdf,png}` | App. A (Fig. 2 of the earlier suite) | `data/pk_xHII_21cmfast_oldsuite.txt` (= `data/pk_xHII_21cmfast.txt` at 16f3ec9) | `fig2_pk_xHII.pdf` as of 16f3ec9 (`scripts/fig_pk.py` of then) | for comparison with the late-end suite |
