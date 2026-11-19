@@ -4,13 +4,16 @@
 (x_HI < 1e-2) made uniform, tau rescaled to Bosman et al. 2022's mean flux in
 every variant.
 
-  left:   the 84-16 % width against z for the four variants
+  left:   the 84-16 % width against z for the five variants
   others: the tau_eff PDF at the lowest and highest snapshot redshift
 
   own   the run's x_HI and T
   uG    x_HI * Gamma/Gamma_ref                 (uniform Gamma)
   uT    x_HI * (T/T_ref)^0.7 and T -> T_ref    (uniform temperature)
   uGT   both (density, velocities and the remaining neutral gas only)
+  ion   uGT, and the cells with x_HI >= 1e-2 also at T_ref and in
+        photoionization equilibrium with Gamma_ref (density and velocities
+        only)
 
 Data: data/taueff_temp.txt, data/taueff_temp_pdf.txt (made on klone by
 $R/reion512late_figures/paper/taueff_temp.py).
@@ -32,7 +35,8 @@ DATA = os.path.join(HERE, "..", "data")
 KINDS = [("own", r"own $\Gamma_{\rm HI}$ and $T$", "#000000", "-", 2.0, 6),
          ("uG", r"uniform $\Gamma_{\rm HI}$", "#2a78d6", "--", 1.5, 9),
          ("uT", r"uniform $T$", "#eb6834", "-.", 1.5, 12),
-         ("uGT", r"uniform $\Gamma_{\rm HI}$ and $T$", "#6b6a66", ":", 1.8, 15)]
+         ("uGT", r"uniform $\Gamma_{\rm HI}$ and $T$", "#6b6a66", ":", 1.8, 15),
+         ("ion", r"same, and no neutral gas", "#1baf7a", "-", 1.1, 18)]
 
 
 def main():
