@@ -1,5 +1,5 @@
-# Made 2026-11-18 on klone from the late-end 512^3 suite by /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/history.py
-# runs (label = directory under /gscratch/astro/mcquinn/radhydro/runs): rays=reion512late M1=reion512late_m1 OTVET=reion512late_otvet_ga01 split=reion512late_otvet_split screen=reion512late_otvet_screen cone=reion512late_otvet_cone rays_A+RR=reion512late_caseA
+# Made 2026-11-19 on klone from the late-end 512^3 suite by /gscratch/astro/mcquinn/radhydro/runs/paper_view/history_view.py
+# runs (label = directory under /gscratch/astro/mcquinn/radhydro/runs): rays=reion512late M1=reion512late_m1 OTVET=paper_view/reion512late_otvet_ga01 split=paper_view/reion512late_otvet_split screen=paper_view/reion512late_otvet_screen cone=paper_view/reion512late_otvet_cone rays_A+RR=reion512late_caseA
 # one line per snapshot (run/step_NNNN with stats.txt, fHI.bin, gammaHI_avg.bin) at z <= 9
 # z, xHII_V, xHII_M: 'redshift', 'xHII_V', 'xHII_M' of stats.txt; xHII_M is the gas-mass-weighted ionized fraction, sum rho_gas (1 - fHI) / sum rho_gas
 # GammaHI_ion_med: median of gammaHI_avg.bin [s^-1] over the cells with x_HI = fHI < 0.01 (0 if there are none)
@@ -24,7 +24,7 @@ OTVET      6.9249 0.415893 0.534987 7.7000e-14 62
 OTVET      6.4763 0.546015 0.653930 7.5688e-14 69
 OTVET      6.2281 0.626729 0.721899 7.1040e-14 74
 OTVET      5.9672 0.717483 0.793862 6.6192e-14 79
-OTVET      5.7496 0.796671 0.852982 6.5906e-14 83
+OTVET      5.6949 0.817728 0.868468 6.8675e-14 84
 OTVET      5.4825 0.901448 0.930017 9.1175e-14 88
 OTVET      5.2427 0.978806 0.984733 1.4059e-13 93
 OTVET      4.9870 0.999968 0.998979 2.7430e-13 99
@@ -32,7 +32,7 @@ split      6.9250 0.415897 0.534968 7.6993e-14 62
 split      6.4763 0.546031 0.653921 7.5717e-14 69
 split      6.2281 0.626757 0.721901 7.1051e-14 74
 split      5.9672 0.717642 0.793963 6.7030e-14 79
-split      5.7496 0.796598 0.852909 6.5143e-14 83
+split      5.6948 0.817675 0.868413 6.8788e-14 84
 split      5.4824 0.901564 0.930078 9.1049e-14 88
 split      5.2427 0.978799 0.984660 1.4078e-13 93
 split      4.9869 0.999965 0.998382 2.8258e-13 99
@@ -40,7 +40,7 @@ screen     6.9249 0.421282 0.539542 7.2966e-14 62
 screen     6.4762 0.552841 0.659589 7.3232e-14 69
 screen     6.2280 0.634503 0.728369 6.7663e-14 74
 screen     5.9668 0.726454 0.801180 6.2000e-14 79
-screen     5.7491 0.805787 0.860540 6.0833e-14 83
+screen     5.6943 0.826729 0.875967 6.2988e-14 84
 screen     5.4817 0.910866 0.937509 8.4429e-14 88
 screen     5.2422 0.984748 0.989122 1.4404e-13 93
 screen     4.9864 0.999968 0.998696 2.9950e-13 99
@@ -48,7 +48,7 @@ cone       6.9249 0.417404 0.534368 7.8292e-14 62
 cone       6.4763 0.545358 0.651411 8.0104e-14 69
 cone       6.2280 0.625669 0.719246 7.6950e-14 74
 cone       5.9669 0.714987 0.790581 7.4950e-14 79
-cone       5.7492 0.793082 0.849471 7.5947e-14 83
+cone       5.6944 0.813605 0.864697 7.9674e-14 84
 cone       5.4820 0.896751 0.925752 1.0407e-13 88
 cone       5.2424 0.972711 0.980294 1.6020e-13 93
 cone       4.9866 0.999824 0.998435 2.9625e-13 99

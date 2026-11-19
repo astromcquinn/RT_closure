@@ -269,7 +269,7 @@ gives the rays' volume-weighted ionized fraction.  We find levels of disagreemen
 \centering
 \includegraphics[width=\linewidth]{figures/fig1_maps_xHII.png}
 \caption{Comparison of $x_{\rm HII}$ for different radiative transfer methods in 8-cell ($0.625\mpch$) slabs through the middle of the $40\mpch$ box
-at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80 and 0.96 in the rays simulation. \textcolor{red}{[The middle row of OTVET and the cone is their $z=5.75$ snapshot ($\xv=0.80$, 0.79); say so here, since $\Delta z=0.05$ is visible.]}\label{fig:maps}}
+at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80 and 0.96 in the rays simulation.\label{fig:maps}}
 \end{figure}
 
 
@@ -289,7 +289,7 @@ and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
 
 Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$-thick slab through the
 box at three stages of reionization. All the RT methods agree reasonably well on the morphology: smoothed on scales above a few$\mpch$, their $x_{\rm HII}$ fields are
-nearly identical. Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure, as has been shown previously \citep{zahn07,zahn11,mesinger11}. The fraction of cells whose $x_{\rm HII}$ differs from the rays' by more than 0.5: 1.9--2.0\% for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, 7.1--7.4\% for M1, and 17--21\% for  21cmFAST's is still to compute for this suite {\bf [check for new suite]}. % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
+nearly identical. Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure, as has been shown previously \citep{zahn07,zahn11,mesinger11}. The fraction of cells whose $x_{\rm HII}$ differs from the rays' by more than 0.5: 1.9--2.1\% for the cone at $z=6.48$ and 5.70, 2.7--3.3\% for OTVET and the screen, 7.1--7.4\% for M1, and 17--21\% for 21cmFAST. % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
 
 Of the closures, M1 departs most from the ray-tracing simulation (rays), our proxy for the truth, although it is still much closer to the rays than 21cmFAST is. M1's local closure merges the
 light of several sources into one flux per cell, so its
@@ -303,7 +303,7 @@ the HI along each direction, gives a morphology very similar to the rays' at eve
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
 coefficient $r(k)$ with the rays. Although our $40\mpch$ box is too small for these statistics to be converged, the relative comparison of the methods is likely to be similar in a larger box. On large scales ($k\lesssim0.5\hmpc$), every RT method has the
-rays' power to within 20\% until $\xv\approx0.8$, whereas 21cmFAST has up to 3 times the rays' power on the largest scales in the box and $r<0.5$ at $k\gtrsim1\hmpc$. The closures differ mainly at higher wavenumbers, which is clearest in the cross-correlation coefficient (bottom panels): at $k=2\hmpc$ and $\xv=0.80$, $r=0.96$ for the cone, 0.92--0.93 for OTVET and the screen, and 0.54 for M1. Near the end of reionization ($\xv=0.96$) every closure has too little power (0.4--0.8 times the rays'), the cone the least (0.7--0.8 at $k\le2\hmpc$), and only the cone keeps $r>0.9$ at $k\approx1\hmpc$. %\textcolor{red}{[At $z=5.24$ the moment runs are further along ($\xv=0.97$--0.98 against the rays' 0.963; Fig.~1 panels file), so part of this deficit reflects the history rather than the morphology. Compare this panel at fixed $\xv$, or say so.]}
+rays' power to within 20\% until $\xv\approx0.8$, whereas 21cmFAST has up to 3 times the rays' power on the largest scales in the box and $r<0.5$ at $k\gtrsim1\hmpc$. The closures differ mainly at higher wavenumbers, which is clearest in the cross-correlation coefficient (bottom panels): at $k=2\hmpc$ and $\xv=0.80$, $r=0.96$ for the cone, 0.89--0.90 for OTVET and the screen, and 0.54 for M1. Near the end of reionization ($\xv=0.96$) every closure has too little power (0.4--0.8 times the rays'), the cone the least (0.7--0.8 at $k\le2\hmpc$), and only the cone keeps $r>0.9$ at $k\approx1\hmpc$. %\textcolor{red}{[At $z=5.24$ the moment runs are further along ($\xv=0.97$--0.98 against the rays' 0.963; Fig.~1 panels file), so part of this deficit reflects the history rather than the morphology. Compare this panel at fixed $\xv$, or say so.]}
 
 Also shown is a ray-tracing run that uses case-A recombination and transports the recombination radiation. It is much closer to the fiducial rays (case B, on the spot) than any closure is, with 0.9--1.0 times their power and $r\ge0.98$ at $k\le2\hmpc$, so the treatment of recombination radiation matters less than the closure. \textcolor{red}{[Suggestion: use this run to set the scale of differences that matter, e.g.\ in the conclusions.]}
 
@@ -315,9 +315,7 @@ Also shown is a ray-tracing run that uses case-A recombination and transports th
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig3_gamma_maps.png}
-\caption{$\Gamma_{\rm HI}$ in the $40\mpch\times40\mpch$ slabs of Fig.~\ref{fig:maps} (8 cells thick) at $z=5.70$, 5.24 and 4.99 ($\xv=0.80$, 0.96 and 1.00 in the rays;
-the top row of OTVET, the screen and the cone is their $z=5.75$
-snapshot), for all six runs, divided by the rays' median $\Gamma_{\rm HI}$
+\caption{$\Gamma_{\rm HI}$ in the $40\mpch\times40\mpch$ slabs of Fig.~\ref{fig:maps} (8 cells thick) at $z=5.70$, 5.24 and 4.99 ($\xv=0.80$, 0.96 and 1.00 in the rays), for all six runs, divided by the rays' median $\Gamma_{\rm HI}$
 of the ionized cells at that redshift and shown in bands at factors of 1.25, 2 and 4; neutral gas is black. The split is not shown (see text).}
 \label{fig:mapsg}
 \end{figure}
@@ -337,7 +335,7 @@ ionized fraction, especially after reionization, as \citet{wu21} also found. Fig
 same slab, relative to the rays' median in the ionized gas. The median $\Gamma_{\rm HI}$ of the ionized cells
 ($x_{\rm HI}<10^{-2}$; Fig.~\ref{fig:hist}, middle) is within 10\% of the rays' at every snapshot from
 $z=6.9$ to 5 for M1, the cone and the case A + RR rays, while OTVET and the
-screen are 12--25\% low at $z=5.2$--6.2. Its spatial distribution, however, differs considerably between the methods. Inside the
+screen are 12--28\% low at $z=5.2$--6.2. Its spatial distribution, however, differs considerably between the methods. Inside the
 bubbles, the rays, the cone and the case A + RR rays show a rate that
 falls away from each source: the proximity zones are resolved. M1 fills its
 bubbles with a more uniform rate. OTVET has the rays'
@@ -347,9 +345,9 @@ over-weighting the nearest sources where the local mean free path is longer. Aft
 
 Figure~\ref{fig:pkg} quantifies this with the power spectrum of
 $\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ (top), its ratio to the rays' (second row) and its cross-correlation coefficient with the rays (third row). During reionization ($\xv=0.54$ and
-0.80), OTVET and the split, which are identical then, follow the rays most closely ($r\ge0.96$ at
-$k\le2\hmpc$ and the power within 25\%), and the cone has the same
-correlation with 1.1--1.6 times the rays' power at $k=0.5$--$2\hmpc$.
+0.80), OTVET and the split, which are identical then, have the power closest to the rays' (within 25\% at
+$k\le2\hmpc$, with $r\ge0.94$), and the cone the highest
+correlation ($r\ge0.97$) with 1.1--1.6 times the rays' power at $k=0.5$--$2\hmpc$.
 The screen has 2--3 times the rays' power at $k\approx2\hmpc$, the
 mottling of Figure~\ref{fig:mapsg}. M1 is 20--40\% low, and its
 correlation with the rays falls to 0.6--0.7 at $k=0.5$--$1\hmpc$, the
@@ -413,10 +411,9 @@ Despite having smaller $\Gamma_{\rm HI}$ fluctuations, M1's is the broadest (2--
 %     longer than the rays, the screen 15--35\%, the cone 9--18\%, M1
 %     9--20\%, case A + RR 3--6\%.
 %   \item The 84--16\% width of $\tau_{\rm eff}$ at the observed $\langle
-%     F\rangle$ (snapshots at the rays' $z$; not $z\approx5.7$, where the
-%     OTVET-type runs' snapshot is at 5.75): M1 broadest (+2--7\%), OTVET
+%     F\rangle$ (snapshots at the rays' $z$, $z=4.99$--5.97): M1 broadest (+2--7\%), OTVET
 %     ($-7$ to $-14\%$) and the screen ($-2$ to $-18\%$) narrowest, the cone
-%     within 9\% of the rays, case A + RR within 2\%.
+%     within 10\% of the rays, case A + RR within 2\%.
 %   \item The reverse of the $P_\Gamma$ ordering: with a uniform $\Gamma$
 %     every method gives the same width, and after overlap $\langle\Gamma
 %     \rangle$ and $\langle\rho\rangle$ of a segment are correlated
