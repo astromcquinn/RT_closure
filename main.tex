@@ -256,7 +256,7 @@ by Lyman-limit systems. Its sources are matched to ours: the photons of
 a halo of mass $M$ scale as $M^{1+\alpha_\star}$, with
 $\alpha_\star\approx0.45$ from our abundance matching
 ($L_{\rm UV}\propto M^{1.45}$), and the normalization at each redshift
-gives the rays' volume-weighted ionized fraction.
+gives the rays' volume-weighted ionized fraction.  We find levels of disagreement that are qualitatively similar if we use the 21cmFAST setting wehre the sources scale as $M$ or as our $M^{1.45}$.  The maximum radius matters only at the very end, where a box-sized $R_{\rm max}$ ionizes the last island too early.
 
 
 
@@ -359,34 +359,25 @@ and M1 0.4 times, while the cone has 1.1--1.4 times and keeps
 $r\ge0.95$.
 
 After overlap the methods separate sharply. At $z=4.99$ OTVET has
-4 times the rays' power at $k=0.5$--$5\hmpc$ (8 times at $k=0.2\hmpc$), yet its correlation with the
-rays stays at 0.83--0.96: the pattern is right and the amplitude wrong. This
-is the normalization error of \citet{wu21}. Applied to the whole field,
-the thin tensor treats all the photons as if they came from within half
-a box, and once their mean path exceeds that, it beams the diffuse
-background along the source directions. The isotropic background of
-\citet{gnedin01} does not remove this by $z=4.99$
-(Section~\ref{sec:methods}). M1 errs the other way, with 3--10
-times too little power at $k=0.5$--$2\hmpc$ and $r=0.05$ at $k=0.5\hmpc$.
-With one flux per cell, it cannot represent a source's light on top of a
-nearly isotropic background, so that light spreads isotropically and the
-proximity zones vanish. The new closures reduce both errors. The split halves OTVET's excess, to about twice the rays' power at $k=0.5$--$10\hmpc$, at no extra cost. \textcolor{red}{[In the $256^3$ tests the split removed the excess almost entirely (1.1--1.3); here it leaves a factor 2. Worth a sentence on why, e.g.\ the later end of reionization in this suite.]} The
-screen and the cone have 1.0--2.2 times the rays' power at
-$k=0.2$--$10\hmpc$ after overlap, with $r=0.91$--0.97, and the cone is
-closest on large scales (1.00, 1.38 and 2.02 times the rays' power at
-$k=0.5$, 1.8 and $4.9\hmpc$, against 1.41, 1.94 and 2.07 for the screen).
+$\approx 4\times$ the rays' power over most of the wavenumbers shown, yet $r(k) \gtrsim 0.8$. This
+is the normalization error of \citet{wu21} where the fluctuations are overestimated once the box is larger than the mean free path (and underestimated in the other limit)  M1 errs the other way, with 3--10
+times too little power at $k=0.5$--$2\hmpc$ and $r$ at significantly below unity at the large scales in the box. With one flux per cell, M1 cannot represent a source's light on top of a
+nearly isotropic background. The new closures reduce both errors. The split halves OTVET's excess, to about twice the rays' power at no extra cost. \textcolor{red}{[In the $256^3$ tests the split removed the excess almost entirely (1.1--1.3); here it leaves a factor 2. Worth a sentence on why, e.g.\ the later end of reionization in this suite.]} The
+screen and the cone do even slightly better still and all the new closuers ahve similar cross correlation coefficients.
 
-The closures built on the thin tensor (OTVET, the split, the screen and the cone) also share an excess of 1.5--3.6 times the rays' power at $k\approx5\hmpc$ at every epoch,
+{\bf not sure if we keep this paragraph} The closures built on the thin tensor (OTVET, the split, the screen and the cone) also share an excess of 1.5--3.6 times the rays' power at $k\approx5\hmpc$ at every epoch,
 rising at higher $k$; M1 does not (0.6--1.1). It comes from the source cells, which hold their
 own photons for one absorption step and are brighter than in the rays,
 not from the closures: capping $\Gamma$ at $3\langle\Gamma\rangle$
 removes it and leaves the ranking of the methods at $k\lesssim2\hmpc$ unchanged. \textcolor{red}{[The cap test was done on the earlier suite, where M1 shared the excess. In this suite it does not, which suggests the excess comes from the thin tensor's light near the sources rather than the source cells. Redo the cap test on the late-end suite, or reword.]} 
+
+
 Case-A recombination
 with the recombination radiation transported changes the rays' power by
 only 3--13\% at $k\ge0.5\hmpc$, less than any closure does, and leaves the one-point distribution almost unchanged (widths within 0.02\,dex).
 
 
-Figure~\ref{fig:taueff} shows the 1`point distributions of $\Gamm_{\rm HI}$ after overlap at $z=4.99$.  The agreement between the emethods is better before overlap.  Other than cone, all the closure methods do not predict the tail to small underdensities and somewhat overpredict the overdensities.  This is because they don't attenuate properly the radiation into more opaque regions and remaing neutral regions (0.1\% of the volume is neutral in rays).  Note that the axis is logged, and so this tail ioccurpies a small fraciton of the volume. OTVET overpredicts the overdense tail because after the mean free path becomes larger than the box, it waits too heavity local contributions to the flux.
+Figure~\ref{fig:taueff} shows the 1-point distributions of $\Gamma_{\rm HI}$ after overlap at $z=4.99$.  The agreement between the emethods is better before overlap.  Other than cone, all the closure methods do not predict the tail to small underdensities and, other than M1, somewhat overpredict the overdensities.  This is because they don't attenuate properly the radiation into more opaque regions and remaing neutral regions (0.08\% of the volume is neutral in rays, whereas in M1, OTVET, screen it's zero and cone is $0.02$).\footnote{The mean free path is set by optically thin regions and so, despite this, the mean free path is the same between the runs.}  Note that the axis is logged, and so this tail ioccurpies a small fraciton of the volume. OTVET overpredicts the overdense tail because after the mean free path becomes larger than the box, it waits too heavity local contributions to the flux.  In M1, a point source’s light perturbing a nearly isotropic background spreads isotropically instead of streaming outward, resulting in an excess falling off as $r^{-1}$ rather than $r^{-2}$, resuling in fewer high-$\Gamma_{\rm HI}$ pixels.
 
 
 
@@ -440,9 +431,9 @@ These differences in $\Gamma_{\rm HI}$ could affect the observables: the mean fr
 \section{Discussion and conclusions}\label{sec:conclusions}
 We have compared five two-moment closures with adaptive ray tracing in one code, with all other physics shared, in a $40\mpch$, $512^3$ reionization simulation. Our main conclusions are as follows.
 \begin{itemize}
-\item \textbf{Morphology of reionization.} Every closure reproduces the rays' ionization morphology on large scales: the $x_{\rm HII}$ power is within 20\% of the rays' at $k\lesssim0.5\hmpc$ until $\xv\approx0.8$. The closures differ at $k\gtrsim1\hmpc$, where the cone correlates best with the rays and M1 worst. All of them are far closer to the rays than 21cmFAST with matched sources.
+\item \textbf{Morphology of reionization.} Every closure reproduces the rays' ionization morphology on large scales: the $x_{\rm HII}$ power for times with$\xv\approx0.8$ is within 20\% of the rays' at $k\lesssim 5\hmpc$ -- the scales potentially probed by 21cm experiments \citep{}. The closures differ at $k\gtrsim5\hmpc$, where the new cone correlates best with the rays and M1 by far the worst. Still, all of them are far closer to the rays than 21cmFAST with matched sources, which predicts power that can differ at the factor of 2-3 level.
 \item \textbf{The photoionization rate during reionization.} OTVET and the split follow the rays' $\Gamma_{\rm HI}$ power to within 25\%, and the cone to within a factor of 1.6. M1 has 20--40\% too little power and weak proximity zones, and the screen's single attenuation length makes the field mottled.
-\item \textbf{After overlap.} OTVET has 4 times the rays' $\Gamma_{\rm HI}$ power, the normalization error of \citet{wu21}, and the background of \citet{gnedin01} does not remove it by $z=5$. M1 has 3--10 times too little power and no proximity zones. The split halves OTVET's excess at no cost. The cone has 1.0--1.4 times the rays' power at $k\le2\hmpc$ and is the only closure that reproduces the one-point distribution of $\Gamma_{\rm HI}$, including the low tail of shadowed gas.
+\item \textbf{After overlap.} OTVET has $4\times$ the rays' $\Gamma_{\rm HI}$ power, the normalization error of \citet{wu21}, and the background of \citet{gnedin01} does not remove it by $z=5$. M1 has 3--10 times too little power and no proximity zones. The split halves OTVET's excess at no cost. The cone has 1.0--1.4 times the rays' power at $k\le2\hmpc$ and is the only closure that reproduces the one-point distribution of $\Gamma_{\rm HI}$, including the low tail of shadowed gas.
 \item \textbf{Observables.} Every closure gives the rays' mean $\Gamma_{\rm HI}$ to 10--25\% and a mean free path 9--35\% longer. The 84--16\% width of the $\tau_{\rm eff}$ distribution changes by less than 20\%, in the opposite order to the $\Gamma_{\rm HI}$ power. Even M1 is therefore adequate for the $\tau_{\rm eff}$ scatter, the main evidence for a late end of reionization. \textcolor{red}{[Compare with the observational errors before claiming ``adequate''.]}
 \item \textbf{Which closure.} The cone for simulations in which the fluctuations of the ionizing background matter; its tensor adds little to the wall time. The split as a free fix for existing OTVET codes after overlap. We do not recommend the screen.
 \item \textbf{Shared limitations.} Only the cone casts shadows, and only of structures larger than about four cells; on smaller scales its tensor is the split's. The closures built on the thin tensor have 1.5--3.6 times the rays' $\Gamma_{\rm HI}$ power at $k\approx5\hmpc$. The first-order transport thickens the ionization fronts. All our results come from one $40\mpch$ box, whose size the mean free path exceeds after overlap, so the after-overlap statistics, and the $\tau_{\rm eff}$ scatter in particular, are limited by the box.
