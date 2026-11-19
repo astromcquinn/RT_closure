@@ -400,9 +400,9 @@ online tables would be better}}
 
 These differences in $\Gamma_{\rm HI}$ could affect the observables: the mean free path and the Ly$\alpha$ forest transmission. For the latter we use the scatter of $\tau_{\rm eff}$ over $50\mpch$ segments, whose large fluctuations cannot be explained by the IGM density alone \citep{becker15,bosman18,eilers18,bosman22} and have been the main evidence that reionization ends below $z\approx5.5$ \citep{kulkarni19,keating20,bosman22}. The right panel of Fig.~\ref{fig:hist} shows that the mean free path is similar in every run; at $z\le5.5$ the moment methods' is 9--35\% longer than the rays'. 
 
-The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\tau_{\rm eff}$ distribution, with every run rescaled to the observed mean flux, changes by less than 20\%.  Part of this is that much of the fluctuations are driven by ionization: `rays, uniform $\Gamma_{\rm HI}$' shows the effect of 
+The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\tau_{\rm eff}$ distribution, with every run rescaled to the observed mean flux, changes by less than 20\%.  Part of this is that much of the fluctuations are driven by ionization: the difference between `rays, uniform $\Gamma_{\rm HI}$', which sets the photoionization rate in every ionized cell to be uniform in processing, and the other curves shows the effect of $\Gamma_{\rm HI}$ fluctuations.  Many of the moment methods miss the correct amount of this effect by almost a factor two. Suprisingly, M1 is rather similar to rays despite it having the most discrepant $\Gamma_{\rm HI}$ field -- this is likely because the large-scale amplitude of $\delta_{\Gamma_{\rm HI}}$ is less discrepant and less correlated with density.  Interestingly, at late times the   $\Gamma_{\rm HI}$ fluctuations counteracts denstiy fluctuations and lead to a narrower PDF in most of the models.  However, his comparison uses a very small $40\hmpc$ box that certainly is underestimating the effect of these fluctuations needed to understand the effect in $50\hmpc skewers$ \citep{}. We expect in larger box sizes that better captures  $\Gamma_{\rm HI}$ fluctuations, the discrepancies in $\tau_{\rm eff}$ will be enhanced.
 
-Despite having smaller $\Gamma_{\rm HI}$ fluctuations, M1's is the broadest (2--7\% above the rays'), OTVET's and the screen's the narrowest (up to 14 and 18\% below), and the cone's is within 10\%. This ordering is the reverse of that of the $\Gamma_{\rm HI}$ power. After overlap $\Gamma_{\rm HI}$ and the density of a segment are correlated ($\tau\propto\rho^2/\Gamma_{\rm HI}$), so a method with too much $\Gamma_{\rm HI}$ power near the sources narrows the distribution, and one with too little broadens it. The $\tau_{\rm eff}$ scatter therefore appears insensitive to the closure: even M1 reproduces the rays' width to better than 10\%. These results even hold if we don't rescale the flux to that observed.
+%Despite having smaller $\Gamma_{\rm HI}$ fluctuations, M1's is the broadest (2--7\% above the rays'), OTVET's and the screen's the narrowest (up to 14 and 18\% below), and the cone's is within 10\%. This ordering is the reverse of that of the $\Gamma_{\rm HI}$ power. After overlap $\Gamma_{\rm HI}$ and the density of a segment are correlated ($\tau\propto\rho^2/\Gamma_{\rm HI}$), so a method with too much $\Gamma_{\rm HI}$ power near the sources narrows the distribution, and one with too little broadens it. The $\tau_{\rm eff}$ scatter therefore appears insensitive to the closure: even M1 reproduces the rays' width to better than 10\%. These results even hold if we don't rescale the flux to that observed.
 
 % {\bf [do we think this is converged or we need a larger box]}
 %   \begin{itemize}
@@ -428,6 +428,10 @@ Despite having smaller $\Gamma_{\rm HI}$ fluctuations, M1's is the broadest (2--
 % \end{itemize}
 
 %======================================================================
+
+\section{The mean photoionization rate}
+
+
 \section{Discussion and conclusions}\label{sec:conclusions}
 We have compared five two-moment closures with adaptive ray tracing in one code, with all other physics shared, in a $40\mpch$, $512^3$ reionization simulation. Our main conclusions are as follows.
 \begin{itemize}
