@@ -8,12 +8,17 @@ Right: tau_eff(84 %) - tau_eff(16 %) over 50 Mpc/h segments with tau
     rescaled to Bosman et al. 2022's mean flux, and their observed widths
     (squares); the right panel of fig_mfp_width.py, see its docstring.
 
-    Grey dashed: the rays' run with a uniform Gamma_HI (x_HI of the cells
-    with x_HI < 1e-2 scaled to their median Gamma, then rescaled to the same
-    mean flux; the w_uni column of data/taueff_uniform.txt).
+    Brown, open symbols: the rays' run with (each rescaled to the same mean
+    flux; the w_uG, w_uGT, w_ion columns of data/taueff_temp.txt)
+      dashed, circles     a uniform Gamma_HI: x_HI of the cells with
+                          x_HI < 1e-2 scaled to their median Gamma
+      dash-dot, triangles also a uniform temperature of those cells: x_HI
+                          scaled by (T/T_ref)^0.7, Doppler width at T_ref
+      dotted, diamonds    also no neutral gas: the other cells at T_ref and
+                          in equilibrium with Gamma_ref
 
 Data: data/pdf_gamma.txt, data/taueff_mfp_snap_A.txt, data/taueff_width_obs.txt,
-data/taueff_uniform.txt.
+data/taueff_temp.txt.
 
 usage: python3 scripts/fig_pdf_width.py   (writes figures/fig_pdf_width.{pdf,png})
 """
@@ -29,6 +34,7 @@ import fig_mfp_width as fm  # noqa: E402
 import fig_pk  # noqa: E402
 
 DATA, OBS = fm.DATA, fm.OBS
+TEST = "#8c5a2e"  # the rays' test curves: a colour no run and no measurement uses
 
 
 def main():
@@ -45,11 +51,14 @@ def main():
         if key in width:
             d = width[key]
             a1.plot(d[:, 0], d[:, 1], color=c, ls=ls, lw=lw, marker="o", ms=3.5)
-    uni = np.array(sorted([float(v) for v in l.split()[1:]] for l in open(os.path.join(DATA, "taueff_uniform.txt"))
+    uni = np.array(sorted([float(v) for v in l.split()[1:]] for l in open(os.path.join(DATA, "taueff_temp.txt"))
                           if l.startswith("rays ")))
-    a1.plot(uni[:, 0], uni[:, 4], color=fm.INK2, ls=(0, (5, 2)), lw=1.2, marker="o", ms=3, mfc="white",
-            zorder=3, label=r"rays, uniform $\Gamma_{\rm HI}$")
-    a1.legend(fontsize=6.5, frameon=False, loc="upper right", handlelength=3.2)
+    for col, ls, mk, label in ((9, (0, (5, 2)), "o", r"rays, uniform $\Gamma_{\rm HI}$"),
+                               (15, (0, (4, 1.5, 1, 1.5)), "v", r"rays, uniform $\Gamma_{\rm HI}$ and $T$"),
+                               (18, (0, (1, 1.5)), "D", r"rays, uniform $\Gamma_{\rm HI}$, $T$, no neutral gas")):
+        a1.plot(uni[:, 0], uni[:, col], color=TEST, ls=ls, lw=1.1, marker=mk, ms=3.4, mfc="white", mew=0.9,
+                zorder=3, label=label)
+    a1.legend(fontsize=6.5, frameon=False, loc="upper right", handlelength=3.8)
     a1.errorbar(wo[:, 0], wo[:, 1], yerr=[wo[:, 1] - wo[:, 2], wo[:, 3] - wo[:, 1]], fmt="s", ms=4,
                 color=OBS, mfc="white", ecolor=OBS, elinewidth=0.8, capsize=2, zorder=5)
     for z, w0, _, _, w1 in wo:
