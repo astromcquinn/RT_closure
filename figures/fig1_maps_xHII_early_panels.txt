@@ -1,0 +1,5 @@
+62 'rays': /gscratch/astro/mcquinn/radhydro/runs/reion512late/run/step_0062 z = 6.9250 xHII_V = 0.4164
+62 'M1': /gscratch/astro/mcquinn/radhydro/runs/reion512late_m1/run/step_0062 z = 6.9252 xHII_V = 0.4197
+62 'OTVET': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_ga01/run/step_0062 z = 6.9249 xHII_V = 0.4159
+62 'cone': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_cone/run/step_0062 z = 6.9249 xHII_V = 0.4174
+62 '21cmFAST': /gscratch/astro/mcquinn/radhydro/runs/rt_closure_paper/es_early/es_rmax15_mass/run/step_0062 z = 6.9250 xHII_V = 0.4154
