@@ -31,7 +31,6 @@ RUNS = [("rays", "rays", "#000000", "-", 2.2),
         ("M1", "M1", "#2a78d6", "-", 1.5),
         ("OTVET", "OTVET", "#eb6834", "-", 2.6),  # wide: the split (dashed, on top) follows it before overlap
         ("OTVET_nobg", "OTVET, no background", "#eb6834", (0, (4, 1.5)), 1.0),
-        ("split", "split", "#1baf7a", "--", 1.5),
         ("screen", "screen", "#eda100", "-.", 1.5),
         ("cone", "cone", "#e87ba4", ":", 2.0),
         ("rays_A+RR", "rays, case A + RR", "#008300", "-", 1.2),

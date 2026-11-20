@@ -40,7 +40,6 @@ DATA = os.path.join(HERE, "..", "data")
 RUNS = [("rays", "rays", "#000000", "-"),
         ("M1", "M1", "#2a78d6", "-"),
         ("OTVET", "OTVET", "#eb6834", "-"),
-        ("split", "split", "#1baf7a", "--"),
         ("screen", "screen", "#eda100", "-."),
         ("cone", "cone", "#e87ba4", ":"),
         ("rays_A+RR", "rays, case A + RR", "#008300", "-")]

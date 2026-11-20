@@ -1,11 +1,10 @@
-
-\documentclass[11pt]{article}
-\usepackage[margin=1in]{geometry}
+% Open Journal of Astrophysics class (openjournal.cls, from https://astro.theoj.org, "For Authors"; needs revtex4-1)
+\documentclass[iop]{openjournal}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{xcolor}
-\usepackage[authoryear,round]{natbib}
+\setcitestyle{authoryear,round,semicolon}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 
 % ADS journal macros used by refs.bib (a journal class defines them; \providecommand leaves those)
@@ -14,7 +13,7 @@
 \providecommand{\pasp}{PASP}\providecommand{\araa}{ARA\&A}\providecommand{\prd}{Phys.~Rev.~D}
 \providecommand{\nat}{Nature}\providecommand{\physrep}{Phys.~Rep.}\providecommand{\na}{New Astron.}
 \newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
-\newcommand{\draft}[1]{\textcolor{orange}{[draft: #1]}}
+\renewcommand{\draft}[1]{\textcolor{orange}{[draft: #1]}}% the class defines \draft; redefined for notes
 \newcommand{\chat}{\hat{c}}
 \newcommand{\hmpc}{\,h\,\mathrm{Mpc}^{-1}}
 \newcommand{\mpch}{\,h^{-1}\,\mathrm{Mpc}}
@@ -23,15 +22,18 @@
 \newcommand{\T}{^{\mathsf T}}
 \newcommand{\placeholder}[1]{\fbox{\parbox[c][5cm][c]{0.9\linewidth}{\centering\textcolor{red}{To make:} #1}}}
 
+\begin{document}
+
 \title{Moment closures against ray tracing for modeling reionization}
 \author{\todo{authors}}
-
-\begin{document}
-\maketitle
+\affiliation{\todo{affiliations}}
 
 \begin{abstract}
 We compare reionization simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty (and significantly better than 21cmFAST).  OTVET and especially M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  They likey make order-unity errors in $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ transmission that owe to intensity fluctuations.
 \end{abstract}
+\keywords{\todo{keywords from the Unified Astronomy Thesaurus}}
+
+\maketitle
 
 %======================================================================
 \section{Introduction}
@@ -65,7 +67,7 @@ that depends only on the energy density and flux, are unstable
 Here we test two-moment closures against adaptive ray tracing on full reionization simulations rather than the test problems that have often been considered \citep{iliev, wu21, gnedinkatz26}. One code
 holds every closure and the rays of \citet{trac07}, with all other
 physics shared, so differences between runs come from the transfer alone.  This differs from \citep{gnedins25}, the other study that compared reionization simulations.
-We also introduce three new closures; the most complete of them, which
+We also introduce two new closures; the more complete of them, which
 attenuates the light by the HI along each direction, follows the rays
 more closely than M1 or OTVET at every stage of reionization. \textcolor{red}{[Check this claim against the new cone runs.]}
 %======================================================================
@@ -80,7 +82,7 @@ groups with non-equilibrium hydrogen and helium chemistry and
 photoheating. With its original settings the port reproduces the Fortran
 code bit for bit on a set of validation problems. %The runs here enable a set of bookkeeping and physics corrections to the original (among them photon-conserving ray deposition). They also replace its moving-frame hydrodynamics scheme with an unsplit MUSCL--Hancock scheme with HLLC fluxes and a dual-energy formulation \citep{toro09}, which removes the spurious heating of cold, supersonically moving gas.
 
-The comparison uses one uniform suite of seven runs that differ only in
+The comparison uses one uniform suite of six runs that differ only in
 the radiative transfer (and, for one ray run, the treatment of
 recombinations; see below). The box is $40\mpch$ on a
 side, with $512^3$ gas and RT cells ($78\,h^{-1}$\,kpc comoving) and $1024^3$ dark
@@ -118,7 +120,7 @@ in $z$ (Fig.~\ref{fig:hist}, left), we compare them at fixed redshift. Figure~\r
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig_history.pdf}
-\caption{Comparison of our simulation suite run with the same sources but different raidative transfer simulations on different global properties. Left: the mass-weighted neutral fraction of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), with the measurements of \citet{gaikwad23} (squares). Right: the 912\,\AA\ mean free path from random starts  alongside the measurements of \citet{becker21} (squares) and \citet{zhu23} (diamonds). The split closure method is not shown as it is nearly identical to OTVET.}
+\caption{Comparison of our simulation suite run with the same sources but different raidative transfer simulations on different global properties. Left: the mass-weighted neutral fraction of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), with the measurements of \citet{gaikwad23} (squares). Right: the 912\,\AA\ mean free path from random starts  alongside the measurements of \citet{becker21} (squares) and \citet{zhu23} (diamonds).}
 \label{fig:hist}
 \end{figure}
 %Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
@@ -141,7 +143,7 @@ with a first-order Godunov scheme using global Lax--Friedrichs fluxes of
 wave speed $\chat$. The sources $S$, the absorption $\kappa$ and the
 redshifting are those of the ray runs. The methods differ only in their ansatz for the
 Eddington tensor $\mathsf D$, the second angular moment of the intensity normalized to unit trace. M1 and OTVET are the two closures
-in common use in reionization simulations; we also consider three new ones, which we call `Split', `Screen' and `Cone'. All methods are briefly described here:
+in common use in reionization simulations; we also consider two new ones, which we call `Screen' and `Cone'. All methods are briefly described here:
 \begin{itemize}
 \item \textbf{M1}
 assumes that the light in each cell is symmetric about the direction of
@@ -229,13 +231,12 @@ $\lambda_x$ set so that the cones' light matches the photons the solution holds 
 cones' light in the ionized cells equals the photons the solution holds
 there; when it does not exceed them, as during most of overlap, there is
 no cutoff.}  The receivers' tensors are interpolated to every cell, and on scales of
-a few cells, which the receivers cannot resolve, the tensor follows the
-split.\footnote{$\mathsf h=\mathsf h_{\rm split}+G_\sigma*(\mathsf h_{\rm cone}-\mathsf h_{\rm split})$,
-with $\mathsf h_{\rm split}$ the split tensor above, $\mathsf h_{\rm cone}$
+a few cells, which the receivers cannot resolve, the tensor follows OTVET's, with the cell's photons beyond the optically thin prediction treated as isotropic.\footnote{$\mathsf h=\mathsf h_{\rm s}+G_\sigma*(\mathsf h_{\rm cone}-\mathsf h_{\rm s})$,
+with $\mathsf h_{\rm s}=\mathsf I/3+\min(1,N_{\rm OT}/N)\,(\mathsf h-\mathsf I/3)$, where $N_{\rm OT}$ is the photon density the optically thin sum of Eq.~(\ref{eqn:otvet}) predicts in the cell, $\mathsf h_{\rm cone}$
 the tensor of the cones' light, and $G_\sigma$ a Gaussian of width
 $\sigma=4$ cells.}
 \end{itemize}
-The wall time of every moment run is 9--10 hours on 192 cores (the cone's no longer than OTVET's), and the ray runs take 21--22 hours. M1 needs no separate tensor calculation. In test runs at $256^3$ on 192 cores, computing the Eddington tensor takes 0.7\,s per hydro step for OTVET and the split, 1.2\,s for the screen and 3.2\,s for the cone. \textcolor{red}{[$512^3$ times: from the \texttt{OTVET :} lines of each late-end run's \texttt{ray.log} on klone.]}
+The wall time of every moment run is 9--10 hours on 192 cores (the cone's no longer than OTVET's), and the ray runs take 21--22 hours. M1 needs no separate tensor calculation. In test runs at $256^3$ on 192 cores, computing the Eddington tensor takes 0.7\,s per hydro step for OTVET, 1.2\,s for the screen and 3.2\,s for the cone. \textcolor{red}{[$512^3$ times: from the \texttt{OTVET :} lines of each late-end run's \texttt{ray.log} on klone.]}
 
 We also compare the radiative transfer models with the excursion-set
 model of 21cmFAST \citep{mesinger11,murray20}, which does no radiative
@@ -271,7 +272,7 @@ at $z=6.48$, 5.70 and 5.24, corresponding to $\xv=0.54$, 0.80 and 0.96 in the ra
 \includegraphics[width=0.8\linewidth]{figures/fig2_pk_xHII.pdf}
 \caption{The dimensionless power spectrum of the ionization fraction, $\Delta_{x_{\rm HII}}^2$ (top), the ratio of the power in this method to that of rays (middle)
 and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
-5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods}) as well as 21cmFAST. The split method is not shown: before overlap it agrees with OTVET to within 1\% in power and 0.001 in $r(k)$.}
+5.70 and 5.24 for all the considered radiative transfer methods (\S~\ref{sec:methods}) as well as 21cmFAST.}
 \label{fig:pkx}
 \end{figure}
 
@@ -309,7 +310,7 @@ Also shown is a ray-tracing run that uses case-A recombination and transports th
 \centering
 \includegraphics[width=\linewidth]{figures/fig3_gamma_maps.png}
 \caption{$\Gamma_{\rm HI}$ in the $40\mpch\times40\mpch$ slabs of Fig.~\ref{fig:maps} (8 cells thick) at $z=5.70$, 5.24 and 4.99 ($\xv=0.80$, 0.96 and 1.00 in the rays), for all six runs, divided by the rays' median $\Gamma_{\rm HI}$
-of the ionized cells at that redshift and shown in bands at factors of 1.25, 2 and 4; neutral gas is black. The split is not shown (see text).}
+of the ionized cells at that redshift and shown in bands at factors of 1.25, 2 and 4; neutral gas is black.}
 \label{fig:mapsg}
 \end{figure}
 
@@ -334,17 +335,17 @@ falls away from each source: the proximity zones are resolved. M1 fills its
 bubbles with a more uniform rate. OTVET has the rays'
 structure inside the bubbles but at a lower level, as it over-counts distant sources, which reduces the local enhancements. The screen gives
 a more mottled field during reionization, its single attenuation length
-over-weighting the nearest sources where the local mean free path is longer. After overlap ($z=4.99$, bottom row), OTVET is the most inhomogeneous: its tensor counts only the sources within half a box (the minimum-image cube around each cell), so once the photons' mean path exceeds that, it concentrates the light around the source clusters. We do not show the split, which is identical to OTVET until overlap and similar to the screen after it.
+over-weighting the nearest sources where the local mean free path is longer. After overlap ($z=4.99$, bottom row), OTVET is the most inhomogeneous: its tensor counts only the sources within half a box (the minimum-image cube around each cell), so once the photons' mean path exceeds that, it concentrates the light around the source clusters.
 
 Figure~\ref{fig:pkg} quantifies this with the power spectrum of
 $\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ (top), its ratio to the rays' (second row) and its cross-correlation coefficient with the rays (third row). During reionization ($\xv=0.54$ and
-0.80), OTVET and the split, which are identical then, have the power closest to the rays' (within 25\% at
+0.80), OTVET has the power closest to the rays' (within 25\% at
 $k\le2\hmpc$, with $r\ge0.94$), and the cone the highest
 correlation ($r\ge0.97$) with 1.1--1.6 times the rays' power at $k=0.5$--$2\hmpc$.
 The screen has 2--3 times the rays' power at $k\approx2\hmpc$, the
 mottling of Figure~\ref{fig:mapsg}. M1 is 20--40\% low, and its
 correlation with the rays falls to 0.6--0.7 at $k=0.5$--$1\hmpc$, the
-scale on which its fronts are displaced. Near the end ($\xv=0.96$), OTVET, the split
+scale on which its fronts are displaced. Near the end ($\xv=0.96$), OTVET
 and the screen have 1.2--2.1 times the rays' power at $k=0.5$--$2\hmpc$
 and M1 0.4 times, while the cone has 1.1--1.4 times and keeps
 $r\ge0.95$.
@@ -353,10 +354,10 @@ After overlap the methods separate sharply. At $z=4.99$ OTVET has
 $\approx 4\times$ the rays' power over most of the wavenumbers shown, yet $r(k) \gtrsim 0.8$. This
 is the normalization error of \citet{wu21} where the fluctuations are overestimated once the box is larger than the mean free path (and underestimated in the other limit)  M1 errs the other way, with 3--10
 times too little power at $k=0.5$--$2\hmpc$ and $r$ at significantly below unity at the large scales in the box. With one flux per cell, M1 cannot represent a source's light on top of a
-nearly isotropic background. The new closures reduce both errors. The split halves OTVET's excess, to about twice the rays' power at no extra cost. \textcolor{red}{[In the $256^3$ tests the split removed the excess almost entirely (1.1--1.3); here it leaves a factor 2. Worth a sentence on why, e.g.\ the later end of reionization in this suite.]} The
-screen and the cone do even slightly better still and all the new closuers ahve similar cross correlation coefficients.
+nearly isotropic background. The new closures reduce both errors. The
+screen and the cone do better and have similar cross correlation coefficients.
 
-{\bf not sure if we keep this paragraph} The closures built on the thin tensor (OTVET, the split, the screen and the cone) also share an excess of 1.5--3.6 times the rays' power at $k\approx5\hmpc$ at every epoch,
+{\bf not sure if we keep this paragraph} The closures built on the thin tensor (OTVET, the screen and the cone) also share an excess of 1.5--3.6 times the rays' power at $k\approx5\hmpc$ at every epoch,
 rising at higher $k$; M1 does not (0.6--1.1). It comes from the source cells, which hold their
 own photons for one absorption step and are brighter than in the rays,
 not from the closures: capping $\Gamma$ at $3\langle\Gamma\rangle$
@@ -426,20 +427,21 @@ The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\
 
 
 \section{Discussion and conclusions}\label{sec:conclusions}
-We have compared five two-moment closures with adaptive ray tracing in one code, with all other physics shared, in a $40\mpch$, $512^3$ reionization simulation. Our main conclusions are as follows.
+We have compared four two-moment closures with adaptive ray tracing in one code, with all other physics shared, in a $40\mpch$, $512^3$ reionization simulation. Our main conclusions are as follows.
 \begin{itemize}
 \item \textbf{Morphology of reionization.} Every closure reproduces the rays' ionization morphology on large scales: the $x_{\rm HII}$ power for times with$\xv\approx0.8$ is within 20\% of the rays' at $k\lesssim 5\hmpc$ -- the scales potentially probed by 21cm experiments \citep{}. The closures differ at $k\gtrsim5\hmpc$, where the new cone correlates best with the rays and M1 by far the worst. Still, all of them are far closer to the rays than 21cmFAST with matched sources, which predicts power that can differ at the factor of 2-3 level.
-\item \textbf{The photoionization rate during reionization.} OTVET and the split follow the rays' $\Gamma_{\rm HI}$ power to within 25\%, and the cone to within a factor of 1.6. M1 has 20--40\% too little power and weak proximity zones, and the screen's single attenuation length makes the field mottled.
-\item \textbf{After overlap.} OTVET has $4\times$ the rays' $\Gamma_{\rm HI}$ power, the normalization error of \citet{wu21}, and the background of \citet{gnedin01} does not remove it by $z=5$. M1 has 3--10 times too little power and no proximity zones. The split halves OTVET's excess at no cost. The cone has 1.0--1.4 times the rays' power at $k\le2\hmpc$ and is the only closure that reproduces the one-point distribution of $\Gamma_{\rm HI}$, including the low tail of shadowed gas.
+\item \textbf{The photoionization rate during reionization.} OTVET follows the rays' $\Gamma_{\rm HI}$ power to within 25\%, and the cone to within a factor of 1.6. M1 has 20--40\% too little power and weak proximity zones, and the screen's single attenuation length makes the field mottled.
+\item \textbf{After overlap.} OTVET has $4\times$ the rays' $\Gamma_{\rm HI}$ power, the normalization error of \citet{wu21}, and the background of \citet{gnedin01} does not remove it by $z=5$. M1 has 3--10 times too little power and no proximity zones. The cone has 1.0--1.4 times the rays' power at $k\le2\hmpc$ and is the only closure that reproduces the one-point distribution of $\Gamma_{\rm HI}$, including the low tail of shadowed gas.
 \item \textbf{Observables.} Every closure gives the rays' mean $\Gamma_{\rm HI}$ to 10--25\% and a mean free path 9--35\% longer. The 84--16\% width of the $\tau_{\rm eff}$ distribution changes by less than 20\%, in the opposite order to the $\Gamma_{\rm HI}$ power. Even M1 is therefore adequate for the $\tau_{\rm eff}$ scatter, the main evidence for a late end of reionization. \textcolor{red}{[Compare with the observational errors before claiming ``adequate''.]}
-\item \textbf{Which closure.} The cone for simulations in which the fluctuations of the ionizing background matter; its tensor adds little to the wall time. The split as a free fix for existing OTVET codes after overlap. We do not recommend the screen.
-\item \textbf{Shared limitations.} Only the cone casts shadows, and only of structures larger than about four cells; on smaller scales its tensor is the split's. The closures built on the thin tensor have 1.5--3.6 times the rays' $\Gamma_{\rm HI}$ power at $k\approx5\hmpc$. The first-order transport thickens the ionization fronts. All our results come from one $40\mpch$ box, whose size the mean free path exceeds after overlap, so the after-overlap statistics, and the $\tau_{\rm eff}$ scatter in particular, are limited by the box.
+\item \textbf{Which closure.} The cone for simulations in which the fluctuations of the ionizing background matter; its tensor adds little to the wall time. We do not recommend the screen.
+\item \textbf{Shared limitations.} Only the cone casts shadows, and only of structures larger than about four cells; on smaller scales its tensor is OTVET's with the excess photons isotropic. The closures built on the thin tensor have 1.5--3.6 times the rays' $\Gamma_{\rm HI}$ power at $k\approx5\hmpc$. The first-order transport thickens the ionization fronts. All our results come from one $40\mpch$ box, whose size the mean free path exceeds after overlap, so the after-overlap statistics, and the $\tau_{\rm eff}$ scatter in particular, are limited by the box.
 \item \textbf{Relation to previous work.} \citet{gnedin25} found that the choice of Eddington tensor is not the dominant cause of the different $\Gamma_{\rm HI}$ power spectra of CROC and Thesan. We find that OTVET and M1 differ from the rays by 25--40\% during reionization, but by factors of 4 and 3--10 in opposite directions after overlap, so the importance of the closure depends strongly on the epoch. \textcolor{red}{[Check against the epochs and scales of \citet{gnedin25}.]}
 
 \item \textbf{Absorbers.} We also argue that current simulations without subgrid prescriptions for absorbers that are matched to Ly$\alpha$ forest statistics are almost certainly biased to end reionization a few tenths in redshift later than it actually does. \textcolor{red}{[Your sentence, reworded; ``later'' is my reading, so check the direction. Nothing in Sections 2--3 supports it yet: add the argument, or cite D'Aloisio et al.\ in prep.]}
 \end{itemize}
 
-\paragraph{Acknowledgements.} The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  This updated code is available: \url{https://github.com/astromcquinn/NewRadHydroCode}.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
+\section*{Acknowledgements}
+The updates to the RadHydro code, including the addition of different closure approximations, were added by Claude with MM checking them both with tests and by viewing the code.  This updated code is available: \url{https://github.com/astromcquinn/NewRadHydroCode}.  The figures were created by Claude with MM suggesting changes and additions in a supervisory manner, and devising the organization for presentation.  Writing was aided by Claude in collaboration with MM, with the drafts and rewrites occurring at the paragraph level and then assembled into a full document.
 
 
 
@@ -520,6 +522,6 @@ We have compared five two-moment closures with adaptive ray tracing in one code,
 
 
 
-\bibliographystyle{plainnat}
+\bibliographystyle{aasjournal}
 \bibliography{refs}
 \end{document}
