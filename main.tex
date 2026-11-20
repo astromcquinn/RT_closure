@@ -30,7 +30,7 @@
 \maketitle
 
 \begin{abstract}
-We compare reionization simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty (and significantly better than 21cmFast).  OTVET and especially M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  However, we show that even M1 likely captures $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ with sufficient accuracy. 
+We compare reionization simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty (and significantly better than 21cmFAST).  OTVET and especially M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  They likey make order-unity errors in $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ transmission that owe to intensity fluctuations.
 \end{abstract}
 
 %======================================================================
@@ -118,7 +118,7 @@ in $z$ (Fig.~\ref{fig:hist}, left), we compare them at fixed redshift. Figure~\r
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig_history.pdf}
-\caption{Left: the mass-weighted neutral fraction of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), with the measurements of \citet{gaikwad23} (squares). Right: the 912\,\AA\ mean free path from random starts (the distance where $\langle F\rangle=1/e$), with the measurements of \citet{becker21} (squares) and \citet{zhu23} (diamonds). The split is not shown: it is similar to OTVET (the median $\Gamma_{\rm HI}$ and the mean free path within 1.5\% of OTVET's before overlap, and within 5\% at $z=4.99$).}
+\caption{Comparison of our simulation suite run with the same sources but different raidative transfer simulations on different global properties. Left: the mass-weighted neutral fraction of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), with the measurements of \citet{gaikwad23} (squares). Right: the 912\,\AA\ mean free path from random starts  alongside the measurements of \citet{becker21} (squares) and \citet{zhu23} (diamonds). The split closure method is not shown as it is nearly identical to OTVET.}
 \label{fig:hist}
 \end{figure}
 %Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
@@ -190,14 +190,7 @@ background spreads isotropically instead of streaming outward.
   volume ionizes. Since only newly emitted photons enter the background, it holds 2\% of the
   photons in flight at $z=5$, the lowest redshift we consider. %A run without the background agrees with it to $10^{-5}$ in the ionized fraction and to 3\% in the $\Gamma$ power spectrum at $z=4.99$. \draft{In a 20\,Mpc/h, $256^3$ test run to   $\Delta z\approx1$ after overlap, $\Lambda$ reaches 0.95--0.99 and the background brings the $\Gamma$ power from 14--16 to 1.2--1.5 times the   rays' (split 1.0--1.1), but 0.3--0.5 in $z$ after overlap it is still 3--4 times; keep?}
   }
-\item \textbf{Split} (new method) is a simple tweak of OTVET that improves its major diffency, that it does not capture the ionizing background when the mean free path becomes larger than the box.  In this new method, OTVET
-  tensor is applied only to the photons the optically thin approximation
-  accounts for, $N_{\rm OT}$, and the rest of the cell's photons are
-  isotropic, $\mathsf D=\mathsf I/3+\min(1,N_{\rm OT}/N)\,(\mathsf h-\mathsf I/3)$.
-  Where those schemes set the isotropic share with a global opacity or an
-  observed mean free path and transport it as a second field, the split
-  takes it cell by cell from the solution's own photons, with no free
-  parameter and at no extra cost.  This cures pathologies in OTVET
+%\item \textbf{Split} (new method) is a simple tweak of OTVET that improves its major diffency, that it does not capture the ionizing background when the mean free path becomes larger than the box.  In this new method, OTVET  tensor is applied only to the photons the optically thin approximation  accounts for, $N_{\rm OT}$, and the rest of the cell's photons are  isotropic, $\mathsf D=\mathsf I/3+\min(1,N_{\rm OT}/N)\,(\mathsf h-\mathsf I/3)$. Where those schemes set the isotropic share with a global opacity or an  observed mean free path and transport it as a second field, the split  takes it cell by cell from the solution's own photons, with no free parameter and at no extra cost.  This cures pathologies in OTVET
 \item \textbf{Screen} (new method) improves upon OTVET by attenuating the sources' light
   by $e^{-r/\lambda}$, summed over all periodic images. This is the
   remedy \citet{wu21} propose: attenuating at the mean free path gives the
