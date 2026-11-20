@@ -32,13 +32,14 @@ These runs test both in full reionization simulations.
 
 1. **Dry run first.** `DRYRUN=1 tools/hyak/rt_convergence.sh all` and check
    the printed jobs: 3 ICs jobs (128³, 256³, 512³ gas with 512³ particles,
-   20 Mpc/h; it reuses `$RUNS/rt512cal256/ics` for 256³ if present), 10
-   whole-node runs (`rtconv_N{128,256,512}_rays` and `..._rays_m1`;
+   20 Mpc/h; it reuses `$RUNS/rt512cal256/ics` for 256³ if present), 13
+   whole-node runs (`rtconv_N{128,256,512}_rays`, `..._rays_m1` and
+   `..._rays_m1_inj0`, M1 with `moment_inject = 0`;
    `rtconv_N256_rays_f{8,32,64,120}`), 4 analysis jobs. The script has only
    been dry-run and smoke-tested at toy size, never through Slurm: fix what
    breaks, and say what you changed. Check the free space under `$RUNS`
    against the suite's disk estimates (rt_suite512.sh header) before
-   submitting. **Ask me before submitting the two 512³ runs** (4-day limit,
+   submitting. **Ask me before submitting the three 512³ runs** (4-day limit,
    a node each); submit the rest with `RES="128 256"`.
 2. **Before the runs start, verify the matched sources.** After the ICs
    jobs: `xv_dm.init` must be byte-identical in the three ICs directories
@@ -64,6 +65,17 @@ These runs test both in full reionization simulations.
    (so at k ∝ N); at k ≲ 0.5 h/Mpc the ratio does not depend on N. Also
    report whether the rays themselves change with N at fixed k (they are the
    reference, and the absorbers change with the gas resolution).
+   **The injection order.** `M1_inject0` in the same tables is M1 with the
+   sources injected before the transport. In the uniform-opacity test
+   T(inject 1) − T(inject 0) = 1 − exp(−Δx/λ) at every k and resolution (a
+   white term: the current substep's photons in their source cells), and
+   inject 0 is nearer the continuum M1 solution but smooths the sources
+   over ~2 cells. Report P_Γ(M1 inject 0)/P_Γ(rays) beside M1's: how much
+   of M1's excess over the rays at kΔx ≳ 0.5 is this term, whether inject 0
+   stays below the rays at every k, and whether its ratio depends less on
+   N. Also report inject 0's known cost in these runs: the neutral fraction
+   and Γ in cells above 100 ρ̄ after overlap against the rays and inject 1
+   (docs/rt_moments.md §5a).
 5. **Ray-budget series.** From `$RUNS/rtconv_post/rays/gamma_pk.txt`
    (reference f120): P_Γ(f)/P_Γ(f120) and r(k) for f = 8, 15, 32, 64 at the
    same epochs, and the same for x_HII (`tools/analysis/reion_power.py` or
