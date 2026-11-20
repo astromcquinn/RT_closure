@@ -64,9 +64,9 @@ extensions of M1 and OTVET, and any local closure for the third moment
 that depends only on the energy density and flux, are unstable
 \citep{gnedinkatz26}. Both routes are expensive.
 
-Here we test two-moment closures against adaptive ray tracing on full reionization simulations rather than the test problems that have often been considered \citep{iliev, wu21, gnedinkatz26}. One code
+Here we test two-moment closures against adaptive ray tracing on full reionization simulations rather than the test problems that have often been considered \citep{iliev06,iliev09,wu21,gnedinkatz26}. One code
 holds every closure and the rays of \citet{trac07}, with all other
-physics shared, so differences between runs come from the transfer alone.  This differs from \citep{gnedins25}, the other study that compared reionization simulations.
+physics shared, so differences between runs come from the transfer alone.  This differs from \citet{gnedin25}, the other study that compared reionization simulations.
 We also introduce two new closures; the more complete of them, which
 attenuates the light by the HI along each direction, follows the rays
 more closely than M1 or OTVET at every stage of reionization. \textcolor{red}{[Check this claim against the new cone runs.]}
@@ -92,7 +92,7 @@ $\Omega_\Lambda=0.73$, $\Omega_b=0.045$, $h=0.70$, $\sigma_8=0.80$ and
 $n_s=0.96$. The initial conditions are a Zel'dovich realization at $z=100$
 of the no-wiggle linear power spectrum of \citet{eisenstein98}.
 
-Sources are the friends-of-friends halos (linking length 0.2) found on the
+Sources are the friends-of-friends halos (linking length 0.2; \citealt{davis85}) found on the
 fly at every hydro step, down to 20 particles
 ($1.3\times10^8\,M_\odot$). Each halo's UV luminosity comes from abundance
 matching observed UV luminosity functions to a Sheth--Tormen mass function
@@ -139,7 +139,7 @@ density $N$ and the flux $\chat\,\mathbf F$,
 \partial_t N + \chat\,\nabla\cdot\mathbf F &= S - \chat\kappa N,\\
 \partial_t \mathbf F + \chat\,\nabla\cdot(\mathsf D\,N) &= -\chat\kappa \mathbf F,
 \end{align}
-with a first-order Godunov scheme using global Lax--Friedrichs fluxes of
+with a first-order Godunov scheme using global Lax--Friedrichs fluxes \citep{toro09} of
 wave speed $\chat$. The sources $S$, the absorption $\kappa$ and the
 redshifting are those of the ray runs. The methods differ only in their ansatz for the
 Eddington tensor $\mathsf D$, the second angular moment of the intensity normalized to unit trace. M1 and OTVET are the two closures
@@ -394,7 +394,7 @@ online tables would be better}}
 
 These differences in $\Gamma_{\rm HI}$ could affect the observables: the mean free path and the Ly$\alpha$ forest transmission. For the latter we use the scatter of $\tau_{\rm eff}$ over $50\mpch$ segments, whose large fluctuations cannot be explained by the IGM density alone \citep{becker15,bosman18,eilers18,bosman22} and have been the main evidence that reionization ends below $z\approx5.5$ \citep{kulkarni19,keating20,bosman22}. The right panel of Fig.~\ref{fig:hist} shows that the mean free path is similar in every run; at $z\le5.5$ the moment methods' is 9--35\% longer than the rays'. 
 
-The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\tau_{\rm eff}$ distribution, with every run rescaled to the observed mean flux, changes by less than 20\%.  Part of this is that much of the fluctuations are driven by ionization: the difference between `rays, uniform $\Gamma_{\rm HI}$', which sets the photoionization rate in every ionized cell to be uniform in processing, and the other curves shows the effect of $\Gamma_{\rm HI}$ fluctuations.  Many of the moment methods miss the correct amount of this effect by almost a factor two. Suprisingly, M1 is rather similar to rays despite it having the most discrepant $\Gamma_{\rm HI}$ field -- this is likely because the large-scale amplitude of $\delta_{\Gamma_{\rm HI}}$ is less discrepant and less correlated with density.  Interestingly, at late times the   $\Gamma_{\rm HI}$ fluctuations counteracts denstiy fluctuations and lead to a narrower PDF in most of the models.  However, his comparison uses a very small $40\hmpc$ box that certainly is underestimating the effect of these fluctuations needed to understand the effect in $50\hmpc skewers$ \citep{}. We expect in larger box sizes that better captures  $\Gamma_{\rm HI}$ fluctuations, the discrepancies in $\tau_{\rm eff}$ will be enhanced.
+The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\tau_{\rm eff}$ distribution, with every run rescaled to the observed mean flux, changes by less than 20\%.  Part of this is that much of the fluctuations are driven by ionization: the difference between `rays, uniform $\Gamma_{\rm HI}$', which sets the photoionization rate in every ionized cell to be uniform in processing, and the other curves shows the effect of $\Gamma_{\rm HI}$ fluctuations.  Many of the moment methods miss the correct amount of this effect by almost a factor two. Suprisingly, M1 is rather similar to rays despite it having the most discrepant $\Gamma_{\rm HI}$ field -- this is likely because the large-scale amplitude of $\delta_{\Gamma_{\rm HI}}$ is less discrepant and less correlated with density.  Interestingly, at late times the   $\Gamma_{\rm HI}$ fluctuations counteracts denstiy fluctuations and lead to a narrower PDF in most of the models.  However, his comparison uses a very small $40\hmpc$ box that certainly is underestimating the effect of these fluctuations needed to understand the effect in $50\hmpc$ skewers \citep{davies16,davies17}. We expect in larger box sizes that better captures  $\Gamma_{\rm HI}$ fluctuations, the discrepancies in $\tau_{\rm eff}$ will be enhanced.
 
 %Despite having smaller $\Gamma_{\rm HI}$ fluctuations, M1's is the broadest (2--7\% above the rays'), OTVET's and the screen's the narrowest (up to 14 and 18\% below), and the cone's is within 10\%. This ordering is the reverse of that of the $\Gamma_{\rm HI}$ power. After overlap $\Gamma_{\rm HI}$ and the density of a segment are correlated ($\tau\propto\rho^2/\Gamma_{\rm HI}$), so a method with too much $\Gamma_{\rm HI}$ power near the sources narrows the distribution, and one with too little broadens it. The $\tau_{\rm eff}$ scatter therefore appears insensitive to the closure: even M1 reproduces the rays' width to better than 10\%. These results even hold if we don't rescale the flux to that observed.
 
@@ -429,7 +429,7 @@ The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\
 \section{Discussion and conclusions}\label{sec:conclusions}
 We have compared four two-moment closures with adaptive ray tracing in one code, with all other physics shared, in a $40\mpch$, $512^3$ reionization simulation. Our main conclusions are as follows.
 \begin{itemize}
-\item \textbf{Morphology of reionization.} Every closure reproduces the rays' ionization morphology on large scales: the $x_{\rm HII}$ power for times with$\xv\approx0.8$ is within 20\% of the rays' at $k\lesssim 5\hmpc$ -- the scales potentially probed by 21cm experiments \citep{}. The closures differ at $k\gtrsim5\hmpc$, where the new cone correlates best with the rays and M1 by far the worst. Still, all of them are far closer to the rays than 21cmFAST with matched sources, which predicts power that can differ at the factor of 2-3 level.
+\item \textbf{Morphology of reionization.} Every closure reproduces the rays' ionization morphology on large scales: the $x_{\rm HII}$ power for times with$\xv\approx0.8$ is within 20\% of the rays' at $k\lesssim 5\hmpc$ -- the scales potentially probed by 21cm experiments \citep{Furlanetto2006,deboer17}. The closures differ at $k\gtrsim5\hmpc$, where the new cone correlates best with the rays and M1 by far the worst. Still, all of them are far closer to the rays than 21cmFAST with matched sources, which predicts power that can differ at the factor of 2-3 level.
 \item \textbf{The photoionization rate during reionization.} OTVET follows the rays' $\Gamma_{\rm HI}$ power to within 25\%, and the cone to within a factor of 1.6. M1 has 20--40\% too little power and weak proximity zones, and the screen's single attenuation length makes the field mottled.
 \item \textbf{After overlap.} OTVET has $4\times$ the rays' $\Gamma_{\rm HI}$ power, the normalization error of \citet{wu21}, and the background of \citet{gnedin01} does not remove it by $z=5$. M1 has 3--10 times too little power and no proximity zones. The cone has 1.0--1.4 times the rays' power at $k\le2\hmpc$ and is the only closure that reproduces the one-point distribution of $\Gamma_{\rm HI}$, including the low tail of shadowed gas.
 \item \textbf{Observables.} Every closure gives the rays' mean $\Gamma_{\rm HI}$ to 10--25\% and a mean free path 9--35\% longer. The 84--16\% width of the $\tau_{\rm eff}$ distribution changes by less than 20\%, in the opposite order to the $\Gamma_{\rm HI}$ power. Even M1 is therefore adequate for the $\tau_{\rm eff}$ scatter, the main evidence for a late end of reionization. \textcolor{red}{[Compare with the observational errors before claiming ``adequate''.]}
