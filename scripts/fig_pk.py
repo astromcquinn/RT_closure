@@ -12,6 +12,8 @@
 
 usage: python3 scripts/fig_pk.py   (writes figures/fig2_pk_xHII.{pdf,png} and
        figures/fig4_pk_gamma.{pdf,png})
+       python3 scripts/fig_pk.py --only xhii --xhii-data data/pk_xHII_21cmfast_early.txt \
+               --xhii-out fig2_pk_xHII_early [--ratio-ylim 0.1,10]   (another set of epochs)
 """
 import os
 import re
@@ -190,7 +192,22 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip
 
 
 def main():
-    path = os.path.join(DATA, "pk_xHII_21cmfast.txt")
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--xhii-data", default=os.path.join(DATA, "pk_xHII_21cmfast.txt"),
+                    help="the x_HII spectra (excursion_set.py figure output)")
+    ap.add_argument("--xhii-out", default="fig2_pk_xHII", help="figure name under figures/")
+    ap.add_argument("--ratio-ylim", default="0.3,3", help="the P/P_rays axis of the x_HII figure")
+    ap.add_argument("--only", choices=("all", "xhii", "gamma"), default="all")
+    a = ap.parse_args()
+    if a.only in ("all", "xhii"):
+        lo, hi = (float(v) for v in a.ratio_ylim.split(","))
+        fig_xhii(a.xhii_data, os.path.join(FIG, a.xhii_out), (lo, hi))
+    if a.only in ("all", "gamma"):
+        fig_gamma()
+
+
+def fig_xhii(path, out, ylim_ratio):
     bx = read_blocks(path)
     xv = read_xv(path)
     heads = {int(re.match(r"# step (\d+)", h).group(1)): h for h in bx}
@@ -198,9 +215,11 @@ def main():
     titles = [f"$z={float(re.search(r' z ([0-9.]+)', heads[s]).group(1)):.2f}$, $x_V={xv[s]:.2f}$"
               for s in steps]
     panel_grid([bx[heads[s]] for s in steps], titles,
-               r"$\Delta^2_{x_{\rm HII}}(k)$", os.path.join(FIG, "fig2_pk_xHII"),
+               r"$\Delta^2_{x_{\rm HII}}(k)$", out, ylim_ratio=ylim_ratio,
                skip=("split",))  # = OTVET to < 1 % in power before overlap
 
+
+def fig_gamma():
     bs = read_blocks(os.path.join(DATA, "pk_suite.txt"))
     gam = [h for h in bs if h.startswith("# gamma")]
     titles = []
