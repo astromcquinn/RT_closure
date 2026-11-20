@@ -1,0 +1,9 @@
+# Made 2026-11-20 on klone by /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/taueff_temp.py: tau_eff over the box-length 40 Mpc/h skewers (F_box_A; 3 x 8192 skewers, as igm_stats.py --taueff 50 --seed 1), tau rescaled to the Bosman+22 mean flux for each variant; runs: rays=reion512late
+# variants, applied to the cells with x_HI < 0.01 only: own; uG: x_HI * Gamma/Gamma_ref; uT: x_HI * (T/T_ref)^0.7 and T -> T_ref; uGT: both. Gamma_ref, T_ref: the medians of those cells; ion: uGT, and the other cells get T_ref and the equilibrium n_HI ~ rho^2 at Gamma_ref, T_ref (no neutral gas)
+# w = tau_eff(84 %) - tau_eff(16 %), t50 the median
+# label z step Gamma_ref[s^-1] T_ref[K] A_own t50_own w_own A_uG t50_uG w_uG A_uT t50_uT w_uT A_uGT t50_uGT w_uGT A_ion t50_ion w_ion
+rays       5.9675 79 8.0019e-14 12623.2 0.4939 5.1113 4.0549 0.5592 4.9048 2.1637 0.4925 5.1606 3.8964 0.5065 4.8272 1.8425 0.6815 4.7807 1.4435
+rays       5.6953 84 8.6419e-14 12516.3 0.4216 3.7889 2.1735 0.4962 3.7682 1.5138 0.4226 3.8128 2.1680 0.4602 3.7248 1.2768 0.5775 3.7001 1.0726
+rays       5.4831 88 1.1206e-13 12430.7 0.4130 2.8439 1.3089 0.4818 2.8313 1.0879 0.4138 2.8181 1.3331 0.4581 2.8170 0.9152 0.5376 2.8028 0.8152
+rays       5.2431 93 1.6844e-13 12144.8 0.5443 2.1946 0.7979 0.6189 2.1961 0.8327 0.5409 2.1852 0.7282 0.5967 2.1879 0.6597 0.6349 2.1897 0.6633
+rays       4.9871 99 3.0066e-13 11384.6 0.9668 1.8586 0.7543 1.0429 1.8631 0.8034 0.9548 1.8432 0.5385 1.0215 1.8450 0.5856 1.0234 1.8456 0.5888

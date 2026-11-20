@@ -17,11 +17,21 @@ Right: tau_eff(84 %) - tau_eff(16 %) over 50 Mpc/h segments with tau
       dotted, diamonds    also no neutral gas: the other cells at T_ref and
                           in equilibrium with Gamma_ref
 
+--seg box: the same with the simulated widths over the box-length
+    (40 Mpc/h) skewers, one per skewer, instead of the 50 Mpc/h segments (a
+    box-length skewer joined to 10 Mpc/h of another): the same skewers,
+    snapshots and rescaling (data/taueff_mfp_snap_A_box.txt,
+    data/taueff_temp_box.txt). The Bosman et al. 2022 squares are unchanged:
+    they are widths in 50 Mpc/h bins in both versions. Not in the paper.
+
 Data: data/pdf_gamma.txt, data/taueff_mfp_snap_A.txt, data/taueff_width_obs.txt,
 data/taueff_temp.txt.
 
-usage: python3 scripts/fig_pdf_width.py   (writes figures/fig_pdf_width.{pdf,png})
+usage: python3 scripts/fig_pdf_width.py [--seg {50,box}]
+       (writes figures/fig_pdf_width.{pdf,png}, the paper's; with --seg box
+       figures/fig_pdf_width_box.{pdf,png})
 """
+import argparse
 import os
 
 import matplotlib
@@ -38,9 +48,14 @@ TEST = "#8c5a2e"  # the rays' test curves: a colour no run and no measurement us
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--seg", default="50", choices=("50", "box"),
+                    help="50: the 50 Mpc/h joined segments (the paper's); box: the 40 Mpc/h box-length skewers")
+    a = ap.parse_args()
+    sfx = "_box" if a.seg == "box" else ""
     head, dp, _ = fig_pk.read_pdf(os.path.join(DATA, "pdf_gamma.txt"))[-1]
     zpdf = float(head.split("z = ")[1].split()[0].rstrip(";"))
-    width, _ = fm.read_runs(os.path.join(DATA, "taueff_mfp_snap_A.txt"))
+    width, _ = fm.read_runs(os.path.join(DATA, f"taueff_mfp_snap_A{sfx}.txt"))
     wo = fm.read_width_obs(os.path.join(DATA, "taueff_width_obs.txt"))
     plt.rcParams.update({"font.size": 8, "axes.linewidth": 0.8, "text.color": fm.INK,
                          "axes.edgecolor": fm.INK2, "xtick.color": fm.INK2, "ytick.color": fm.INK2})
@@ -51,7 +66,7 @@ def main():
         if key in width:
             d = width[key]
             a1.plot(d[:, 0], d[:, 1], color=c, ls=ls, lw=lw, marker="o", ms=3.5)
-    uni = np.array(sorted([float(v) for v in l.split()[1:]] for l in open(os.path.join(DATA, "taueff_temp.txt"))
+    uni = np.array(sorted([float(v) for v in l.split()[1:]] for l in open(os.path.join(DATA, f"taueff_temp{sfx}.txt"))
                           if l.startswith("rays ")))
     for col, ls, mk, label in ((9, (0, (5, 2)), "o", r"rays, uniform $\Gamma_{\rm HI}$"),
                                (15, (0, (4, 1.5, 1, 1.5)), "v", r"rays, uniform $\Gamma_{\rm HI}$ and $T$"),
@@ -63,7 +78,7 @@ def main():
                 color=OBS, mfc="white", ecolor=OBS, elinewidth=0.8, capsize=2, zorder=5)
     for z, w0, _, _, w1 in wo:
         if w1 > w0 * 1.02:
-            top = w1 if np.isfinite(w1) else 3.6
+            top = w1 if np.isfinite(w1) else (4.35 if sfx else 3.6)
             a1.plot([z, z], [w0, top], ls=":", color=OBS, lw=0.9, zorder=4)
             a1.plot([z], [top], marker="^" if not np.isfinite(w1) else "_", color=OBS, ms=4, zorder=4)
     a0.set_yscale("log")
@@ -73,18 +88,21 @@ def main():
     a0.set_ylabel(r"$dP/d\log_{10}\Gamma_{\rm HI}$")
     a0.text(0.04, 0.94, f"$z={zpdf:.2f}$", transform=a0.transAxes, va="top")
     a0.legend(fontsize=6.5, frameon=False, loc="upper right", handlelength=2.6)
-    fm.log_axis(a1, [0.5, 0.7, 1, 1.5, 2, 3])
-    a1.set_ylim(0.4, 3.8)
+    fm.log_axis(a1, [0.5, 0.7, 1, 1.5, 2, 3] + ([4] if sfx else []))
+    a1.set_ylim(0.4, 7.0 if sfx else 3.8)  # the box-length widths reach 4.1 at z = 5.97; room for the legend
     a1.set_xlim(fm.ZMIN, fm.ZMAX)
     a1.invert_xaxis()
     a1.set_xlabel(r"$z$")
     a1.set_ylabel(r"$\tau_{\rm eff}(84\%)-\tau_{\rm eff}(16\%)$, $\langle F\rangle$ = observed")
+    if sfx:
+        a1.text(0.03, 0.04, "simulations: 40 Mpc/$h$ (box-length) skewers\nsquares: 50 Mpc/$h$ bins",
+                transform=a1.transAxes, va="bottom", fontsize=6.5)
     for ax in (a0, a1):
         ax.grid(alpha=0.3, lw=0.5)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
     fig.tight_layout()
-    out = os.path.join(fm.HERE, "..", "figures", "fig_pdf_width")
+    out = os.path.join(fm.HERE, "..", "figures", "fig_pdf_width" + sfx)
     fig.savefig(out + ".pdf")
     fig.savefig(out + ".png", dpi=300)
     print("wrote", os.path.normpath(out) + ".{pdf,png}")
