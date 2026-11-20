@@ -90,32 +90,31 @@ matter particles of $6.4\times10^6\,M_\odot$, whose forces are computed on
 a $2048^3$ PM mesh. The cosmology is $\Omega_m=0.27$,
 $\Omega_\Lambda=0.73$, $\Omega_b=0.045$, $h=0.70$, $\sigma_8=0.80$ and
 $n_s=0.96$. The initial conditions are a Zel'dovich realization at $z=100$
-of the no-wiggle linear power spectrum of \citet{eisenstein98}.
+of the no-wiggle linear power spectrum of \citet{eisenstein98}.  While $40 \hmpc$ is too small to capture the statistics of the ionization field \citep{}, the relative comparison of different radiative transfer methods should be less depedent on boxsize.  Furthermore, our ability to resolve enough dense systems to limit the mean free path of ionizing photons in a manner that is similar to found in observations we think likely makes the method differences close to what one would expect in realistic reionization simulations.
 
 Sources are the friends-of-friends halos (linking length 0.2) found on the
-fly at every hydro step, down to 20 particles
-($1.3\times10^8\,M_\odot$). Each halo's UV luminosity comes from abundance
+fly at every hydro step, down to 20 particles halos that have a mass of $1.3\times10^8\,M_\odot$. Each halo's UV luminosity comes from abundance
 matching observed UV luminosity functions to a Sheth--Tormen mass function
 refit to the friends-of-friends halos of this box
 \citep{sheth99,bouwens21,bouwens22,donnan24,atek26}. Below a turnover at
-$M\approx3$--$5\times10^{11}\,M_\odot$, this gives $L_{\rm UV}\propto M^{1.43\textrm{--}1.46}$ at $z=7$--5.7. The
+$M\approx3$--$5\times10^{11}\,M_\odot$, this gives approximately $L_{\rm UV}\propto M^{1.45}$ over $z=5-7$. The
 ionizing photon production efficiency is
 $\log\xi_{\rm ion}=25.38$ \citep{pahl25}, and the escape fraction is
 $f_{\rm esc}(z)=f_6\,[(1+z)/7]^{2.5}$ with $f_6=0.10$, a value tuned to match Ly$\alpha$ forest opacity measurements (with reionization ending at $z\approx 5.3$) \todo{cite D'Aloisio in prep}.
 % f6 = 0.10 and the continuous c-hat schedule: the late-end suite reion512late* of
 % 2026-11-11 (NewRadHydroCode main 6658086, legacy_physics = 0 with P11, no SN heating).
 
-All runs use case-B recombination with on-the-spot absorption of the
+All runs use case-B recombination and hence on-the-spot absorption of the
 recombination photons, except one ray run with case-A recombination and
 the recombination radiation transported (``rays, case A + RR''). %As in the original code, cooling is suppressed above 200 times the mean density, and a cell denser than 50 times the mean (overdensity $\delta>50$) removes only a fraction $e^{-(\delta-50)/50}$ of the photons its photoionizations use, so the densest gas neither consumes nor shields much radiation.
 The reduced speed of light follows the volume-weighted ionized fraction
 $x$ of the previous hydro step. It is piecewise linear through
 $(x,\chat/c)=(0.125,0.1)$, $(0.375,0.2)$, $(0.625,0.3)$ and $(0.875,0.5)$,
-and constant outside them, a schedule chosen so that the ionization history is converged to $\Delta z<0.1$.  Every $\Gamma_{\rm HI}$ statistic uses
+and constant outside them, a schedule designed from a series of tests so that the ionization history is converged to $\Delta z<0.1$.  Every $\Gamma_{\rm HI}$ statistic uses
 $\Gamma_{\rm HI}$ averaged over the RT substeps of the hydro step, which
 removes most of the rays' sampling noise. Since the runs share their
-initial conditions and sources, and their histories agree to within 0.1
-in $z$ (Fig.~\ref{fig:hist}, left), we compare them at fixed redshift. Figure~\ref{fig:hist} also shows the median $\Gamma_{\rm HI}$ of the ionized gas and the mean free path of every run, with the measurements at $z=5$--6.
+initial conditions and sources, and their histories agree to $\delta x_{\rm HI, M}\sim 0.025$
+iat fixed $z$ with the moment ahead of the rays (Fig.~\ref{fig:hist}, left), we compare them at fixed redshift. Figure~\ref{fig:hist} also shows the median $\Gamma_{\rm HI}$ of the ionized gas and the mean free path of every run, with the measurements at $z=5$--6.
 
 \begin{figure}[h]
 \centering
@@ -179,19 +178,21 @@ background spreads isotropically instead of streaming outward.
   around an isolated source, so it keeps the radial geometry of the
   light. It ignores absorption, though, and counts sources only out to
   half a box, so applied to the whole field it becomes too anisotropic
-  once the mean free path exceeds the box \citep{wu21}. \citet{gnedin01}
-  and CROC \citep{gnedin14} apply it only to a local part of the field
+  once the mean free path exceeds the box and is too isotropic in the other limit \citep{wu21}. \citet{gnedin01}
+  and CROC \citep{gnedin14} {\bf Is this true?} apply it only to a local part of the field
   and carry the rest as an isotropic background, whose share is set by a
   global opacity. Our OTVET run includes this background following
-  \citet{gnedin01}, but it has a negligible effect at the redshifts we consider.\footnote{In each RT substep, every cell moves up to $\Lambda\bar s$
-  of its photons, with $\bar s$ the mean emission per cell and
-  $\Lambda=\exp(-\langle\kappa\rangle\,0.61L)$ for box length $L$ (\citealt{gnedin01} define this length as an integral over the box; for the minimum-image cube it is $\int_{\rm cube}d^3r/(4\pi r^2)=0.61L$), into a
-  second, isotropic field ($\mathsf D=\mathsf I/3$) absorbed like the
-  first.  The volume-mean opacity $\langle\kappa\rangle$ is set by the
-  last neutral gas, so $\Lambda$ is essentially zero until the last percent of the
-  volume ionizes. Since only newly emitted photons enter the background, it holds 2\% of the
-  photons in flight at $z=5$, the lowest redshift we consider. %A run without the background agrees with it to $10^{-5}$ in the ionized fraction and to 3\% in the $\Gamma$ power spectrum at $z=4.99$. \draft{In a 20\,Mpc/h, $256^3$ test run to   $\Delta z\approx1$ after overlap, $\Lambda$ reaches 0.95--0.99 and the background brings the $\Gamma$ power from 14--16 to 1.2--1.5 times the   rays' (split 1.0--1.1), but 0.3--0.5 in $z$ after overlap it is still 3--4 times; keep?}
-  }
+  \citet{gnedin01}, but it has a negligible effect at the redshifts we consider.
+  % \footnote{In each RT substep, every cell moves up to $\Lambda\bar s$
+  % of its photons, with $\bar s$ the mean emission per cell and
+  % $\Lambda=\exp(-\langle\kappa\rangle\,0.61L)$ for box length $L$ (\citealt{gnedin01} define this length as an integral over the box; for the minimum-image cube it is $\int_{\rm cube}d^3r/(4\pi r^2)=0.61L$), into a
+  % second, isotropic field ($\mathsf D=\mathsf I/3$) absorbed like the
+  % first.  The volume-mean opacity $\langle\kappa\rangle$ is set by the
+  % last neutral gas, so $\Lambda$ is essentially zero until the last percent of the
+  % volume ionizes. Since only newly emitted photons enter the background, it holds 2\% of the
+  % photons in flight at $z=5$, the lowest redshift we consider.
+  % }
+  
 %\item \textbf{Split} (new method) is a simple tweak of OTVET that improves its major diffency, that it does not capture the ionizing background when the mean free path becomes larger than the box.  In this new method, OTVET  tensor is applied only to the photons the optically thin approximation  accounts for, $N_{\rm OT}$, and the rest of the cell's photons are  isotropic, $\mathsf D=\mathsf I/3+\min(1,N_{\rm OT}/N)\,(\mathsf h-\mathsf I/3)$. Where those schemes set the isotropic share with a global opacity or an  observed mean free path and transport it as a second field, the split  takes it cell by cell from the solution's own photons, with no free parameter and at no extra cost.  This cures pathologies in OTVET
 \item \textbf{Screen} (new method) improves upon OTVET by attenuating the sources' light
   by $e^{-r/\lambda}$, summed over all periodic images. This is the
