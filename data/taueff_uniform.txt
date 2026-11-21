@@ -1,4 +1,4 @@
-# Made 2026-11-18 on klone by /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/taueff_pdf.py from /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/taueff/igm_taueff_<run>.json (igm_stats.py --zmin 4.9 --zmax 6.3 --nskew 8192 --taueff 50 --lya-only --seed 1); runs: rays=reion512late M1=reion512late_m1 OTVET=reion512late_otvet_ga01 split=reion512late_otvet_split screen=reion512late_otvet_screen cone=reion512late_otvet_cone rays_A+RR=reion512late_caseA
+# Made 2026-11-20 on klone by /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper_nb/taueff_pdf_nb.py from /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper_nb/taueff_orig/igm_taueff_<run>.json (igm_stats.py --zmin 4.9 --zmax 6.3 --nskew 8192 --taueff 50 --lya-only --seed 1); runs: rays=reion512late M1=reion512late_m1 OTVET=reion512late_otvet_ga01 split=reion512late_otvet_split screen=reion512late_otvet_screen cone=reion512late_otvet_conenb rays_A+RR=reion512late_caseA
 # own: tau rescaled to the Bosman+22 mean flux (F_seg_A). uniform: x_HI of the cells with x_HI < 1e-2 scaled by Gamma / their median Gamma, then rescaled to the same mean flux (Fug_seg_A); the same 50 Mpc/h segments (3 x 8192 per snapshot)
 # w = tau_eff(84 %) - tau_eff(16 %) and t50 the median of the 50 Mpc/h segments. Per box-length skewer: r_s(a, b) the Spearman rank correlation; rho = mean density, G = mean Gamma_HI of the cells with x_HI < 1e-2 (last RT substep), tau = tau_eff of the skewer (own Gamma, rescaled); sig_lnG the standard deviation of ln G over skewers; f_noion the fraction of skewers without such cells
 # label z t50_own w_own t50_uni w_uni r_s(G,rho) r_s(tau,rho)_own r_s(tau,rho)_uni r_s(tau,G)_own sig_lnG f_noion
@@ -27,11 +27,11 @@ screen     5.2422 2.1892 0.6747 2.1927 0.7627 0.7064 0.5637 0.6023 0.4760 0.1471
 screen     5.4817 2.8120 0.9187 2.8102 0.9154 0.6271 0.2369 0.4067 -0.1397 0.2811 0.0000
 screen     5.7491 3.9627 1.5422 3.9602 1.3819 0.6015 0.0365 0.2290 -0.3898 0.4043 0.0000
 screen     5.9668 4.8920 2.3361 4.8450 1.8670 0.5723 -0.0433 0.1363 -0.4954 0.4856 0.0000
-cone       4.9866 1.8523 0.6394 1.8561 0.6916 0.6697 0.6331 0.6369 0.6376 0.0830 0.0000
-cone       5.2424 2.1857 0.6440 2.1908 0.7266 0.5891 0.4270 0.5731 0.0866 0.2186 0.0000
-cone       5.4820 2.8139 0.9902 2.8112 0.9155 0.5706 0.1018 0.3819 -0.3921 0.3594 0.0000
-cone       5.7492 3.9766 1.6876 3.9578 1.3862 0.5590 -0.0576 0.2185 -0.5461 0.4838 0.0000
-cone       5.9669 4.9263 2.6365 4.8426 1.8511 0.5430 -0.1298 0.1272 -0.6226 0.5763 0.0000
+cone       4.9863 1.8514 0.6388 1.8563 0.6915 0.6628 0.6340 0.6376 0.6368 0.0822 0.0000
+cone       5.2421 2.1858 0.6417 2.1897 0.7272 0.5886 0.4378 0.5768 0.1038 0.2148 0.0000
+cone       5.4817 2.8125 0.9763 2.8095 0.9114 0.5756 0.1128 0.3868 -0.3760 0.3497 0.0000
+cone       5.7490 3.9710 1.6570 3.9575 1.3790 0.5639 -0.0475 0.2201 -0.5340 0.4713 0.0000
+cone       5.9668 4.9184 2.5819 4.8442 1.8508 0.5477 -0.1223 0.1280 -0.6136 0.5639 0.0000
 rays_A+RR  4.9897 1.8590 0.6624 1.8596 0.6975 0.5912 0.6254 0.6346 0.5039 0.0659 0.0000
 rays_A+RR  5.2455 2.1949 0.6816 2.1965 0.7306 0.5222 0.4122 0.5586 -0.0088 0.2173 0.0000
 rays_A+RR  5.4865 2.8361 1.0631 2.8264 0.9343 0.5037 0.1136 0.3778 -0.4544 0.3732 0.0000

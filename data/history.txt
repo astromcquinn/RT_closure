@@ -1,5 +1,5 @@
-# Made 2026-11-19 on klone from the late-end 512^3 suite by /gscratch/astro/mcquinn/radhydro/runs/paper_view/history_view.py
-# runs (label = directory under /gscratch/astro/mcquinn/radhydro/runs): rays=reion512late M1=reion512late_m1 OTVET=paper_view/reion512late_otvet_ga01 split=paper_view/reion512late_otvet_split screen=paper_view/reion512late_otvet_screen cone=paper_view/reion512late_otvet_cone rays_A+RR=reion512late_caseA
+# Made 2026-11-20 on klone from the late-end 512^3 suite by /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper_nb/history_nb.py
+# runs (label = directory under /gscratch/astro/mcquinn/radhydro/runs): rays=reion512late M1=reion512late_m1 OTVET=paper_view/reion512late_otvet_ga01 split=paper_view/reion512late_otvet_split screen=paper_view/reion512late_otvet_screen cone=paper_view/reion512late_otvet_conenb rays_A+RR=reion512late_caseA
 # one line per snapshot (run/step_NNNN with stats.txt, fHI.bin, gammaHI_avg.bin) at z <= 9
 # z, xHII_V, xHII_M: 'redshift', 'xHII_V', 'xHII_M' of stats.txt; xHII_M is the gas-mass-weighted ionized fraction, sum rho_gas (1 - fHI) / sum rho_gas
 # GammaHI_ion_med: median of gammaHI_avg.bin [s^-1] over the cells with x_HI = fHI < 0.01 (0 if there are none)
@@ -44,14 +44,14 @@ screen     5.6943 0.826729 0.875967 6.2988e-14 84
 screen     5.4817 0.910866 0.937509 8.4429e-14 88
 screen     5.2422 0.984748 0.989122 1.4404e-13 93
 screen     4.9864 0.999968 0.998696 2.9950e-13 99
-cone       6.9249 0.417404 0.534368 7.8292e-14 62
-cone       6.4763 0.545358 0.651411 8.0104e-14 69
-cone       6.2280 0.625669 0.719246 7.6950e-14 74
-cone       5.9669 0.714987 0.790581 7.4950e-14 79
-cone       5.6944 0.813605 0.864697 7.9674e-14 84
-cone       5.4820 0.896751 0.925752 1.0407e-13 88
-cone       5.2424 0.972711 0.980294 1.6020e-13 93
-cone       4.9866 0.999824 0.998435 2.9625e-13 99
+cone       6.9249 0.418408 0.536387 8.0091e-14 62
+cone       6.4762 0.547574 0.654339 8.3660e-14 69
+cone       6.2279 0.628167 0.722346 7.8739e-14 74
+cone       5.9668 0.718355 0.794184 7.7460e-14 79
+cone       5.6942 0.817098 0.868214 8.2409e-14 84
+cone       5.4817 0.899535 0.928498 1.0736e-13 88
+cone       5.2421 0.973864 0.981402 1.6651e-13 93
+cone       4.9863 0.999806 0.998513 3.0540e-13 99
 rays_A+RR  6.9246 0.424165 0.536579 8.7145e-14 62
 rays_A+RR  6.4774 0.551124 0.652543 8.8681e-14 69
 rays_A+RR  6.2302 0.629431 0.718822 8.3634e-14 74

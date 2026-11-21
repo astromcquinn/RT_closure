@@ -1,4 +1,4 @@
-# Made 2026-11-20 on klone from the late-end 512^3 suite: the box-length (40 Mpc/h, one per skewer; F_box_A) version of data/taueff_mfp_snap_A.txt, from the same igm_stats json files (igm_stats.py --taueff 50 --lya-only --nskew 8192 --seed 1; OTVET, split, screen, cone from /gscratch/astro/mcquinn/radhydro/runs/paper_view/<run>, step 84 in the middle row), taueff_plot.py --seg box, then taueff_z.py --norm --full on a copy of its taueff.txt whose joined-segment columns hold the box-length percentiles (taueff_z.py reads only those columns); job /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/taueff_box.sh (43424710), NewRadHydroCode main 0e44e1f. lambda_mfp and the #S lines as in data/taueff_mfp_snap_A.txt
+# Made 2026-11-20 on klone from the late-end 512^3 suite: the box-length (40 Mpc/h, one per skewer; F_box_A) version of data/taueff_mfp_snap_A.txt, from the same igm_stats json files (igm_stats.py --taueff 50 --lya-only --nskew 8192 --seed 1; OTVET, split, screen, cone from /gscratch/astro/mcquinn/radhydro/runs/paper_view/<run>, step 84 in the middle row), taueff_plot.py --seg box, then taueff_z.py --norm --full on a copy of its taueff.txt whose joined-segment columns hold the box-length percentiles (taueff_z.py reads only those columns); job /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/taueff_box.sh (43424710), NewRadHydroCode main 0e44e1f. lambda_mfp and the #S lines as in data/taueff_mfp_snap_A.txt; since 2026-11-20 the cone is the no-blend cone (otvet_cone_blend = 0, the paper's cone closure): /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_conenb, its z ~ 5.695 snapshot from the bit-identical rerun /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_conenb_z570 seen through /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_conenb (data job /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper_nb/regen_nb.sh)
 # taueff_z.py: tau rescaled to the Bosman+22 mean flux: tau_eff over the box-length 40 Mpc/h skewers (F_box_A) at the snapshots (full box, 3 x 8192 skewers, redshift space)
 # columns: label z tau16 tau50 tau84 width(84-16) lambda_mfp[pMpc] (interpolated)
 rays       4.987 1.528 1.859 2.282 0.754 17.58
@@ -26,11 +26,11 @@ screen     5.242 1.861 2.195 2.635 0.774 8.191
 screen     5.482 2.362 2.829 3.425 1.063 2.97
 screen     5.694 3.09 3.764 4.784 1.694 1.523
 screen     5.967 3.967 4.982 7.11 3.143 0.8154
-cone       4.987 1.532 1.859 2.273 0.741 20.8
-cone       5.242 1.869 2.192 2.609 0.74 7.073
-cone       5.482 2.334 2.831 3.517 1.183 2.808
-cone       5.694 3.069 3.763 4.989 1.92 1.523
-cone       5.967 3.931 5.051 7.598 3.667 0.8039
+cone       4.986 1.533 1.858 2.271 0.738 21.26
+cone       5.242 1.871 2.192 2.604 0.733 7.338
+cone       5.482 2.337 2.828 3.504 1.167 2.933
+cone       5.694 3.073 3.761 4.954 1.881 1.59
+cone       5.967 3.935 5.039 7.524 3.589 0.837
 rays_A+RR  4.99 1.524 1.865 2.295 0.771 18.1
 rays_A+RR  5.245 1.86 2.199 2.651 0.791 6.391
 rays_A+RR  5.487 2.328 2.857 3.603 1.275 2.714
@@ -78,14 +78,14 @@ rays_A+RR  5.97 3.933 5.094 7.887 3.954 0.7985
 #S screen     6.2280 7.637 0.4689 0
 #S screen     6.4762 8.213 0.2437 0
 #S screen     6.9249 9.411 0.01497 0
-#S cone       4.9866 1.802 20.8 0
-#S cone       5.2424 2.897 7.073 0
-#S cone       5.4820 4.275 2.808 0
-#S cone       5.6944 5.545 1.523 0
-#S cone       5.9669 6.553 0.8039 0
-#S cone       6.2280 7.209 0.4473 0
-#S cone       6.4763 7.816 0.2285 0
-#S cone       6.9249 9.078 0.01227 0
+#S cone       4.9863 1.777 21.26 0
+#S cone       5.2421 2.837 7.337 0
+#S cone       5.4817 4.197 2.933 0
+#S cone       5.6942 5.442 1.59 0
+#S cone       5.9668 6.447 0.8371 0
+#S cone       6.2279 7.127 0.471 0
+#S cone       6.4762 7.667 0.2404 0
+#S cone       6.9249 8.999 0.01276 0
 #S rays_A+RR  4.9897 1.85 18.1 0
 #S rays_A+RR  5.2455 2.88 6.391 0
 #S rays_A+RR  5.4865 4.073 2.714 0

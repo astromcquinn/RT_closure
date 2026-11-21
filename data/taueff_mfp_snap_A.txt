@@ -1,4 +1,4 @@
-# Made 2026-11-12 on klone from the late-end 512^3 suite (reion512late*, NewRadHydroCode main 6658086): igm_stats.py --taueff 50 --lya-only --nskew 8192 --seed 1, taueff_plot.py, taueff_z.py --norm --full (snapshots only); the split (reion512late_otvet_split) added 2026-11-15 with the same tools (/gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/split_data.sh); since 2026-11-19 the middle row (z ~ 5.70) takes OTVET, split, screen and cone at their step 84 (z = 5.694-5.695, from bit-for-bit reruns /gscratch/astro/mcquinn/radhydro/runs/<run>_z570 seen through /gscratch/astro/mcquinn/radhydro/runs/paper_view/<run>; data job paper_view/regen.sh) instead of step 83 (z = 5.75)
+# Made 2026-11-12 on klone from the late-end 512^3 suite (reion512late*, NewRadHydroCode main 6658086): igm_stats.py --taueff 50 --lya-only --nskew 8192 --seed 1, taueff_plot.py, taueff_z.py --norm --full (snapshots only); the split (reion512late_otvet_split) added 2026-11-15 with the same tools (/gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper/split_data.sh); since 2026-11-19 the middle row (z ~ 5.70) takes OTVET, split, screen and cone at their step 84 (z = 5.694-5.695, from bit-for-bit reruns /gscratch/astro/mcquinn/radhydro/runs/<run>_z570 seen through /gscratch/astro/mcquinn/radhydro/runs/paper_view/<run>; data job paper_view/regen.sh) instead of step 83 (z = 5.75); since 2026-11-20 the cone is the no-blend cone (otvet_cone_blend = 0, the paper's cone closure): /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_conenb, its z ~ 5.695 snapshot from the bit-identical rerun /gscratch/astro/mcquinn/radhydro/runs/reion512late_otvet_conenb_z570 seen through /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_conenb (data job /gscratch/astro/mcquinn/radhydro/runs/reion512late_figures/paper_nb/regen_nb.sh)
 # taueff_z.py: tau rescaled to the Bosman+22 mean flux: tau_eff over 50 Mpc/h segments at the snapshots (full box, 3 x 8192 skewers, redshift space)
 # columns: label z tau16 tau50 tau84 width(84-16) lambda_mfp[pMpc] (interpolated)
 rays       4.987 1.559 1.854 2.208 0.649 17.58
@@ -26,11 +26,11 @@ screen     5.242 1.892 2.189 2.566 0.674 8.191
 screen     5.482 2.407 2.812 3.325 0.918 2.97
 screen     5.694 3.15 3.726 4.531 1.381 1.523
 screen     5.967 4.033 4.892 6.369 2.336 0.8154
-cone       4.987 1.562 1.852 2.201 0.639 20.8
-cone       5.242 1.901 2.186 2.545 0.644 7.073
-cone       5.482 2.384 2.814 3.374 0.99 2.808
-cone       5.694 3.13 3.725 4.644 1.514 1.523
-cone       5.967 4.004 4.926 6.641 2.637 0.8039
+cone       4.986 1.562 1.851 2.201 0.639 21.26
+cone       5.242 1.901 2.186 2.542 0.641 7.338
+cone       5.482 2.387 2.813 3.364 0.977 2.933
+cone       5.694 3.133 3.721 4.621 1.488 1.59
+cone       5.967 4.008 4.918 6.59 2.582 0.837
 rays_A+RR  4.99 1.556 1.859 2.219 0.663 18.1
 rays_A+RR  5.245 1.892 2.195 2.574 0.682 6.391
 rays_A+RR  5.487 2.38 2.836 3.443 1.063 2.714
@@ -78,14 +78,14 @@ rays_A+RR  5.97 4.002 4.954 6.781 2.779 0.7985
 #S screen     6.2280 7.637 0.4689 0
 #S screen     6.4762 8.213 0.2437 0
 #S screen     6.9249 9.411 0.01497 0
-#S cone       4.9866 1.802 20.8 0
-#S cone       5.2424 2.897 7.073 0
-#S cone       5.4820 4.275 2.808 0
-#S cone       5.6944 5.545 1.523 0
-#S cone       5.9669 6.553 0.8039 0
-#S cone       6.2280 7.209 0.4473 0
-#S cone       6.4763 7.816 0.2285 0
-#S cone       6.9249 9.078 0.01227 0
+#S cone       4.9863 1.777 21.26 0
+#S cone       5.2421 2.837 7.337 0
+#S cone       5.4817 4.197 2.933 0
+#S cone       5.6942 5.442 1.59 0
+#S cone       5.9668 6.447 0.8371 0
+#S cone       6.2279 7.127 0.471 0
+#S cone       6.4762 7.667 0.2404 0
+#S cone       6.9249 8.999 0.01276 0
 #S rays_A+RR  4.9897 1.85 18.1 0
 #S rays_A+RR  5.2455 2.88 6.391 0
 #S rays_A+RR  5.4865 4.073 2.714 0

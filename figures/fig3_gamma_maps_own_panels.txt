@@ -3,19 +3,19 @@
 84 'M1': /gscratch/astro/mcquinn/radhydro/runs/reion512late_m1/run/step_0084 z = 5.6953 xHII_V = 0.8225 median = 8.1735e-14
 84 'OTVET': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_ga01/run/step_0084 z = 5.6949 xHII_V = 0.8177 median = 6.7784e-14
 84 'screen': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_screen/run/step_0084 z = 5.6943 xHII_V = 0.8267 median = 6.2271e-14
-84 'cone': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_cone/run/step_0084 z = 5.6944 xHII_V = 0.8136 median = 7.8109e-14
+84 'cone': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_conenb/run/step_0084 z = 5.6942 xHII_V = 0.8171 median = 8.0875e-14
 84 'rays\ncase A + RR': /gscratch/astro/mcquinn/radhydro/runs/reion512late_caseA/run/step_0084 z = 5.6992 xHII_V = 0.8109 median = 8.7644e-14
 93: reference median Gamma of the ionised cells ('rays') = 1.6353e-13
 93 'rays': /gscratch/astro/mcquinn/radhydro/runs/reion512late/run/step_0093 z = 5.2431 xHII_V = 0.9626 median = 1.6353e-13
 93 'M1': /gscratch/astro/mcquinn/radhydro/runs/reion512late_m1/run/step_0093 z = 5.2432 xHII_V = 0.9838 median = 1.6577e-13
 93 'OTVET': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_ga01/run/step_0093 z = 5.2427 xHII_V = 0.9788 median = 1.4048e-13
 93 'screen': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_screen/run/step_0093 z = 5.2422 xHII_V = 0.9847 median = 1.4396e-13
-93 'cone': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_cone/run/step_0093 z = 5.2424 xHII_V = 0.9727 median = 1.5997e-13
+93 'cone': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_conenb/run/step_0093 z = 5.2421 xHII_V = 0.9739 median = 1.6627e-13
 93 'rays\ncase A + RR': /gscratch/astro/mcquinn/radhydro/runs/reion512late_caseA/run/step_0093 z = 5.2455 xHII_V = 0.9665 median = 1.6838e-13
 99: reference median Gamma of the ionised cells ('rays') = 2.8733e-13
 99 'rays': /gscratch/astro/mcquinn/radhydro/runs/reion512late/run/step_0099 z = 4.9871 xHII_V = 0.9992 median = 2.8733e-13
 99 'M1': /gscratch/astro/mcquinn/radhydro/runs/reion512late_m1/run/step_0099 z = 4.9872 xHII_V = 1.0000 median = 3.1007e-13
 99 'OTVET': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_ga01/run/step_0099 z = 4.9870 xHII_V = 1.0000 median = 2.7430e-13
 99 'screen': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_screen/run/step_0099 z = 4.9864 xHII_V = 1.0000 median = 2.9950e-13
-99 'cone': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_cone/run/step_0099 z = 4.9866 xHII_V = 0.9998 median = 2.9624e-13
+99 'cone': /gscratch/astro/mcquinn/radhydro/runs/paper_view/reion512late_otvet_conenb/run/step_0099 z = 4.9863 xHII_V = 0.9998 median = 3.0540e-13
 99 'rays\ncase A + RR': /gscratch/astro/mcquinn/radhydro/runs/reion512late_caseA/run/step_0099 z = 4.9897 xHII_V = 0.9995 median = 2.9687e-13
