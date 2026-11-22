@@ -4,15 +4,15 @@
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.78\linewidth]{figures/fig_app_convergence.pdf}
+\includegraphics[width=0.72\linewidth]{figures/fig_app_convergence.pdf}
 \caption{Transfer function from the sources to the photon density for a uniform mean free path $\lambda$,
 with a source in every cell: M1 (left) and OTVET (right), $\lambda=L/4$ (top) and $\lambda=L$ (bottom).
 Black: the exact solution, equation~(\ref{eq:app_exact}). Dashed: the linear solution of each closure in
 the continuum, equations~(\ref{eq:app_m1}) and (\ref{eq:app_otvet}). Filled circles: our transport with the
-settings of the suite, at $32^3$ to $256^3$ cells (light to dark; to $128^3$ for $\lambda=L$). Bands: the
-linear solution with the numerical diffusion of the scheme, equation~(\ref{eq:app_glf}) (lower edge), and
-with the injection floor of equation~(\ref{eq:app_floor}) added (upper edge), for each resolution. Open
-symbols, $128^3$ only: sources injected before the transport (circles) and a second-order scheme (squares).}
+settings of the suite, at $32^3$ to $256^3$ cells (light to dark; to $128^3$ for $\lambda=L$). Thin curves:
+the linear solution of the discretized equations at each resolution, equation~(\ref{eq:app_disc}). Open
+symbols, $128^3$ only: sources injected before the transport (circles; dotted curve: its linear solution)
+and a second-order scheme (squares).}
 \label{fig:app_conv}
 \end{figure}
 
@@ -22,8 +22,8 @@ state with a source of random luminosity in every cell (30\% rms), and each subs
 travel, $\Delta t=\Delta x/\chat$, taken in four transport updates) ends with $N$ and $\mathbf F$ multiplied
 by $e^{-\Delta x/\lambda}$ in place of the chemistry. We measure
 $T(k)\equiv[P_N(k)/P_L(k)]^{1/2}$, normalized to unity as $k\to0$; with uniform opacity this is the
-$T_{\Gamma L}$ of Section~\ref{sec:conclusions}. Figure~\ref{fig:app_conv} compares it with four analytic
-results.
+$T_{\Gamma L}$ of Section~\ref{sec:conclusions}. Figure~\ref{fig:app_conv} compares it with the following
+analytic results.
 
 \emph{Exact.} Each source contributes $L_se^{-r/\lambda}/(4\pi r^2\chat)$ to $N$, whose Fourier
 transform gives
@@ -49,7 +49,8 @@ T_{\rm OTVET}(k)=\frac{1+2\pi^2k\lambda^2/(3L_{\rm O})}{1+k^2\lambda^2/3}.\label
 \end{equation}
 The extra term is $0.86\,(k\lambda)(\lambda/L)$: OTVET has too much structure once $\lambda$ approaches $L$.
 
-\emph{Numerical diffusion.} The first-order Lax--Friedrichs flux through a cell face is
+\emph{Numerical diffusion.} We first take time as continuous, which shows how the discretization acts.
+The first-order Lax--Friedrichs flux through a cell face is
 $\tfrac12(f_i+f_{i+1})-\tfrac12\chat\,(u_{i+1}-u_i)$, which adds a diffusion term
 $\tfrac12\chat\Delta x\nabla^2$ to both moment equations. In the linear solution $\mathbf k$ becomes
 $\mathbf s$ and the loss rate $\kappa$ becomes $q$, with
@@ -71,11 +72,33 @@ T_1=T_0+f\,(1-T_0),\label{eq:app_floor}
 exactly for any linear transport: the photon density keeps an unsmoothed copy of the source field with
 amplitude $f\simeq\Delta x/\lambda$, which exceeds $T_{\rm exact}$ for $k\Delta x>\pi/2$.
 
+\emph{The discretized equations.} The two results above motivate, but do not replace, the solution of the
+scheme as it is run. In cell units, one of the $n=4$ transport updates of a substep maps the mode
+$\mathbf u=(\delta N,\ \mathbf s\cdot\delta\mathbf F)$ to $\mathsf m\,\mathbf u+\mathbf b$, with Courant
+number $C=1/n$ and
+\begin{equation}
+\mathsf m=\begin{pmatrix}a&-iC\\-iC|\mathbf s|^2/3&a\end{pmatrix},\qquad
+a=1-C\sum_d(1-\cos k_d),\qquad
+\mathbf b=-iC\,w\,\bar N\delta_L\begin{pmatrix}0\\1\end{pmatrix},
+\end{equation}
+where $w\equiv s_is_j\,\delta\mathsf D_{ij}/\delta_L$ is zero for M1 and follows from the Fourier transform
+of the kernel of equation~(\ref{eqn:otvet}) for OTVET. A substep is therefore
+$\mathbf u\to\mathsf M\mathbf u+\mathsf G\mathbf b$ with $\mathsf M=\mathsf m^n$ and
+$\mathsf G=\sum_{j<n}\mathsf m^j$, followed by the injection and the absorption. With
+$\mathbf e_N=(1,0)$ and $\mathbf e_F=(0,1)$, its steady state at the chemistry call is
+\begin{equation}
+T_1=\mathbf e_N\cdot\left[\mathsf 1-(1-f)\,\mathsf M\right]^{-1}
+\left[f\,\mathbf e_N-iC\,(1-f)\,w\,\mathsf G\,\mathbf e_F\right],\label{eq:app_disc}
+\end{equation}
+and $T_0=\mathbf e_N\cdot[\mathsf 1-(1-f)\mathsf M]^{-1}[f\,\mathsf M\mathbf e_N-iC\,w\,\mathsf G\,\mathbf e_F]$
+with injection first. These satisfy equation~(\ref{eq:app_floor}) identically and tend to
+equation~(\ref{eq:app_glf}) as the substep shrinks.
+
 \emph{Results.} (i) At $k\lambda\lesssim2$ M1 is within 2--13\% and OTVET within 6\% of its continuum
-solution at every resolution: the transport solves the closure's equations. (ii) At higher $k$ the code
-lies inside the band between equation~(\ref{eq:app_glf}) and the same with the floor of
-equation~(\ref{eq:app_floor}) in every bin for M1 (to 1\%), and for OTVET except in its lowest bins, where it
-scatters by up to 20\% about equation~(\ref{eq:app_otvet}). (iii) M1 is not converged at $k\lambda\gg1$. At
+solution at every resolution: the transport solves the closure's equations. (ii) The code follows equation~(\ref{eq:app_disc}) to within 3\% in every bin, for both closures, both
+injection orders and every resolution: its departures from the continuum closure are those of the
+discretization, which equations~(\ref{eq:app_glf}) and (\ref{eq:app_floor}) describe to 30--40\% at
+$k\Delta x<1$. (iii) M1 is not converged at $k\lambda\gg1$. At
 $k\lambda=10$ and $\lambda=L/4$ it is 4.9, 3.7, 2.6 and 1.8 times equation~(\ref{eq:app_m1}) at $32^3$,
 $64^3$, $128^3$ and $256^3$ (OTVET: 1.8, 1.6, 1.4, 1.2 times equation~\ref{eq:app_otvet}), and it crosses
 above the exact solution at $k\Delta x\approx1.3$ at every resolution and both $\lambda$. Its agreement with
@@ -89,9 +112,9 @@ deficit at $k\gtrsim15\hmpc$ in Fig.~\ref{fig:pkg} is therefore numerical, and a
 less small-scale power than ours.
 
 \emph{Other tests.} The moment solver also passes the following.
-(1) The transport conserves photons and energy to rounding and keeps $|\mathbf F|\le N$; a pulse stays
+(1) The transport conserves photons to rounding and keeps $|\mathbf F|\le N$; a pulse stays
 inside its light cone; an M1 plane beam moves one cell per substep without sideways spread.
-(2) The OTVET tensor of one source has rank one and unit trace, includes the periodic images, and its direct and FFT sums agree
+(2) The OTVET tensor of one source has rank one and unit trace, and its direct and FFT sums agree
 to $3\times10^{-7}$.
 (3) Results are identical for 1, 2 and 4 threads and across a restart, and in every run the photons
 emitted, absorbed, redshifted and in flight balance to six digits.

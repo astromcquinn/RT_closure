@@ -8,9 +8,10 @@ NewRadHydroCode, branch moment-order2), writes figures/fig_app_convergence.{pdf,
 
 Columns: M1, OTVET. Rows: lambda = L/4, lambda = L. Per resolution: the code
 with the default settings (first order, inject after the transport), and the
-band between the linear solution with the scheme's numerical diffusion and
-the same with the injection floor. --variants adds, at the reference
-resolution of each row, injection before the transport and second order.
+exact linear solution of the discrete scheme (data/convergence/Tlin_N*.txt,
+scripts/transfer_exact_linear.py). --variants adds, at the reference
+resolution of each row, injection before the transport (with its exact
+linear solution) and second order.
 """
 import os
 import re
@@ -59,7 +60,11 @@ for ir, frac in enumerate((4, 1)):
             lam = N / frac
             f = 1 - np.exp(-1 / lam)
             kl = d["k*lam"]
-            p.fill_between(kl, d[glf], d[glf] + f * (1 - d[glf]), color=COL[N], alpha=0.22, lw=0)
+            t = np.loadtxt(os.path.join(here, "..", "data", "convergence", "Tlin_N%d_l%d.txt" % (N, frac)))
+            jc = 1 if m == "m1" else 3  # columns: k lam, m1 inj1, m1 inj0, otvet inj1, otvet inj0
+            p.loglog(t[:, 0], t[:, jc], color=COL[N], lw=1.1, zorder=2.5)
+            if variants and N == NREF:
+                p.loglog(t[:, 0], t[:, jc + 1], color=COL[N], lw=1.1, ls=(0, (1, 1.2)), zorder=2.5)
             p.loglog(kl, d[m + "_inj1_o1"], ls="none", marker="o", ms=4.2, color=COL[N], mec="white", mew=0.5, zorder=3)
             if variants and N == NREF:
                 for key, mk in ((m + "_inj0_o1", "o"), (m + "_inj1_o2", "s")):
@@ -86,7 +91,7 @@ h = [Line2D([], [], color="k", lw=1.8, label=r"$(k\lambda)^{-1}\arctan(k\lambda)
      Line2D([], [], color="0.4", ls="--", lw=1.4, label="closure's linear theory")]
 h += [Line2D([], [], ls="none", marker="o", ms=4.5, color=COL[N], label=r"code, $%d^3$" % N) for N in NS]
 ax[0, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
-h = [Patch(color=COL[128], alpha=0.3, lw=0, label="closure + numerical\ndiffusion (to + floor)")]
+h = [Line2D([], [], color=COL[NREF], lw=1.1, label="linear theory of the\ndiscretized equations")]
 if variants:
     h += [Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=COL[NREF], label=r"inject before, $%d^3$" % NREF),
           Line2D([], [], ls="none", marker="s", ms=4.6, mfc="none", mec=COL[NREF], label=r"$2^{\rm nd}$ order solver, $%d^3$" % NREF)]
