@@ -94,36 +94,81 @@ normalised so that $T\to1$ as $k\to0$, and the cross-correlation coefficient $r(
 sources. With uniform opacity $\Gamma\propto N$, so $T$ is the transfer function of the photoionization
 rate. This is the test of \citet{gnedin25}.
 
+Throughout, $\kappa=1/\lambda$, the source field is $S(\mathbf x)=\bar S\,[1+\delta_L(\mathbf x)]$, and
+$T=\delta_N(\mathbf k)/\delta_L(\mathbf k)$ with $\delta_N=N/\bar N-1$ and $\bar N=\bar S/(\chat\kappa)$.
+
 \begin{enumerate}
-\item \textbf{Exact.} The steady-state solution of the transfer equation is
+\item \textbf{Exact.} In steady state each source contributes $L_s\,e^{-r/\lambda}/(4\pi r^2\chat)$ to $N$,
+so $N$ is the source field convolved with that kernel. Its Fourier transform is
 \begin{equation}
-T_{\rm exact}(k)=\frac{\arctan(k\lambda)}{k\lambda}.
+\frac{N(\mathbf k)}{S(\mathbf k)}=\frac{1}{\chat}\int_0^\infty\!dr\,e^{-r/\lambda}\,\frac{\sin kr}{kr}
+=\frac{\arctan(k\lambda)}{\chat k},
+\qquad\hbox{hence}\qquad
+T_{\rm exact}(k)=\frac{\arctan(k\lambda)}{k\lambda}\label{eq:exact}
 \end{equation}
-\item \textbf{The closure, in the continuum.} Linearising about the isotropic state ($\mathsf D=\mathsf I/3$),
-equations (\ref{eq:N})--(\ref{eq:F}) give for M1
+\citep[][eq.~2]{gnedin25}, with $T\to1-k^2\lambda^2/3$ for $k\lambda\ll1$ and $T\to\pi/(2k\lambda)$ for
+$k\lambda\gg1$.
+\item \textbf{The closure, in the continuum.} In steady state and in Fourier space equations
+(\ref{eq:N})--(\ref{eq:F}) are
 \begin{equation}
-T_{\rm M1}(k)=\frac{1}{1+k^2\lambda^2/3},
+i\mathbf k\cdot\mathbf F=S/\chat-\kappa N,\qquad i k_j\,(\mathsf D_{ij}N)=-\kappa F_i .\label{eq:steady}
 \end{equation}
-which falls as $3/(k\lambda)^2$ where the exact solution falls as $\pi/(2k\lambda)$: M1 has too little
-small-scale structure once sources overlap. For OTVET the tensor also responds to the sources, which adds
-\citep[eqs.~5.14--5.15 without the opacity response]{wu21}
+For M1 with many overlapping sources the state is nearly isotropic, $\mathsf D=\mathsf I/3$ to first
+order in the perturbation, so $\mathbf F=-i\mathbf kN/3\kappa$ and
+\begin{equation}
+T_{\rm M1}(k)=\frac{1}{1+k^2\lambda^2/3}.\label{eq:m1lin}
+\end{equation}
+This is the diffusion limit. It agrees with equation (\ref{eq:exact}) to order $k^2\lambda^2$ and falls as
+$3/(k\lambda)^2$ where the exact solution falls as $\pi/(2k\lambda)$: M1 has too little small-scale
+structure once sources overlap.
+
+For OTVET the tensor is not a function of the local state but of the source field,
+$\mathsf D_{ij}(\mathbf x)=\sum_sL_s\hat n_i\hat n_j/r_s^2\,\big/\sum_sL_s/r_s^2$, and its perturbation
+$\delta\mathsf D$ enters equation (\ref{eq:steady}) at first order through
+$ik_j\,\delta\mathsf D_{ij}\bar N$. With $L_{\rm O}\equiv\int d^3r/r^2$ over the minimum-image cube
+($=7.66\,L$),
+\begin{equation}
+\delta\mathsf D_{ij}(\mathbf k)=\frac{\delta_L(\mathbf k)}{L_{\rm O}}\int\!d^3r\,
+\frac{\hat n_i\hat n_j-\delta_{ij}/3}{r^2}\,e^{-i\mathbf k\cdot\mathbf r}
+=-\frac{\pi^2}{kL_{\rm O}}\left(\hat k_i\hat k_j-\frac{\delta_{ij}}{3}\right)\delta_L(\mathbf k),
+\end{equation}
+using $\int_0^\infty j_2(x)\,dx=\pi/4$ (the integral is taken to infinity, which holds for $kL\gg1$). Then
+$k_ik_j\,\delta\mathsf D_{ij}=-(2\pi^2k/3L_{\rm O})\,\delta_L$ and
 \begin{equation}
 T_{\rm OTVET}(k)=\frac{1+2\pi^2k\lambda^2/(3L_{\rm O})}{1+k^2\lambda^2/3},\qquad L_{\rm O}=7.66\,L
+\label{eq:otvetlin}
 \end{equation}
-for the minimum-image cube. The extra term grows as $\lambda/L$: OTVET has too much structure when the mean
-free path approaches the box size.
-\item \textbf{The closure with the scheme's numerical diffusion.} Per unit $\chat/\dx$ the first-order GLF
-flux adds $\tfrac12\dx\nabla^2$ to both moment equations. In the linear solution this replaces $\kappa=1/\lambda$ in the loss terms by
+\citep[eqs.~5.14--5.15 without the opacity response]{wu21}. The extra term is $0.86\,(k\lambda)(\lambda/L)$:
+OTVET has too much structure when the mean free path approaches the box size, and for $k\lambda\gg1$ it
+tends to $2\pi^2/(kL_{\rm O})$, which does not depend on $\lambda$.
+\item \textbf{The closure with the scheme's numerical diffusion.} The first-order GLF flux through the
+face between cells $i$ and $i+1$ is $\tfrac12(f_i+f_{i+1})-\tfrac12\chat\,(u_{i+1}-u_i)$ for a conserved
+variable $u$ with physical flux $f$. Its difference across a cell is the centred difference of $f$ minus
+$\tfrac12\chat\dx$ times the second difference of $u$: both moment equations acquire a diffusion term
+$\tfrac12\chat\dx\nabla^2$. In equation (\ref{eq:steady}) this replaces $\mathbf k$ by the centred-difference
+symbol $\mathbf s$ and $\kappa$ by $q$,
 \begin{equation}
+s_d=\frac{\sin k_d\dx}{\dx},\qquad
 q=\kappa+\frac{1}{\dx}\sum_d(1-\cos k_d\dx)\;\simeq\;\kappa+\tfrac12k^2\dx,
-\qquad
-T^{\rm GLF}_{\rm M1}(k)=\frac{\kappa}{q+|\mathbf s|^2/3q},\quad s_d=\frac{\sin k_d\dx}{\dx},
+\end{equation}
+while the mean $\bar N=\bar S/(\chat\kappa)$ is unchanged, which leaves $\kappa$ in the numerator. The same
+algebra then gives (for OTVET with $s_is_j\,\delta\mathsf D_{ij}\simeq-(2\pi^2|\mathbf s|^2/3kL_{\rm O})\,\delta_L$)
+\begin{equation}
+T^{\rm GLF}_{\rm M1}(\mathbf k)=\frac{\kappa}{q+|\mathbf s|^2/3q},\qquad
+T^{\rm GLF}_{\rm OTVET}(\mathbf k)=\frac{\kappa+2\pi^2|\mathbf s|^2/(3qkL_{\rm O})}{q+|\mathbf s|^2/3q},
 \label{eq:glf}
 \end{equation}
-and likewise for OTVET with its tensor term. For $k\gtrsim(2/\lambda\dx)^{1/2}$ the numerical term
-dominates the flux equation and $T$ flattens near $1.5\,\dx/\lambda$ instead of continuing as
-$3/(k\lambda)^2$. For the second-order scheme, where its limiter is inactive, the diffusion is fourth order:
-$q=\kappa+\sum_d(2-2\cos k_d\dx)^2/(8\dx)$ and $s_d=\sin k_d\dx\,(3-\cos k_d\dx)/(2\dx)$.
+which reduce to equations (\ref{eq:m1lin}) and (\ref{eq:otvetlin}) for $\dx\to0$. They are evaluated on
+the grid's modes and averaged in the same $k$ bins as the measurement. For
+$k\gtrsim(2/\lambda\dx)^{1/2}$ the numerical term dominates the flux equation, $|\mathbf s|^2/3q\to2/(3\dx)$,
+and $T^{\rm GLF}_{\rm M1}$ flattens near $1.5\,\dx/\lambda$ instead of continuing as $3/(k\lambda)^2$.
+
+For the second-order scheme, where its limiter is inactive (central slopes), the dissipation is a fourth
+difference and the flux difference is a higher-order one. Equation (\ref{eq:glf}) holds with
+\begin{equation}
+q=\kappa+\frac{1}{8\dx}\sum_d(2-2\cos k_d\dx)^2\;\simeq\;\kappa+\tfrac18\dx^3\sum_dk_d^4,\qquad
+s_d=\frac{\sin k_d\dx\,(3-\cos k_d\dx)}{2\dx}.\label{eq:muscl}
+\end{equation}
 \end{enumerate}
 
 \noindent One more term is needed for the default injection order. The photons a source emitted during the
@@ -132,7 +177,13 @@ component to $N$, the \emph{injection floor},
 \begin{equation}
 T_1=T_0+f\,(1-T_0),\qquad f=1-e^{-\dx/\lambda},\label{eq:floor}
 \end{equation}
-where $T_0$ is the transfer function with injection before the transport. The model excludes the
+where $T_0$ is the transfer function with injection before the transport. It follows from the steady
+state of the substep: a substep injects $\Delta S$, and the absorption removes the fraction $f$ of what is in
+the cell, so the transported field before injection is $N_0=\bar N_0\,(1+T_0\delta_L)$ with
+$f\,(\bar N_0+\Delta\bar S)=\Delta\bar S$, and the field the rate sees is
+$N_0+\Delta S=\bar N_0\,[1+T_0\delta_L]+\Delta\bar S\,[1+\delta_L]$, whose contrast is
+$[(1-f)\,T_0+f]\,\delta_L$. In Figure~\ref{fig:transfer} the dotted curves are equation (\ref{eq:floor})
+with $T_0$ from equation (\ref{eq:glf}) or (\ref{eq:muscl}). The model excludes the
 nonlinear closure, the slope limiter and the time discretisation.
 
 \subsection{Result}
@@ -261,8 +312,18 @@ order, and the $L_1$ error of a smooth advected wave falls by 3.6 per doubling o
 \paragraph{Photon budget.} In every run the photons injected, absorbed, lost to redshift and in flight
 balance to six digits.
 
-\paragraph{I-front in a uniform medium} ($32^3$, $\chat=0.1c$, one source). Error of the front radius
-against the finite-$c$ solution:
+\paragraph{I-front in a uniform medium} ($32^3$, $\chat=0.1c$, one source). Photons emitted at $t'$ reach
+a front of radius $R$ at $t'+R/\chat$, so the front is where the infinite-speed front $R_\infty$ was at the
+retarded time,
+\begin{equation}
+R(t)=R_\infty\!\left(t-R(t)/\chat\right),\label{eq:ifront}
+\end{equation}
+which without recombinations ($R_\infty^3=3Qt$, $Q=\dot N_\gamma/4\pi n_{\rm H}$) is the solution of
+Shapiro et al.\ (2006), $R^3/3+(Q/\chat)R=Qt$, with $R\to\chat t$ early and $R\to R_\infty$ late.
+$R_\infty(t)$ is taken from the ray run at the full speed of light, corrected with the same relation, and
+$\chat$ is the speed the code realises (one cell per substep); there is no free parameter. The radius is
+$R=(3V_{\rm ion}/4\pi)^{1/3}$ with $V_{\rm ion}=\sum x_{\rm HII}$ over the cells. Error of the front radius
+against equation (\ref{eq:ifront}):
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
