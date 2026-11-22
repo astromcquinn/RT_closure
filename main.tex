@@ -231,7 +231,7 @@ cones' light is further attenuated by $e^{-r/\lambda_x}$, with
 $\lambda_x$ set so that the cones' light matches the photons the solution holds in the ionized cells.\footnote{Each hydro step, $\lambda_x$ is chosen so that the
 cones' light in the ionized cells equals the photons the solution holds
 there; when it does not exceed them, as during most of overlap, there is
-no cutoff.}  The receivers' cone light is interpolated to every cell and added to the optically thin light from within 8 cells, and the sum gives the cell's tensor.
+no cutoff.}  The receivers' cone light is interpolated to every cell (with trilinear weighting) and added to the optically thin light from within 8 cells, and the sum gives the cell's tensor.
 \end{itemize}
 The wall time of every moment run is 9--10 hours on 192 cores (the cone's no longer than OTVET's), and the ray runs take 21--22 hours. M1 needs no separate tensor calculation. In test runs at $256^3$ on 192 cores, computing the Eddington tensor takes 0.7\,s per hydro step for OTVET, 1.2\,s for the screen and 2.1\,s for the cone. \textcolor{red}{[$512^3$ times: from the \texttt{OTVET :} lines of each late-end run's \texttt{ray.log} on klone.]}
 
