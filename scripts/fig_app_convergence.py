@@ -82,14 +82,14 @@ for ir, frac in enumerate((4, 1)):
             p.set_ylabel(r"$T(k)$", fontsize=10)
         p.set_xlabel(r"$k\lambda$", fontsize=10)
 
-h = [Line2D([], [], color="k", lw=1.8, label="exact"),
-     Line2D([], [], color="0.4", ls="--", lw=1.4, label="closure, continuum")]
+h = [Line2D([], [], color="k", lw=1.8, label=r"$(k\lambda)^{-1}\arctan(k\lambda)$"),
+     Line2D([], [], color="0.4", ls="--", lw=1.4, label="closure's linear theory")]
 h += [Line2D([], [], ls="none", marker="o", ms=4.5, color=COL[N], label=r"code, $%d^3$" % N) for N in NS]
 ax[0, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 h = [Patch(color=COL[128], alpha=0.3, lw=0, label="closure + numerical\ndiffusion (to + floor)")]
 if variants:
     h += [Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=COL[NREF], label=r"inject before, $%d^3$" % NREF),
-          Line2D([], [], ls="none", marker="s", ms=4.6, mfc="none", mec=COL[NREF], label=r"second order, $%d^3$" % NREF)]
+          Line2D([], [], ls="none", marker="s", ms=4.6, mfc="none", mec=COL[NREF], label=r"$2^{\rm nd}$ order solver, $%d^3$" % NREF)]
 ax[1, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 fig.tight_layout(h_pad=0.6, w_pad=0.4)
 out = os.path.join(here, "..", "figures", "fig_app_convergence")
