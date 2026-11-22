@@ -171,20 +171,76 @@ s_d=\frac{\sin k_d\dx\,(3-\cos k_d\dx)}{2\dx}.\label{eq:muscl}
 \end{equation}
 \end{enumerate}
 
-\noindent One more term is needed for the default injection order. The photons a source emitted during the
+\subsection{The injection floor}\label{sec:floor}
+
+One more term is needed for the default injection order: the photons a source emitted during the
 current substep sit in its own cell when the photoionization rate is evaluated. This adds a white
-component to $N$, the \emph{injection floor},
+component to $N$, which we call the \emph{injection floor}.
+
+\paragraph{Derivation.} Let $\mathcal A$ be the transport of one substep (its $n_{\rm sub}$ subcycles), a
+linear operator in the linear regime with Fourier symbol $A(\mathbf k)$; $A(0)=1$ because it conserves photons.
+A substep of length $\Delta t=\dx/\chat$ injects $\Delta S=S\,\Delta t$ and ends with the absorption, which
+multiplies $N$ and $\mathbf F$ by $1-f$,
 \begin{equation}
-T_1=T_0+f\,(1-T_0),\qquad f=1-e^{-\dx/\lambda},\label{eq:floor}
+f=1-e^{-\chat\Delta t/\lambda}=1-e^{-\dx/\lambda}.
 \end{equation}
-where $T_0$ is the transfer function with injection before the transport. It follows from the steady
-state of the substep: a substep injects $\Delta S$, and the absorption removes the fraction $f$ of what is in
-the cell, so the transported field before injection is $N_0=\bar N_0\,(1+T_0\delta_L)$ with
-$f\,(\bar N_0+\Delta\bar S)=\Delta\bar S$, and the field the rate sees is
-$N_0+\Delta S=\bar N_0\,[1+T_0\delta_L]+\Delta\bar S\,[1+\delta_L]$, whose contrast is
-$[(1-f)\,T_0+f]\,\delta_L$. In Figure~\ref{fig:transfer} the dotted curves are equation (\ref{eq:floor})
-with $T_0$ from equation (\ref{eq:glf}) or (\ref{eq:muscl}). The model excludes the
-nonlinear closure, the slope limiter and the time discretisation.
+The two orders of operation are
+\begin{align}
+\hbox{inject after (default):}\quad & N\;\to\;\mathcal AN\;\to\;\mathcal AN+\Delta S\equiv N_1\;\to\;(1-f)\,N_1,\\
+\hbox{inject before:}\quad & N\;\to\;N+\Delta S\;\to\;\mathcal A\,(N+\Delta S)\equiv N_0\;\to\;(1-f)\,N_0,
+\end{align}
+where $N_1$ and $N_0$ are the fields the chemistry sees. In steady state
+$N_1=(1-f)\,\mathcal AN_1+\Delta S$ and $N_0=\mathcal A\,[(1-f)N_0+\Delta S]$, so mode by mode
+\begin{equation}
+N_1(\mathbf k)=\frac{\Delta S(\mathbf k)}{1-(1-f)A},\qquad N_0(\mathbf k)=A\,N_1(\mathbf k).\label{eq:n1n0}
+\end{equation}
+Both have the same mean, $\bar N=\Delta\bar S/f$ (which is $\bar S\lambda/\chat$ for $\dx\ll\lambda$), so the
+transfer functions are
+\begin{equation}
+T_1=\frac{f}{1-(1-f)A},\qquad T_0=A\,T_1=\frac{fA}{1-(1-f)A},\label{eq:t1t0}
+\end{equation}
+and eliminating $A$ gives
+\begin{equation}
+T_1=(1-f)\,T_0+f=T_0+f\,(1-T_0).\label{eq:floor}
+\end{equation}
+Equation (\ref{eq:floor}) is exact for any linear transport operator, of either order: it uses only that
+the two variants apply the same $\mathcal A$ and the same absorption. It can fail only through the nonlinear
+parts of the solver (the M1 closure, the limiter of the second-order scheme, the realizability clamp). In the
+code it holds to 1--4\,\% (below).
+
+\paragraph{What it means.} The field the chemistry sees with the default order is the smoothed field of
+the other order with weight $1-f$, plus the unsmoothed source field with weight $f$.
+\begin{itemize}
+\item \emph{It is a floor.} Where the transport has erased the structure ($A\to0$, $T_0\to0$), $T_1\to f$:
+the photon density keeps a copy of the source field with amplitude $f\simeq\dx/\lambda$, at every $k$ up to the
+Nyquist frequency. In the power spectrum this is a white term $f^2P_L$.
+\item \emph{Injection before the transport smooths instead.} By equation (\ref{eq:t1t0}), $T_0=A\,T_1$: that
+variant is the default one passed once more through a substep of transport, which spreads each source over
+the cells its photons reach in the $n_{\rm sub}$ subcycles. The diffusion model of equation (\ref{eq:glf})
+describes the semi-discrete steady state and contains no such factor, and the measured $T_0$ lies below it.
+\item \emph{Where it matters.} The exact solution falls as $\pi/(2k\lambda)$, so the floor exceeds it for
+\begin{equation}
+k\dx>\frac{\pi}{2},
+\end{equation}
+independent of $\lambda$ and of the resolution, and is twice the exact $T$ at the Nyquist frequency
+($k\dx=\pi$). The continuum M1 solution falls as $3/(k\lambda)^2$, so the floor exceeds it already for
+$k>(3/\lambda\dx)^{1/2}$, close to the wavenumber $(2/\lambda\dx)^{1/2}$ at which the numerical diffusion takes
+over. The two numerical terms therefore enter together and are of the same size: the diffusion plateau is
+$\simeq1.5\,\dx/\lambda$ and the floor $\simeq\dx/\lambda$. Both are proportional to $\dx$ at fixed $k$;
+the second-order scheme removes only the first.
+\item \emph{It depends on the substep, not on the flux.} $f$ is the optical depth of the light travel between
+two calls of the chemistry, $\chat\Delta t/\lambda$. A less diffusive flux does not change it; only a
+shorter interval between chemistry calls, or a different treatment of the source cell, would.
+\item \emph{In a reionization run} $f$ is not uniform: it is $1-e^{-\tau}$ with $\tau$ the optical depth of the
+cell. In an optically thick source cell $f\to1$ and the rate there is set by the cell's own emission of
+the current substep. This is what ionizes dense source cells with the default order, and what is missing
+with injection before the transport (Sections~\ref{sec:other} and \ref{sec:inject}).
+\end{itemize}
+
+\paragraph{In the figure.} The dotted curves of Figure~\ref{fig:transfer} are equation (\ref{eq:floor})
+with $T_0$ replaced by the diffusion model, equation (\ref{eq:glf}) or (\ref{eq:muscl}). Because the
+measured $T_0$ is lower than that model, the dotted curves overestimate $T_1$. The model excludes the
+nonlinear closure, the slope limiter and the time discretisation of the transport itself.
 
 \subsection{Result}
 
