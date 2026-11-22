@@ -250,39 +250,42 @@ equation (\ref{eq:glf}) to the continuum solution for modes along the diagonal (
 
 \begin{table}
 \centering
-\caption{$T/T_{\rm continuum}$ of the closure at fixed $k\lambda$ in the uniform test, every cell a source.
-First order at $\lambda=L/4$ from Fig.~\ref{fig:uniconv}; the comparison of orders from
-\texttt{moment\_transfer\_order2.txt}.}
+\caption{$T/T_{\rm continuum}$ of the closure at fixed $k\lambda$ in the uniform test, every cell a source,
+interpolated in $\log k$ between the bins of \texttt{data/convergence/T\_N*.txt}. At $k\lambda=10$ and
+$\lambda=L/4$, $k\dx=1.25$, 0.63, 0.31, 0.16 from $32^3$ to $256^3$.}
 \label{tab:uniconv}
 \begin{tabular}{llcccc}
 \toprule
 Case & $k\lambda$ & $32^3$ & $64^3$ & $128^3$ & $256^3$\\
 \midrule
-M1, order 1, $\lambda=L/4$ & 10 & 5.1 & 3.5 & 2.4 & 1.8\\
-M1, order 1, $\lambda=L/4$ & 20 & 17 & 9.6 & 7.7 & 4.6\\
-OTVET, order 1, $\lambda=L/4$ & 10 & 1.8 & 1.6 & 1.4 & 1.2\\
-OTVET, order 1, $\lambda=L/4$ & 20 & 3.1 & 2.2 & 2.0 & 1.6\\
+\multicolumn{6}{l}{$\lambda=L/4$}\\
+M1, order 1 & 10 & 4.9 & 3.7 & 2.6 & 1.8\\
+M1, order 2 & 10 & 4.4 & 2.6 & 1.8 & 1.4\\
+M1, order 1 & 20 & 16 & 9.9 & 6.9 & 4.4\\
+M1, order 2 & 20 & 17 & 8.4 & 4.4 & 2.7\\
+M1, order 1, inject before & 10 & 1.09 & 1.72 & 1.60 & 1.34\\
+M1, order 2, inject before & 10 & 0.56 & 0.63 & 0.79 & 0.89\\
+OTVET, order 1 & 10 & 1.81 & 1.62 & 1.41 & 1.22\\
+OTVET, order 2 & 10 & 1.85 & 1.43 & 1.22 & 1.11\\
+OTVET, order 1 & 20 & 3.0 & 2.2 & 1.9 & 1.6\\
 \midrule
-M1, order 2, $\lambda=L/4$ & 10 & \pending{} & 2.7 & 2.0 & \pending{}\\
-M1, order 2, $\lambda=L/4$ & 20 & \pending{} & 9.6 & 4.4 & \pending{}\\
-M1, order 1, inject before, $\lambda=L/4$ & 10 & -- & 1.74 & 1.71 & --\\
-M1, order 2, inject before, $\lambda=L/4$ & 10 & \pending{} & 0.62 & 0.76 & \pending{}\\
-M1, order 1, $\lambda=L$ & 25 & -- & 6.3 & 3.7 & --\\
-M1, order 2, $\lambda=L$ & 25 & \pending{} & 3.6 & 2.2 & \pending{}\\
-OTVET, order 2, $\lambda=L/4$ & 10 & \pending{} & 1.44 & 1.25 & \pending{}\\
+\multicolumn{6}{l}{$\lambda=L$}\\
+M1, order 1 & 25 & 9.9 & 6.3 & 3.8 & \pending{}\\
+M1, order 2 & 25 & 6.6 & 3.6 & 2.3 & \pending{}\\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{itemize}
 \item \textbf{M1 is not converged at any $k>1/\lambda$ with the default settings.} At fixed $k\lambda$ its $T$ falls
-toward the continuum solution by a factor 1.3--1.8 per doubling of the resolution, about first order in
-$\dx$, as both numerical terms scale (Table~\ref{tab:uniconv}).
-\item The second-order scheme is a factor 1.3--1.7 closer to the continuum at each resolution and converges
-at about the same rate, as expected if the floor ($\propto\dx$) is what is left. With injection before the
-transport it approaches the continuum from below.
+toward the continuum solution by a factor 1.35--1.65 per doubling of the resolution, somewhat slower than first order in
+$\dx$, the scaling of both numerical terms (Table~\ref{tab:uniconv}).
+\item The second-order scheme is a factor 1.2--1.7 closer to the continuum from $64^3$ up and converges
+a little faster (1.3--2.0 per doubling). At $32^3$ and $\lambda=L/4$ it gains nothing: there $k\lambda\ge10$ is
+$k\dx\ge1.25$. With injection before the
+transport it approaches the continuum from below, 0.56, 0.63, 0.79, 0.89 from $32^3$ to $256^3$ at $k\lambda=10$.
 \item OTVET is converged at $\lambda=L$ and converges like M1, with smaller amplitude, at $\lambda=L/4$.
-\item The $32^3$ and $256^3$ points of the second-order scheme are queued. \pending{job 43451395}
+\item The $256^3$ points at $\lambda=L$ are running. \pending{job 43451395}
 \end{itemize}
 
 \subsection{Relation to Gnedin (2025) and to the suite}
@@ -541,7 +544,7 @@ events; the $256^3$ $f=15$ and $f=120$ runs took 2.5\,h and 7.5\,h.
 \begin{itemize}
 \item Uniform test: first order at $32^3$--$256^3$ ($\lambda=L/4$) and $32^3$--$128^3$ ($\lambda=L$), plus
 $\lambda=L/8$ and $2.5L$ with few and many sources; both orders and both injection orders at $64^3$ and $128^3$.
-\pending{second order at $32^3$ and $256^3$}
+The second order at $32^3$ (both $\lambda$) and $256^3$ ($\lambda=L/4$) is done. \pending{$256^3$, $\lambda=L$}
 \item Reionization runs finished: rays, M1 at $128^3$, $256^3$, $512^3$; OTVET at $128^3$, $256^3$, $512^3$; M1 with injection before the transport at $128^3$
 and $256^3$; the ray budgets; M1 second order at $128^3$.
 \pending{M1 second order $256^3$; OTVET second order $128^3$, $256^3$}
