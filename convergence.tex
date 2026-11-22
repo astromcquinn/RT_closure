@@ -1,0 +1,509 @@
+% Tests and convergence of the moment radiative transfer (M1, OTVET) and of the rays.
+% A working document beside main.tex, not part of the paper. Figures: figures/convergence/,
+% tables: data/convergence/, lead figure: scripts/fig_transfer_diffusion.py.
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[authoryear,round,semicolon]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\providecommand{\mnras}{MNRAS}\providecommand{\apj}{ApJ}\providecommand{\apjs}{ApJS}\providecommand{\aj}{AJ}
+\providecommand{\apjl}{ApJL}\providecommand{\aap}{A\&A}\providecommand{\jcap}{JCAP}
+\providecommand{\pasp}{PASP}\providecommand{\araa}{ARA\&A}\providecommand{\prd}{Phys.~Rev.~D}
+\providecommand{\nat}{Nature}\providecommand{\physrep}{Phys.~Rep.}\providecommand{\na}{New Astron.}
+\newcommand{\chat}{\hat{c}}
+\newcommand{\hmpc}{\,h\,\mathrm{Mpc}^{-1}}
+\newcommand{\mpch}{\,h^{-1}\,\mathrm{Mpc}}
+\newcommand{\xv}{x_{\rm V}}
+\newcommand{\dx}{\Delta x}
+\newcommand{\pending}[1]{\textcolor{red}{[pending: #1]}}
+
+\begin{document}
+
+\title{Tests and convergence of the moment radiative transfer}
+\author{Working notes for the RT-closure paper}
+\date{Draft of 2026-11-21}
+\maketitle
+
+\begin{abstract}
+\noindent This document collects the tests of the M1 and OTVET solvers of the code and of the ray tracing they are
+compared with. The central test is the transfer function between sources and photon density in a medium
+of uniform mean free path, which has an exact solution and a linear solution for each closure, and for
+which the numerical diffusion of the transport scheme can be modelled. Three results matter for the
+paper. (i) Both solvers reproduce the linear solution of their closure where it is resolved. (ii) M1's
+small-scale response is set by two numerical terms, the diffusion of the first-order flux and the
+photons a source injects into its own cell; it converges slowly, about first order in the cell size. (iii) In
+the reionization runs M1's excess of photoionization-rate power over the rays at small scales falls
+with resolution as that predicts (a ratio of 3.1, 1.4 and 1.05 at $k=16\hmpc$ on $128^3$, $256^3$ and $512^3$ cells), while
+its deficit at large scales after overlap, and OTVET's excess, do not go away.
+The ray runs of the paper's suite are converged in ray number to 3\,\% at $k\ge2\hmpc$ and to 8--20\,\%
+at $k\le1\hmpc$ after overlap. Items still running are marked \pending{}.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{The solver}\label{sec:solver}
+
+The moment solver evolves the photon number density $N$ and flux $\mathbf F$ of each of five frequency
+groups on the gas grid at the reduced speed of light $\chat$,
+\begin{align}
+\partial_t N + \chat\,\nabla\!\cdot\mathbf F &= S - \chat\kappa N, \label{eq:N}\\
+\partial_t \mathbf F + \chat\,\nabla\!\cdot(\mathsf D N) &= -\chat\kappa\,\mathbf F, \label{eq:F}
+\end{align}
+with $\mathbf F$ in units of $\chat$. The two methods differ only in the Eddington tensor $\mathsf D$: M1
+uses the local \citet{levermore84} form, and OTVET the optically thin tensor summed over the sources with
+the minimum-image convention.
+
+\paragraph{Transport.} The default scheme is the first-order global Lax--Friedrichs (GLF, Rusanov) flux with
+wave speed $\chat$, unsplit in the three directions, as in ATON and RAMSES-RT \citep{aubert08,rosdahl13}.
+One RT substep is one cell of light travel and is divided into $n_{\rm sub}=4$ subcycles (Courant number
+$C=1/4$). After each subcycle $N\ge0$ and $|\mathbf F|\le N$ are enforced.
+
+\paragraph{Sources and absorption.} Sources add photons isotropically to their own cell. Absorption,
+photoheating and chemistry use the same routine as the rays, called once per substep with the
+photon density in each cell. The order within a substep is a choice:
+\begin{itemize}
+\item \emph{inject after transport} (the default, \texttt{moment\_inject = 1}): the photons a source emits
+in a substep are first exposed to absorption in their own cell and transported in the next substep;
+\item \emph{inject before transport} (\texttt{moment\_inject = 0}): they are transported four subcycles
+first, which moves most of them out of the source cell before anything absorbs them.
+\end{itemize}
+
+\paragraph{Second-order option.} A second-order scheme was added for this study (\texttt{moment\_order = 2}):
+linear reconstruction of $N$, $\mathbf F$ and the group energy with the monotonized-central limiter, the GLF
+flux of the two face states (each with the closure of its own state), and a two-stage Heun step. It needs
+$C\le1/6$ and is 10--17 times more expensive in the transport.
+
+%======================================================================
+\section{Uniform mean free path: transfer function against the analytic solution}\label{sec:uniform}
+
+\subsection{Set-up and the three reference curves}
+
+The solver's own transport kernels are run to steady state in a periodic box of side $L$ with a fixed,
+uniform mean free path $\lambda$: every substep ends with $N,\mathbf F\to N,\mathbf F\,e^{-\dx/\lambda}$ in place of the
+chemistry. Sources of random luminosity $L_s$ are placed in every cell (or in a few cells). The measured
+quantity is the transfer function
+\begin{equation}
+T(k)\equiv\left[\frac{P_N(k)}{P_L(k)}\right]^{1/2},
+\end{equation}
+normalised so that $T\to1$ as $k\to0$, and the cross-correlation coefficient $r(k)$ of $N$ with the
+sources. With uniform opacity $\Gamma\propto N$, so $T$ is the transfer function of the photoionization
+rate. This is the test of \citet{gnedin25}.
+
+\begin{enumerate}
+\item \textbf{Exact.} The steady-state solution of the transfer equation is
+\begin{equation}
+T_{\rm exact}(k)=\frac{\arctan(k\lambda)}{k\lambda}.
+\end{equation}
+\item \textbf{The closure, in the continuum.} Linearising about the isotropic state ($\mathsf D=\mathsf I/3$),
+equations (\ref{eq:N})--(\ref{eq:F}) give for M1
+\begin{equation}
+T_{\rm M1}(k)=\frac{1}{1+k^2\lambda^2/3},
+\end{equation}
+which falls as $3/(k\lambda)^2$ where the exact solution falls as $\pi/(2k\lambda)$: M1 has too little
+small-scale structure once sources overlap. For OTVET the tensor also responds to the sources, which adds
+\citep[eqs.~5.14--5.15 without the opacity response]{wu21}
+\begin{equation}
+T_{\rm OTVET}(k)=\frac{1+2\pi^2k\lambda^2/(3L_{\rm O})}{1+k^2\lambda^2/3},\qquad L_{\rm O}=7.66\,L
+\end{equation}
+for the minimum-image cube. The extra term grows as $\lambda/L$: OTVET has too much structure when the mean
+free path approaches the box size.
+\item \textbf{The closure with the scheme's numerical diffusion.} Per unit $\chat/\dx$ the first-order GLF
+flux adds $\tfrac12\dx\nabla^2$ to both moment equations. In the linear solution this replaces $\kappa=1/\lambda$ in the loss terms by
+\begin{equation}
+q=\kappa+\frac{1}{\dx}\sum_d(1-\cos k_d\dx)\;\simeq\;\kappa+\tfrac12k^2\dx,
+\qquad
+T^{\rm GLF}_{\rm M1}(k)=\frac{\kappa}{q+|\mathbf s|^2/3q},\quad s_d=\frac{\sin k_d\dx}{\dx},
+\label{eq:glf}
+\end{equation}
+and likewise for OTVET with its tensor term. For $k\gtrsim(2/\lambda\dx)^{1/2}$ the numerical term
+dominates the flux equation and $T$ flattens near $1.5\,\dx/\lambda$ instead of continuing as
+$3/(k\lambda)^2$. For the second-order scheme, where its limiter is inactive, the diffusion is fourth order:
+$q=\kappa+\sum_d(2-2\cos k_d\dx)^2/(8\dx)$ and $s_d=\sin k_d\dx\,(3-\cos k_d\dx)/(2\dx)$.
+\end{enumerate}
+
+\noindent One more term is needed for the default injection order. The photons a source emitted during the
+current substep sit in its own cell when the photoionization rate is evaluated. This adds a white
+component to $N$, the \emph{injection floor},
+\begin{equation}
+T_1=T_0+f\,(1-T_0),\qquad f=1-e^{-\dx/\lambda},\label{eq:floor}
+\end{equation}
+where $T_0$ is the transfer function with injection before the transport. The model excludes the
+nonlinear closure, the slope limiter and the time discretisation.
+
+\subsection{Result}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/convergence/fig_transfer_diffusion.pdf}
+\caption{Transfer function between sources and photon density for a uniform mean free path, every cell a source, $128^3$
+cells: M1 (top) and OTVET (bottom), $\lambda=L/4$ (left) and $\lambda=L$ (right). Black: the exact solution.
+Grey dashed: the linear solution of the closure in the continuum. Thin solid lines: the same with the numerical
+diffusion of the first-order (blue) and second-order (orange) scheme, equation (\ref{eq:glf}); dotted: with the
+injection floor of equation (\ref{eq:floor}) added. Symbols: the code, first order (circles) and second order
+(squares), with injection after (filled, the default) and before (open) the transport. Crosses: bins where the response is
+less than 50\,\% correlated with the sources. The vertical line marks $k\dx=1$.}
+\label{fig:transfer}
+\end{figure}
+
+Figure~\ref{fig:transfer} is the main result. Tables: \texttt{data/convergence/T\_N*.txt} and
+\texttt{moment\_transfer\_order2.txt}.
+
+\begin{itemize}
+\item \textbf{Both solvers solve their equations.} At $k\lambda\lesssim2$ ($\lambda=L/4$) M1 is within
+2--13\,\% and OTVET within 6\,\% of the continuum linear solution at every resolution from $32^3$ to
+$256^3$. With every cell a source M1 equals the isotropic closure to four digits. For 30 sources in the box ($0.06$ per $\lambda^3$, $\lambda=L/8$), where each
+cell holds one beam and M1 is exact, M1 follows the exact solution to 11\,\% over $k\lambda=2$--20.
+\item \textbf{M1 with the default settings lies between the diffusion model and the model with the floor.}
+The code (filled circles) is 1.0--1.4 times $T^{\rm GLF}_{\rm M1}$ at $k\dx<1$ and below the curve with the
+floor, which overestimates it. It is 2.9 ($\lambda=L/4$) and 9.4 ($\lambda=L$) times the continuum M1 at $k\dx=0.34$, and 17 and 69 times at
+$k\dx=1.1$.
+\item \textbf{The agreement of M1 with the exact solution at short $\lambda$ is produced by these terms.} At
+$\lambda=L/4$ the default M1 is within 0.5--1.0 of the exact solution up to $k\dx\approx1$ and crosses above
+it at $k\dx\approx1.3$; the continuum M1 is 5--20 times below it there. The crossing is at the same
+$k\dx$ at every resolution and every $\lambda$ tested: it is numerical. In equation
+(\ref{eq:floor}), $T_1-T_0=f(1-T_0)$ holds to 1--4\,\% at $32^3$, $64^3$ and $128^3$.
+\item \textbf{Injection before the transport removes the floor but smooths the sources.} With the first-order scheme
+(open circles) M1 is 1.0--1.7 times the continuum up to $k\dx\approx0.3$ at $\lambda=L/4$. It lies below the
+diffusion model, at 0.6--0.9 of it for $k\dx\le0.5$ and far below for $k\dx\gtrsim1$: the four subcycles spread a source's photons over about two cells before
+the rate is evaluated. It never crosses the exact solution.
+\item \textbf{The second-order scheme removes the diffusion term, not the floor.} With the default
+injection (filled squares) it lowers M1's $T$ by a factor 1.1--1.9 at $k\dx=0.1$--0.8; what remains follows
+the floor. With injection before the transport (open squares) the excess is gone and $T$ is 0.9 of the
+continuum at $k\dx\le0.2$, but 0.3--0.8 at $k\dx=0.3$--0.5, below the linear model, and at $\lambda=L$ the
+small residual response is anticorrelated with the sources for $k\dx=0.5$--1.1. The source field of this test
+is white noise, the least favourable input for a slope limiter; the cause is not established.
+\item \textbf{OTVET is insensitive at long $\lambda$ and M1-like at short $\lambda$.} At $\lambda=L$ its tensor
+term dominates and the code is within 0.8--1.2 of its continuum solution at every resolution and either
+order; it is 1.6--2.3 times the exact $T$. At $\lambda=L/4$ the tensor term is small, the solution is lifted by
+the same two numerical terms as M1 (1.2--2.4 times its continuum at $k\dx=0.2$--1.1), and this brings it to
+within 0.8--1.15 of the exact solution.
+\end{itemize}
+
+\subsection{Convergence with resolution}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/convergence/moment_transfer_convergence_l4.png}
+\includegraphics[width=\linewidth]{figures/convergence/moment_transfer_convergence.png}
+\caption{The first-order scheme against resolution. Top: $\lambda=L/4$, $32^3$ to $256^3$: M1 with the default
+injection (left), with injection before the transport (middle), and OTVET (right). Bottom: $\lambda=L$, $32^3$ to
+$128^3$: M1 (left; open squares: injection before the transport at $64^3$), OTVET (middle), and the ratio of
+equation (\ref{eq:glf}) to the continuum solution for modes along the diagonal (right).}
+\label{fig:uniconv}
+\end{figure}
+
+\begin{table}
+\centering
+\caption{$T/T_{\rm continuum}$ of the closure at fixed $k\lambda$ in the uniform test, every cell a source.
+First order at $\lambda=L/4$ from Fig.~\ref{fig:uniconv}; the comparison of orders from
+\texttt{moment\_transfer\_order2.txt}.}
+\label{tab:uniconv}
+\begin{tabular}{llcccc}
+\toprule
+Case & $k\lambda$ & $32^3$ & $64^3$ & $128^3$ & $256^3$\\
+\midrule
+M1, order 1, $\lambda=L/4$ & 10 & 5.1 & 3.5 & 2.4 & 1.8\\
+M1, order 1, $\lambda=L/4$ & 20 & 17 & 9.6 & 7.7 & 4.6\\
+OTVET, order 1, $\lambda=L/4$ & 10 & 1.8 & 1.6 & 1.4 & 1.2\\
+OTVET, order 1, $\lambda=L/4$ & 20 & 3.1 & 2.2 & 2.0 & 1.6\\
+\midrule
+M1, order 2, $\lambda=L/4$ & 10 & \pending{} & 2.7 & 2.0 & \pending{}\\
+M1, order 2, $\lambda=L/4$ & 20 & \pending{} & 9.6 & 4.4 & \pending{}\\
+M1, order 1, inject before, $\lambda=L/4$ & 10 & -- & 1.74 & 1.71 & --\\
+M1, order 2, inject before, $\lambda=L/4$ & 10 & \pending{} & 0.62 & 0.76 & \pending{}\\
+M1, order 1, $\lambda=L$ & 25 & -- & 6.3 & 3.7 & --\\
+M1, order 2, $\lambda=L$ & 25 & \pending{} & 3.6 & 2.2 & \pending{}\\
+OTVET, order 2, $\lambda=L/4$ & 10 & \pending{} & 1.44 & 1.25 & \pending{}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+\item \textbf{M1 is not converged at any $k>1/\lambda$ with the default settings.} At fixed $k\lambda$ its $T$ falls
+toward the continuum solution by a factor 1.3--1.8 per doubling of the resolution, about first order in
+$\dx$, as both numerical terms scale (Table~\ref{tab:uniconv}).
+\item The second-order scheme is a factor 1.3--1.7 closer to the continuum at each resolution and converges
+at about the same rate, as expected if the floor ($\propto\dx$) is what is left. With injection before the
+transport it approaches the continuum from below.
+\item OTVET is converged at $\lambda=L$ and converges like M1, with smaller amplitude, at $\lambda=L/4$.
+\item The $32^3$ and $256^3$ points of the second-order scheme are queued. \pending{job 43451395}
+\end{itemize}
+
+\subsection{Relation to Gnedin (2025) and to the suite}
+
+\citet{gnedin25} finds that M1 and OTVET both follow $\arctan(k\lambda)/(k\lambda)$ in this test, with fitted
+$\lambda\approx0.3$--$1\mpch$ in a $20\mpch$ box. The results above agree with his in that regime ($\lambda\ll L$)
+and add two points. First, with many sources per $\lambda^3$ the agreement of M1 is produced by the numerical terms
+and moves with resolution. Second, at $\lambda\gtrsim L$, the regime of our runs after overlap, the
+closures depart from the exact solution in opposite directions: in power, M1 has 0.17 ($\lambda=L$) and 0.06
+($\lambda=2.5L$) and OTVET 3--5 and 11--26 times the exact value at the box scale. The paper's $512^3$ suite at
+$z=5$ has M1 at 0.04--0.07 and OTVET at 12--14 times the rays' $P_\Gamma$ at $k\le2\hmpc$: the suite's
+post-overlap numbers are those of the closures at $\lambda\approx2.5L$. Which mechanism makes his runs agree
+(few sources per $\lambda^3$, the numerical terms, or the shared ionized/neutral pattern during reionization)
+is not established here.
+
+%======================================================================
+\section{Other tests of the moment solver}\label{sec:other}
+
+\paragraph{Unit tests.} Photon and energy conservation of the transport to rounding; realizability; the
+light-cone spread of a pulse; an M1 plane beam that moves exactly one cell per substep without sideways spread;
+the OTVET tensor of a single source (rank one, unit trace, the periodic images) and the agreement of the
+direct and FFT sums to $3\times10^{-7}$; redshifting of the group spectrum. Outputs are byte-identical for
+1, 2 and 4 threads, and a restart from a checkpoint is bit-identical. For the second-order scheme: a point
+pulse after five substeps has an rms width of 1.11 (M1) and 0.80 (OTVET) cells against 1.85 and 1.48 at first
+order, and the $L_1$ error of a smooth advected wave falls by 3.6 per doubling of the resolution.
+
+\paragraph{Photon budget.} In every run the photons injected, absorbed, lost to redshift and in flight
+balance to six digits.
+
+\paragraph{I-front in a uniform medium} ($32^3$, $\chat=0.1c$, one source). Error of the front radius
+against the finite-$c$ solution:
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+$\chat t$ [cells] & 2 & 6 & 10 & 30\\
+\midrule
+rays & $+1.9\,\%$ & $+3.8\,\%$ & $+1.7\,\%$ & $+0.2\,\%$\\
+M1 & $+36\,\%$ & $+6.5\,\%$ & $+3.0\,\%$ & $+0.3\,\%$\\
+OTVET & $+36\,\%$ & $+4.6\,\%$ & $+1.6\,\%$ & $-0.6\,\%$\\
+M1, inject before & $+61\,\%$ & $+15\,\%$ & $+7.4\,\%$ & $+1.7\,\%$\\
+OTVET, inject before & $+61\,\%$ & $+14\,\%$ & $+6.0\,\%$ & $+0.8\,\%$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The moment fronts run ahead while they are a few cells across, because the first-order scheme carries
+photons ahead of the light cone in the first substeps (the four subcycles reach four cells while light
+travels one), and with injection before the transport because the source cell barely absorbs. They converge
+to the solution once the front is resolved; the front stays about 1.5 times thicker than the rays'.
+
+\paragraph{Shadow behind a dense clump} (a point-source test of our own). The mean ionized fraction on the
+axis behind the clump is 0.000 for the rays, 0.044 for M1 and 0.004 for OTVET.
+
+\paragraph{Two sources and 16 sources in a lognormal density field.} Two isotropic sources 12 cells apart give
+the same ionized widths for the rays, M1 and OTVET. In the lognormal box at half ionization M1 and OTVET are
+6\,\% and 3\,\% above the rays in ionized fraction (16\,\% and 11\,\% with injection before the transport), with
+1.6 times as many partly ionized cells; 18--19\,\% of the cells differ from the rays by more than 0.1 in
+$x_{\rm HII}$, against 6\,\% between two ray runs with different HEALPix frames.
+
+\paragraph{Injection order and neutral source cells.} With injection before the transport, dense source cells stay
+neutral however bright the source: at $512^3$ and $z=5.4$ M1 left 21\,\% of the cells at 100--500 times the mean
+density neutral (rays 1.2\,\%, OTVET 2.3\,\%), with $\Gamma$ 500 times below their surroundings. Injection after
+the transport lowers M1's residual neutral fraction after overlap by a factor 30--60, to the level of OTVET and of the rays,
+and restores the proximity peaks ($\Gamma_{\rm max}$ 2--3 times the rays'). This is why it is the default, and why
+the injection floor of Section~\ref{sec:uniform} is present in the suite. Section~\ref{sec:inject} gives the
+dense-cell statistics of the convergence runs.
+
+%======================================================================
+\section{Reionization convergence runs}\label{sec:reion}
+
+\subsection{Set-up}
+
+The runs use the parameters of the paper's suite in a $20\mpch$ box with $512^3$ particles and a $512^3$ gravity mesh in every
+run. The gas and radiation grid has $N^3=128^3$, $256^3$ or $512^3$ cells. The initial particle
+data are byte-identical between resolutions. The suite ($40\mpch$, $512^3$ cells, $1024^3$ particles) has the cell
+size and particle mass of the $256^3$ runs here; the $512^3$ runs have half the suite's cell.
+
+\begin{itemize}
+\item \textbf{Resolution series:} rays, M1, and OTVET at each $N$; M1 with injection before the transport
+at $128^3$ and $256^3$ (not run at $512^3$); M1 and OTVET with the second-order scheme at $128^3$ and $256^3$
+\pending{only the $128^3$ M1 run is finished}.
+\item \textbf{Ray-budget series} at $256^3$: the cap on rays per cell (\texttt{nray\_max\_factor}) $f=8$, 15
+(the suite's value), 32, 64 and 120.
+\item Spectra are of $\delta_\Gamma=\Gamma/\langle\Gamma\rangle_V-1$ and of $x_{\rm HII}$, compared at
+matched ionized fraction $\xv$, because the histories differ between resolutions; after overlap at matched
+redshift. $\lambda$ is the mean free path at 912\,\AA\ from the suite's estimator.
+\end{itemize}
+
+\paragraph{Caveats, stated plainly.}
+\begin{itemize}
+\item \textbf{The sources are not matched between resolutions.} Halo counts at fixed redshift differ by about
+$-26\,\%$ ($128^3$) and $+14$ to $+32\,\%$ ($512^3$) relative to $256^3$, and the total luminosity by up to
+30\,\% at $z>11$ and 2--4\,\% below $z=9$. The likely cause, not tested, is the gas's gravity being smoothed on the
+coarser gas grid.
+\item \textbf{The $512^3$ runs do not reach overlap} by $z=5$ (rays: $\xv=0.84$ at $z=4.97$; M1: 0.87). The
+after-overlap comparison exists only at $128^3$ and $256^3$.
+\item \textbf{At $128^3$ the suite's ray budget fails.} With $f=15$ the ray pool filled (splitting limited
+in 767 substeps and none from $\xv\approx0.75$). The $128^3$ reference is therefore an $f=120$ run. At
+$256^3$ and $512^3$ the pool guard never triggered with $f=15$.
+\item The gas resolution changes the absorbers. After overlap the $128^3$ rays have $\lambda=38$\,pMpc
+against 15.5\,pMpc at $256^3$, and a quarter of the $\Gamma$ power at all $k$. This is the absorber
+population, not the transport.
+\item Snapshots of different runs are not at identical redshifts. Where they differ by $\Delta z\approx0.03$--0.05
+the cross-correlation at $k\gtrsim8\hmpc$ drops (to 0.5--0.8 at $512^3$) and recovers to 0.96--0.99 where they
+match.
+\end{itemize}
+
+\subsection{M1 and OTVET against the rays with resolution}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/convergence/rt_convergence_res.png}
+\caption{Resolution series. Columns: $\xv\approx0.57$, 0.77, 0.86--0.92 and after overlap. Top: $P_\Gamma$ of
+each moment run over that of the ray run with the same $N$ (blue $128^3$, orange $256^3$, red $512^3$; M1 solid, M1 with
+injection before the transport dashed, OTVET dash-dotted, M1 second order dash-dot-dotted); thin vertical lines: $k\dx=1.3$.
+Second row: cross-correlation with the rays. Third and fourth rows: $\Delta^2_\Gamma$ of the ray runs and of the M1
+runs themselves. Table: \texttt{data/convergence/rt\_convergence\_res.txt}.}
+\label{fig:res}
+\end{figure}
+
+\begin{table}
+\centering
+\caption{$P_\Gamma({\rm M1})/P_\Gamma({\rm rays})$ at the same $N$ and matched $\xv$ (default settings).}
+\label{tab:m1res}
+\begin{tabular}{llccccc}
+\toprule
+Epoch & $N$ & $k=1$ & 2 & 4 & 8 & $16\hmpc$\\
+\midrule
+$\xv\approx0.57$ & 128 & 0.91 & 0.93 & 1.12 & 1.47 & 3.05\\
+ & 256 & 0.91 & 0.96 & 0.99 & 1.10 & 1.36\\
+ & 512 & 0.78 & 0.78 & 0.87 & 0.99 & 1.05\\
+$\xv\approx0.77$ & 128 & 0.83 & 0.84 & 1.09 & 1.41 & 3.05\\
+ & 256 & 0.71 & 0.80 & 0.94 & 1.04 & 1.28\\
+ & 512 & 0.64 & 0.71 & 0.77 & 0.80 & 0.88\\
+after overlap & 128 & 0.12 & 0.33 & 0.71 & 1.11 & 2.47\\
+ & 256 & 0.16 & 0.35 & 0.60 & 0.74 & 0.98\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+\item \textbf{M1's small-scale excess is numerical and falls with resolution.} At $k=16\hmpc$ the ratio
+goes $3.05\to1.36\to1.05$ ($\xv\approx0.57$) and $2.47\to0.98$ (after overlap) per doubling of $N$: a factor
+2.2--2.5 from $128^3$ to $256^3$ and 1.3--1.5 from $256^3$ to $512^3$ (Table~\ref{tab:m1res}).
+\item \textbf{After overlap M1 overtakes the rays at fixed $k\dx$,} 1.08 ($128^3$) and 1.28 ($256^3$), as the
+uniform test predicts ($\approx1.3$). Before overlap the crossing is at $k\dx\approx0.2$--0.5, and at $512^3$ it moves from $k\dx=0.2$
+($\xv\approx0.6$) to 1.1 ($\xv\approx0.75$).
+\item \textbf{M1's large-scale deficit after overlap does not converge away:} 0.12 and 0.16 at $k=1\hmpc$,
+0.33 and 0.35 at $k=2\hmpc$ at $128^3$ and $256^3$. This is the closure (Section~\ref{sec:uniform}).
+\item \textbf{During reionization M1 moves below the rays with resolution} at $k=1$--$8\hmpc$: at
+$\xv\approx0.77$ the ratio at $k=4\hmpc$ is 1.09, 0.94, 0.77. Part of this is the rays themselves: the $512^3$ ray run has
+1.7--2.6 times the $\Gamma$ power of the $256^3$ one at $k\ge1\hmpc$ at the same $\xv$ (third row of
+Fig.~\ref{fig:res}), reached at lower redshift.
+\item \textbf{OTVET has more small-scale power than the rays at every resolution} during reionization, and the
+excess shrinks slowly: at $\xv\approx0.57$, $P_\Gamma/P_\Gamma({\rm rays})$ at $k=2$, 4, 8, $16\hmpc$ is
+1.50, 2.08, 2.56, 3.64 at $128^3$ and 1.27, 1.50, 1.96, 2.47 at $256^3$; at $512^3$ ($\xv\approx0.44$) it is
+1.03, 1.25, 1.61, 2.18. \pending{the $512^3$ OTVET run is at $z=5.8$} Its cross-correlation with the rays is
+0.98--1.00 throughout.
+\item \textbf{OTVET's excess after overlap is large and grows as the mean free path does:} 8--12 times the
+rays' power at $k=0.5$--$4\hmpc$ at $256^3$ ($\lambda=15$--20\,pMpc) and 26--85 times at $128^3$
+($\lambda=38$\,pMpc), in line with the $\lambda/L$ scaling of its tensor term.
+\item \textbf{Second-order M1 in a reionization run ($128^3$) does not reduce the excess.} The ratio to the rays
+at $k=2$, 4, 8, $16\hmpc$ is 1.14, 1.47, 1.91, 3.29 at $\xv\approx0.58$ against 0.93, 1.12, 1.47, 3.05 at first order, and the
+cross-correlation at $k=1$--$4\hmpc$ falls from 0.89--0.98 to 0.76--0.87. The uniform test predicted a modest
+reduction. The cause is not known; a control run of the first-order scheme with the same executable is running.
+\pending{control; $256^3$ runs}
+\end{itemize}
+
+\subsection{Injection before the transport in the reionization runs}\label{sec:inject}
+
+\begin{itemize}
+\item With injection before the transport M1 stays below the rays at every $k\ge0.5\hmpc$ and every epoch, and
+falls to 0.01--0.1 of the rays' power at $k\dx\gtrsim1$ (Fig.~\ref{fig:res}, dashed). At $256^3$ and
+$\xv\approx0.57$ the ratio is 0.79, 0.74, 0.54, 0.31 at $k=1$, 2, 4, $8\hmpc$, against 0.91, 0.96, 0.99, 1.10 with
+the default. The difference between the two is the injection floor: most of M1's power above $k\approx4\hmpc$ at
+$256^3$ is the source cells' own photons.
+\item Its ratio depends on resolution as much as the default's does at fixed $k$, because the source smoothing is
+also fixed in cells.
+\item \textbf{Dense cells} (more than 100 times the mean density) after overlap at $256^3$: mass-weighted neutral
+fraction 0.110 (rays), 0.184 (M1) and 0.308 (M1, injection before); mean $\Gamma$ in those cells $3.6\times10^{-12}$,
+$4.5\times10^{-12}$ and $7.4\times10^{-13}\,{\rm s^{-1}}$. At $128^3$: 0.028, 0.134 and 0.295. Injection before the
+transport starves the densest cells of photons, as in Section~\ref{sec:other}.
+\item The pre-overlap conclusions for M1 carry over to OTVET in the uniform test: with injection before the
+transport OTVET is within 0.93--1.25 of its continuum solution up to $k\dx\approx0.7$, and the floor accounts for 65--80\,\%
+of its excess. No OTVET reionization run with injection before the transport was made.
+\end{itemize}
+
+\subsection{Do the rays change with resolution?}
+
+Yes, through the gas and the absorbers rather than the ray transport. At matched $\xv\approx0.57$--0.77 the $128^3$
+and $256^3$ ray runs agree in $P_\Gamma$ to 10\,\% at $k\le4\hmpc$; the $512^3$ run has 1.3--2.6 times more
+power at $k\ge0.5\hmpc$, a lower median $\Gamma$ in ionized gas ($2.4\times10^{-14}$ against $5.3\times10^{-14}\,{\rm s^{-1}}$) and a
+later reionization. After overlap the $128^3$ run has $\lambda=38$\,pMpc and 73 cells above 100 times the mean density,
+the $256^3$ run 15.5\,pMpc and 1500. The absolute $\Gamma$ statistics are therefore not converged in gas
+resolution at the suite's cell size; the comparison between methods at fixed resolution is the robust quantity.
+
+\subsection{Ray budget}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/convergence/rt_convergence_rays.png}
+\caption{Ray-budget series at $256^3$: ratio of the power of $\Gamma$ and of $x_{\rm HII}$ to the $f=120$ run and
+cross-correlation with it. Table: \texttt{data/convergence/rt\_convergence\_rays.txt}.}
+\label{fig:rays}
+\end{figure}
+
+\begin{table}
+\centering
+\caption{Ray-budget runs at $256^3$ after overlap ($z=4.96$).}
+\label{tab:rays}
+\begin{tabular}{lccccc}
+\toprule
+ & $f=8$ & 15 (suite) & 32 & 64 & 120\\
+\midrule
+live rays per cell & 6.8 & 10.1 & 17.4 & 26.5 & 41\\
+peak memory [GB] & 55 & 60 & 70 & 84 & 106\\
+pool guard (substeps with splitting limited) & 1920 & 0 & 0 & 0 & 0\\
+$\lambda$ [pMpc] & 12.7 & 15.5 & 15.8 & 16.0 & --\\
+$P_\Gamma/P_\Gamma(f=120)$, $k=0.3\hmpc$ & 1.65 & 1.20 & 1.13 & 1.06 & 1\\
+\quad $k=1\hmpc$ & 1.36 & 1.08 & 1.05 & 1.02 & 1\\
+\quad $k=2\hmpc$ & 1.34 & 1.03 & 1.02 & 1.00 & 1\\
+\quad $k=16\hmpc$ & 1.34 & 1.01 & 1.01 & 1.00 & 1\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+\item \textbf{During reionization the suite's budget is converged.} At $\xv\le0.92$ the $f=15$ run is within
+5\,\% of $f=120$ in $P_\Gamma$ at every $k$ up to $68\hmpc$ (within 2\,\% at $\xv\le0.79$), with $r\ge0.99$.
+\item \textbf{After overlap it is converged to 3\,\% at $k\ge2\hmpc$, 8\,\% at $k=1\hmpc$ and 20\,\% in the lowest
+bin} ($k=0.3\hmpc$). The largest deviation at $k\le2\hmpc$ grows with the mean free path: 0.6\,\%, 2\,\%, 5\,\%, 20\,\%
+at $\lambda=0.22$, 0.83, 2.1 and 16\,pMpc. The error is an excess of large-scale power.
+\item $f=64$ and $f=120$ differ by at most 6\,\% (lowest bin) and 2\,\% elsewhere. $f=8$ is not usable after
+overlap (35\,\% high, $\lambda$ 20\,\% short, pool guard active).
+\item The power of $x_{\rm HII}$ after overlap (the residual neutral gas) is up to 13\,\% high at $f=15$.
+\item Not varied: the number of merge directions per cell (\texttt{nside\_merge}), which would be the next test.
+\item The $512^3$ ray run of this series ($f=15$) took 16.8\,h on 192 cores with a peak memory of 196\,GB and no pool-guard
+events; the $256^3$ $f=15$ and $f=120$ runs took 2.5\,h and 7.5\,h.
+\end{itemize}
+
+%======================================================================
+\section{What was and was not run}\label{sec:status}
+
+\begin{itemize}
+\item Uniform test: first order at $32^3$--$256^3$ ($\lambda=L/4$) and $32^3$--$128^3$ ($\lambda=L$), plus
+$\lambda=L/8$ and $2.5L$ with few and many sources; both orders and both injection orders at $64^3$ and $128^3$.
+\pending{second order at $32^3$ and $256^3$}
+\item Reionization runs finished: rays, M1 at $128^3$, $256^3$, $512^3$; M1 with injection before the transport and OTVET at $128^3$
+and $256^3$; the ray budgets; M1 second order at $128^3$.
+\pending{OTVET $512^3$; M1 second order $256^3$; OTVET second order $128^3$, $256^3$}
+\item Not run: M1 with injection before the transport at $512^3$; OTVET with injection before the transport in a reionization
+run; any $512^3$ run past overlap; the screen and cone closures in any of these tests; an HLL flux; the second-order scheme on refined grids.
+\end{itemize}
+
+\section{Suggested wording for the paper}
+
+For ``Shared limitations'' in the main text, if the reionization runs are not shown:
+
+\begin{quote}
+Our M1 solver uses a first-order flux and deposits each source's photons in its own cell before
+transporting them. In a medium of uniform mean free path these two choices set M1's response below a few cells
+(Appendix~X): it exceeds the exact solution for $k\dx\gtrsim1.3$ and converges to the closure's own solution only
+at first order in the cell size. In reionization runs at fixed box size the ratio of M1's $P_\Gamma$ to the rays'
+at $k=16\hmpc$ falls from 3.1 to 1.4 to 1.05 as the grid goes from $128^3$ to $256^3$ to $512^3$ cells
+(at $\xv\approx0.6$), a factor of about 2.3 and 1.3 per doubling, while at $k\le2\hmpc$ after overlap it stays at 0.1--0.35.
+M1's excess small-scale power in Fig.~Y is therefore numerical, and its deficit at large scales is the closure.
+
+The ray tracing caps the number of rays per cell. Raising the cap eightfold changes $P_\Gamma$ by less than 5\,\%
+at all $k$ during reionization. After overlap our runs are converged to 3\,\% for $k\ge2\hmpc$ and overestimate the
+power by 8\,\% at $k=1\hmpc$ and 20\,\% at $k=0.3\hmpc$.
+\end{quote}
+
+\bibliographystyle{aasjournal}
+\bibliography{refs}
+
+\end{document}
