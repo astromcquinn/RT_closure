@@ -242,6 +242,59 @@ with $T_0$ replaced by the diffusion model, equation (\ref{eq:glf}) or (\ref{eq:
 measured $T_0$ is lower than that model, the dotted curves overestimate $T_1$. The model excludes the
 nonlinear closure, the slope limiter and the time discretisation of the transport itself.
 
+\subsection{Exact linear solution of the discrete scheme}\label{sec:disc}
+
+Equation (\ref{eq:glf}) treats time as continuous, and the dotted curves of Figure~\ref{fig:transfer}
+join it to the floor with the wrong $T_0$. The scheme as it is run can be solved exactly in the linear
+regime (\texttt{scripts/transfer\_exact\_linear.py}; tables \texttt{data/convergence/Tlin\_N*.txt}).
+
+In cell units ($\dx=1$) one first-order GLF update with Courant number $C=1/n_{\rm sub}$ is
+$U_i'=U_i-C\sum_d[\tfrac12(f_d(U_{i+1})-f_d(U_{i-1}))-\tfrac12(U_{i+1}-2U_i+U_{i-1})]$ with $U=(N,\mathbf F)$
+and $f_d=(F_d,\mathsf D_{jd}N)$. For a Fourier mode, with $s_d=\sin k_d$ and
+$\mathsf D=\mathsf I/3+\delta\mathsf D$, only $\delta N$ and the longitudinal flux
+$\phi\equiv\mathbf s\cdot\delta\mathbf F$ couple:
+\begin{equation}
+\begin{pmatrix}\delta N\\\phi\end{pmatrix}'=
+\underbrace{\begin{pmatrix}a&-iC\\-iC|\mathbf s|^2/3&a\end{pmatrix}}_{\mathsf m}
+\begin{pmatrix}\delta N\\\phi\end{pmatrix}
+-iC\,w\,\bar N\delta_L\begin{pmatrix}0\\1\end{pmatrix},
+\qquad a=1-C\sum_d(1-\cos k_d),
+\end{equation}
+where $w\equiv s_is_j\,\delta\mathsf D_{ij}/\delta_L$. For M1, $\chi=1/3+O(F^2/N^2)$ and $w=0$. For OTVET
+the tensor is $\mathsf h=\mathsf P/{\rm tr}\,\mathsf P$ with $\mathsf P=\mathsf K*L$, so
+$\delta\mathsf D_{ij}(\mathbf k)=[\hat{\mathsf K}_{ij}(\mathbf k)-\tfrac13\delta_{ij}\,{\rm tr}\,\hat{\mathsf K}(\mathbf k)]\,
+\delta_L(\mathbf k)/{\rm tr}\,\hat{\mathsf K}(0)$, where $\hat{\mathsf K}$ is the discrete Fourier transform of the code's
+kernel ($d_id_j/|d|^4$ at the nearest image, $4/3$ on the diagonal at $d=0$, off-diagonal terms zero on the
+half-box planes). A substep of transport is $\mathbf u\to\mathsf M\mathbf u+\mathsf G\mathbf b$ with
+$\mathsf M=\mathsf m^{n_{\rm sub}}$, $\mathsf G=\sum_{j<n_{\rm sub}}\mathsf m^j$ and $\mathbf b$ the forcing
+above, in which $\bar N$ is the mean during the transport: $(1-f)$ times the mean the chemistry sees with
+the default order, and equal to it with injection first. With $\mathbf t=\mathbf u/(\bar N\delta_L)$ at the
+chemistry call, $\mathbf e_N=(1,0)$ and $\mathbf e_F=(0,1)$, the steady states are
+\begin{align}
+\hbox{inject after:}\quad&\mathbf t_1=(1-f)\,\mathsf M\,\mathbf t_1+f\,\mathbf e_N-iC\,(1-f)\,w\,\mathsf G\,\mathbf e_F,\\
+\hbox{inject before:}\quad&\mathbf t_0=(1-f)\,\mathsf M\,\mathbf t_0+f\,\mathsf M\,\mathbf e_N-iC\,w\,\mathsf G\,\mathbf e_F,
+\end{align}
+that is
+\begin{equation}
+T_1=\mathbf e_N\cdot[\mathsf 1-(1-f)\mathsf M]^{-1}[f\,\mathbf e_N-iC(1-f)\,w\,\mathsf G\,\mathbf e_F],\qquad
+T_0=\mathbf e_N\cdot[\mathsf 1-(1-f)\mathsf M]^{-1}[f\,\mathsf M\,\mathbf e_N-iC\,w\,\mathsf G\,\mathbf e_F].
+\label{eq:disc}
+\end{equation}
+These satisfy $\mathbf t_1=(1-f)\,\mathbf t_0+f\,\mathbf e_N$, so equation (\ref{eq:floor}) holds for OTVET
+as well as M1. For a substep of length $\tau\to0$ ($\mathsf M\to\mathsf 1-\tau\mathsf K$, $f\to\kappa\tau$),
+$T_1\to\kappa\,\mathbf e_N\cdot(\kappa+\mathsf K)^{-1}\mathbf e_N$, which is equation (\ref{eq:glf}). $|T|^2$ is
+averaged over the modes of each $k$ bin as the measurement is.
+
+\paragraph{Comparison with the code.} The first-order code agrees with equation (\ref{eq:disc}) to within
+3\,\% in every bin, for M1 and OTVET, both injection orders, $\lambda=L/4$ ($32^3$--$256^3$) and $\lambda=L$
+($32^3$--$128^3$): the ratio of code to theory spans 0.972--1.023, and is within 0.5\,\% in most bins at
+$k\dx>0.3$ with the default order. The residuals are largest in bins with few modes, where the measured
+ratio of two noisy spectra differs from the mode average of $|T|^2$. So the solver solves its discretized
+linear equations, the nonlinearity of the M1 closure plays no role in this test, and every departure from
+the continuum closure in Figure~\ref{fig:transfer} is the discretization. The appendix figure of the paper
+(\texttt{figures/fig\_app\_convergence.pdf}) shows these curves. No such solution was derived for the
+second-order scheme, whose limiter is nonlinear.
+
 \subsection{Result}
 
 \begin{figure}
