@@ -4,20 +4,23 @@
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.72\linewidth]{figures/fig_app_convergence.pdf}
-\caption{Transfer function from the sources to the photon density for a uniform mean free path $\lambda$,
-with a source in every cell: M1 (left) and OTVET (right), $\lambda=L/4$ (top) and $\lambda=L$ (bottom).
+\includegraphics[width=\linewidth]{figures/fig_app_convergence.pdf}
+\caption{Transfer function from the sources to the photon density for a uniform mean free path $\lambda$:
+M1 (left), OTVET (middle) and the rays (right), $\lambda=L/4$ (top) and $\lambda=L$ (bottom).
 Black: the exact solution, equation~(\ref{eq:app_exact}). Dashed: the linear solution of each closure in
-the continuum, equations~(\ref{eq:app_m1}) and (\ref{eq:app_otvet}). Filled circles: our transport with the
-settings of the suite, at $32^3$ to $256^3$ cells (light to dark; to $128^3$ for $\lambda=L$). Thin curves:
-the linear solution of the discretized equations at each resolution, equation~(\ref{eq:app_disc}). Open
-symbols, $128^3$ only: sources injected before the transport (circles; dotted curve: its linear solution)
-and a second-order scheme (squares).}
+the continuum, equations~(\ref{eq:app_m1}) and (\ref{eq:app_otvet}). Filled blue circles: our moment
+transport with the settings of the suite and a source in every cell, at $32^3$ to $256^3$ cells (light to
+dark; to $128^3$ for $\lambda=L$). Thin blue curves: the linear solution of the discretized equations at
+each resolution, equation~(\ref{eq:app_disc}). Open blue symbols, $128^3$ only: sources injected before the
+transport (circles; dotted curve: its linear solution) and a second-order scheme (squares). Right: the ray
+tracer at $128^3$ with sources in one cell in 512, for pools of 8, 15 (the suite), 64 (the original) and
+120 rays per cell (light to dark). Thin curves: the exact solution plus white noise of rms
+$0.95\,n_{\rm ray}^{-1/2}$ per cell. Open circles: the pool of 15 averaged over 16 substeps.}
 \label{fig:app_conv}
 \end{figure}
 
-We test the moment transport as \citet{gnedin25} does, with a uniform mean free path
-$\lambda=1/\kappa$ in a periodic box of side $L$. The transport routines of the code are run to steady
+We test the transport as \citet{gnedin25} does, with a uniform mean free path
+$\lambda=1/\kappa$ in a periodic box of side $L$. The moment transport routines of the code are run to steady
 state with a source of random luminosity in every cell (30\% rms), and each substep (one cell of light
 travel, $\Delta t=\Delta x/\chat$, taken in four transport updates) ends with $N$ and $\mathbf F$ multiplied
 by $e^{-\Delta x/\lambda}$ in place of the chemistry. We measure
@@ -93,6 +96,20 @@ T_1=\mathbf e_N\cdot\left[\mathsf 1-(1-f)\,\mathsf M\right]^{-1}
 and $T_0=\mathbf e_N\cdot[\mathsf 1-(1-f)\mathsf M]^{-1}[f\,\mathsf M\mathbf e_N-iC\,w\,\mathsf G\,\mathbf e_F]$
 with injection first. These satisfy equation~(\ref{eq:app_floor}) identically and tend to
 equation~(\ref{eq:app_glf}) as the substep shrinks.
+
+\emph{Rays.} The ray tracer runs the same test with its emission, splitting, merging and deposit unchanged,
+each cell transmitting $e^{-\Delta x/\lambda}$ of the photons deposited in it. A source cell emits 192 rays
+per substep, so the sources occupy one random cell in 512 ($P_L=512\,\Delta x^3\bar L^2$; M1 and OTVET with
+these sources reproduce their $T$ for a source in every cell to 4\%). With $r(k)$ the correlation
+coefficient of $N$ with the sources, the correlated part $rT$ is within 5\% of
+equation~(\ref{eq:app_exact}) at every $k$ for $\lambda=L/4$ and within 13\% for $\lambda=L$, for every
+pool size. The rays have no diffusion plateau, and their injection term is the true one: a ray deposits
+along its path in the substep it is emitted, as do the photons at $r<\Delta x$ in
+equation~(\ref{eq:app_exact}). What remains is white noise, uncorrelated with the sources, of rms
+$\sigma\simeq0.95\,n_{\rm ray}^{-1/2}$ of $\bar N$ per cell and substep, where $n_{\rm ray}$ is the number
+of rays per cell: $\sigma=0.27$ for the suite's pool of 15 ($n_{\rm ray}=12.6$), and 0.38, 0.14--0.18 and
+0.11--0.14 for pools of 8, 64 and 120. It adds $\sigma^2\Delta x^3$ to $P_N/\bar N^2$, and falls by a
+factor of 1.5 ($\lambda=L/4$) to 2.5 ($\lambda=L$) when $N$ is averaged over 16 substeps.
 
 \emph{Results.} (i) At $k\lambda\lesssim2$ M1 is within 2--13\% and OTVET within 6\% of its continuum
 solution at every resolution: the transport solves the closure's equations. (ii) The code follows equation~(\ref{eq:app_disc}) to within 3\% in every bin, for both closures, both

@@ -6,12 +6,18 @@ usage: fig_app_convergence.py [--variants]
 reads data/convergence/T_N<N>_l{4,1}.txt (tools/analysis/moment_transfer.py of
 NewRadHydroCode, branch moment-order2), writes figures/fig_app_convergence.{pdf,png}
 
-Columns: M1, OTVET. Rows: lambda = L/4, lambda = L. Per resolution: the code
+Columns: M1, OTVET, rays. Rows: lambda = L/4, lambda = L. Per resolution: the code
 with the default settings (first order, inject after the transport), and the
 exact linear solution of the discrete scheme (data/convergence/Tlin_N*.txt,
 scripts/transfer_exact_linear.py). --variants adds, at the reference
 resolution of each row, injection before the transport (with its exact
 linear solution) and second order.
+
+Rays (third column): data/convergence/T_rays_N128_l{4,1}.txt (tools/analysis/
+ray_transfer.cpp, branch rt-convergence-runs; sources in one cell in 512) at
+ray pool sizes of 8, 15, 64 and 120 per cell, with the exact solution plus
+white shot noise of rms SIG0 / sqrt(rays per cell) per cell (scripts/ray_noise.py;
+rays per cell from data/convergence/rays_pool.txt).
 """
 import os
 import re
@@ -29,10 +35,14 @@ variants = "--variants" in sys.argv
 NS = (32, 64, 128, 256)
 COL = {32: "#86b6ef", 64: "#3987e5", 128: "#1c5cab", 256: "#0d366b"}  # one hue, light to dark
 NREF = 128  # resolution of the variants
+POOLS = (8, 15, 64, 120)
+RCOL = {8: "#f2b28a", 15: "#e57a3c", 64: "#b24a17", 120: "#6b2706"}  # a second hue, light to dark
+SIG0 = 0.95  # rms per cell of the ray noise times sqrt(rays per cell), scripts/ray_noise.py
+SRC = 512.0  # cells per source in the ray test: P_L / Lbar^2 = SRC cells
 
 
-def load(N, frac):
-    f = os.path.join(here, "..", "data", "convergence", "T_N%d_l%d.txt" % (N, frac))
+def load(N, frac, stem="T"):
+    f = os.path.join(here, "..", "data", "convergence", "%s_N%d_l%d.txt" % (stem, N, frac))
     if not os.path.exists(f):
         return None
     hdr = [ln for ln in open(f) if ln.startswith("# k*lam")][0]
@@ -46,7 +56,9 @@ def load(N, frac):
     return d
 
 
-fig, ax = plt.subplots(2, 2, figsize=(7.4, 5.9), sharex="row", sharey="row")
+pool = {ln.split()[0]: float(ln.split()[1])
+        for ln in open(os.path.join(here, "..", "data", "convergence", "rays_pool.txt"))}
+fig, ax = plt.subplots(2, 3, figsize=(10.4, 5.7), sharex="row", sharey="row")
 for ir, frac in enumerate((4, 1)):
     for ic, (m, lin, glf, name) in enumerate((("m1", "M1 lin", "M1 lin+GLF", "M1"),
                                               ("otvet", "OTVET lin", "OTVET lin+GLF", "OTVET"))):
@@ -86,6 +98,22 @@ for ir, frac in enumerate((4, 1)):
         if ic == 0:
             p.set_ylabel(r"$T(k)$", fontsize=10)
         p.set_xlabel(r"$k\lambda$", fontsize=10)
+    # the rays
+    p = ax[ir, 2]
+    d = load(NREF, frac, "T_rays")
+    kl = d["k*lam"]
+    kk = np.geomspace(kmin, kl.max() * 1.05, 300)
+    ex = np.arctan(kk) / kk
+    p.loglog(kk, ex, "k-", lw=1.8, zorder=2)
+    for f in POOLS:
+        nray = pool["rays_N%d_l%d_f%d" % (NREF, frac, f)]
+        p.loglog(kk, np.sqrt(ex ** 2 + SIG0 ** 2 / nray / SRC), color=RCOL[f], lw=1.1, zorder=2.5)
+        p.loglog(kl, d["rays_f%d" % f], ls="none", marker="o", ms=4.2, color=RCOL[f], mec="white", mew=0.5, zorder=3)
+    p.loglog(kl, d["rays_f15_avg"], ls="none", marker="o", ms=4.6, mfc="none", mec=RCOL[15], mew=1.0, zorder=4)
+    p.text(0.97, 0.94, r"rays, $\lambda=L%s$" % ("/4" if frac == 4 else ""), transform=p.transAxes,
+           ha="right", va="top", fontsize=10)
+    p.tick_params(which="both", direction="in", top=True, right=True, labelsize=8.5)
+    p.set_xlabel(r"$k\lambda$", fontsize=10)
 
 h = [Line2D([], [], color="k", lw=1.8, label=r"$(k\lambda)^{-1}\arctan(k\lambda)$"),
      Line2D([], [], color="0.4", ls="--", lw=1.4, label="closure's linear theory")]
@@ -96,6 +124,12 @@ if variants:
     h += [Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=COL[NREF], label=r"inject before, $%d^3$" % NREF),
           Line2D([], [], ls="none", marker="s", ms=4.6, mfc="none", mec=COL[NREF], label=r"$2^{\rm nd}$ order solver, $%d^3$" % NREF)]
 ax[1, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
+h = [Line2D([], [], ls="none", marker="o", ms=4.5, color=RCOL[f],
+            label=r"rays, $%d^3$, pool %d%s" % (NREF, f, {15: " (suite)", 64: " (original)"}.get(f, ""))) for f in POOLS]
+ax[0, 2].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
+h = [Line2D([], [], color=RCOL[15], lw=1.1, label="arctan with shot noise\nof the rays"),
+     Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=RCOL[15], label="pool 15, mean of 16 substeps")]
+ax[1, 2].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 fig.tight_layout(h_pad=0.6, w_pad=0.4)
 out = os.path.join(here, "..", "figures", "fig_app_convergence")
 fig.savefig(out + ".pdf")

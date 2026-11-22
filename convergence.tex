@@ -397,6 +397,87 @@ transport it approaches the continuum from below, 0.56, 0.63, 0.79, 0.89 from $3
 \item The $256^3$ points at $\lambda=L$ are running. \pending{job 43451395}
 \end{itemize}
 
+\subsection{The same test with the rays}\label{sec:raytest}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{figures/fig_app_convergence.pdf}
+\caption{The appendix figure of the paper: M1 (left) and OTVET (middle) as in Figs.~\ref{fig:transfer} and
+\ref{fig:uniconv}, with the exact linear solution of the discrete scheme (Section~\ref{sec:disc}) as thin
+curves; right, the ray tracer at $128^3$ for pools of 8, 15, 64 and 120 rays per cell (light to dark), with
+$[T_{\rm exact}^2+\sigma^2/512]^{1/2}$, $\sigma=0.95\,n_{\rm ray}^{-1/2}$, as thin curves and the pool of 15
+averaged over 16 substeps as open circles. Script: \texttt{scripts/fig\_app\_convergence.py --variants}.}
+\label{fig:raytest}
+\end{figure}
+
+\paragraph{Set-up.} \texttt{tools/analysis/ray\_transfer.cpp} (branch \texttt{rt-convergence-runs}) runs the
+solver's own ray tracing (thresholds, pool guard, emission, casting, splitting, merging and the deposit, then
+the attenuation and the move) and replaces only the chemistry: every cell transmits $e^{-\dx/\lambda}$ of the
+photons deposited in it, in every frequency group. The gas is made fully ionized, so the deposit is the path
+share of a ray in each cell. $N$ is the photon count a cell holds in a substep, summed over the groups, which is
+what the chemistry is given. A source cell emits 192 rays per substep, so a source in every cell is not
+possible; the sources are $N^3/512$ random cells (4096 at $128^3$), a white field with
+$P_L=512\,\dx^3\bar L^2$. The luminosity is set so that the mean is 0.1 photons per hydrogen atom per cell in
+steady state (my estimate of the level in the suite after overlap; the ray deletion threshold $10^{-6}$ is
+absolute). Runs last $20\lambda/\dx$ substeps, with the suite's settings otherwise (\texttt{legacy\_rt = 0},
+\texttt{ray\_rotate = 3}). M1 and OTVET were run with the same source cells: their $T$ agrees with that for a
+source in every cell to 4\,\% ($\lambda=L/4$) and 1\,\% ($\lambda=L$) in every bin, so the columns of
+Fig.~\ref{fig:raytest} can be compared.
+
+\paragraph{Result.} Table~\ref{tab:raytest} and Fig.~\ref{fig:raytest}. The transfer function separates into
+a part correlated with the sources, $rT$ with $r$ the correlation coefficient, and an uncorrelated part
+$T(1-r^2)^{1/2}$ (\texttt{scripts/ray\_noise.py}).
+\begin{itemize}
+\item \textbf{The correlated part is the exact solution.} $rT/T_{\rm exact}$ is 0.95--1.05 in every bin for
+$\lambda=L/4$ at every pool size, and 0.87--1.09 for $\lambda=L$ (0.95--1.09 at $k\lambda>30$; the lowest
+bins hold 6--20 modes). There is no diffusion plateau and no resolution-dependent floor: at the Nyquist
+frequency $rT/T_{\rm exact}$ is 0.99--1.05 ($\lambda=L/4$) and 1.00--1.09 ($\lambda=L$). The rays do have an
+injection term, since a substep's emission is deposited in and next to the source cell in that substep, but
+it is the true one: these are the photons at $r<\dx$ of equation~(\ref{eq:exact}). A dip of 5\,\% at
+$k\dx\approx1.5$--2 is the only systematic feature.
+\item \textbf{The rest is white noise set by the number of rays per cell.} The uncorrelated part is flat in $k$
+and corresponds to an rms per cell and substep of $\sigma=0.95\,n_{\rm ray}^{-1/2}$ of the mean (0.86--1.01
+over the eight runs), close to the Poisson value for $n_{\rm ray}$ equal rays. For the suite's pool of 15,
+$n_{\rm ray}=12.6$ and $\sigma=0.27$. In general $P_{\rm noise}=\sigma^2\dx^3\bar N^2$, that is
+$\Delta^2_{\rm noise}(k)=\sigma^2(k\dx)^3/2\pi^2$, $1.6\,\sigma^2=0.11$ at the Nyquist frequency for the
+suite. In units of $T$ the noise is $\sigma/\sqrt{512}$ in this test: its height relative to the signal in
+Fig.~\ref{fig:raytest} is that of this source field, and it is larger at $\lambda=L$ only because the signal
+is smaller.
+\item \textbf{It averages down, but not as fast as independent draws.} Over 16 substeps $\sigma$ falls by 1.5
+($\lambda=L/4$) and 2.5 ($\lambda=L$) at the pool of 15, against 4 for independent substeps: the same rays
+persist from one substep to the next.
+\item The pool guard limits the splitting in almost every substep at the pool of 15 (631 of 640 and 2551 of
+2560) without a visible effect on the correlated part. At a pool of 8 it also forces merges, and 0.3\,\% of the
+photons are lost at $\lambda=L$.
+\item At $64^3$ and the pool of 15 the result is the same: $rT/T_{\rm exact}=0.95$--1.00 and $\sigma=0.20$
+($\lambda=16$ cells), 0.87--1.18 and $\sigma=0.26$ ($\lambda=64$ cells).
+\item Not varied: the source density, the mean photon count, and the number of merge directions.
+\end{itemize}
+
+\begin{table}
+\centering
+\caption{The rays in the uniform test at $128^3$. $T/T_{\rm exact}$ at the Nyquist frequency and the noise
+per cell $\sigma$, for one substep and (in brackets) the mean of 16.}
+\label{tab:raytest}
+\begin{tabular}{llcccc}
+\toprule
+ & pool per cell & 8 & 15 (suite) & 64 (original) & 120\\
+\midrule
+$\lambda=L/4$ & rays per cell $n_{\rm ray}$ & 6.7 & 12.6 & 39.3 & 63.2\\
+ & substeps limited / forced (of 640) & 318 / 314 & 631 / 0 & 12 / 0 & 0 / 0\\
+ & $T/T_{\rm exact}$, Nyquist & 1.34 (1.13) & 1.21 (1.10) & 1.04 (1.01) & 1.02 (1.00)\\
+ & $\sigma$ & 0.37 (0.23) & 0.26 (0.17) & 0.14 (0.09) & 0.11 (0.09)\\
+ & $\sigma\,n_{\rm ray}^{1/2}$ & 0.96 & 0.91 & 0.90 & 0.86\\
+\midrule
+$\lambda=L$ & rays per cell $n_{\rm ray}$ & 6.7 & 12.6 & 31.2 & 52.1\\
+ & substeps limited / forced (of 2560) & 1628 / 924 & 2551 / 0 & 11 / 0 & 0 / 0\\
+ & $T/T_{\rm exact}$, Nyquist & 3.88 (1.58) & 2.77 (1.34) & 1.90 (1.19) & 1.56 (1.07)\\
+ & $\sigma$ & 0.39 (0.16) & 0.28 (0.11) & 0.18 (0.08) & 0.14 (0.06)\\
+ & $\sigma\,n_{\rm ray}^{1/2}$ & 1.01 & 0.97 & 0.98 & 0.97\\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Relation to Gnedin (2025) and to the suite}
 
 \citet{gnedin25} finds that M1 and OTVET both follow $\arctan(k\lambda)/(k\lambda)$ in this test, with fitted
@@ -654,6 +735,8 @@ events; the $256^3$ $f=15$ and $f=120$ runs took 2.5\,h and 7.5\,h.
 \item Uniform test: first order at $32^3$--$256^3$ ($\lambda=L/4$) and $32^3$--$128^3$ ($\lambda=L$), plus
 $\lambda=L/8$ and $2.5L$ with few and many sources; both orders and both injection orders at $64^3$ and $128^3$.
 The second order at $32^3$ (both $\lambda$) and $256^3$ ($\lambda=L/4$) is done. \pending{$256^3$, $\lambda=L$}
+\item Uniform test with the rays (Section~\ref{sec:raytest}): $128^3$ at pools of 8, 15, 64 and 120 per cell and
+$64^3$ at 15, $\lambda=L/4$ and $L$, with M1 and OTVET on the same source cells.
 \item Reionization runs finished: rays, M1 at $128^3$, $256^3$, $512^3$; OTVET at $128^3$, $256^3$, $512^3$; M1 with injection before the transport at $128^3$
 and $256^3$; the ray budgets; M1 second order at $128^3$.
 \pending{M1 second order $256^3$; OTVET second order $128^3$, $256^3$}
