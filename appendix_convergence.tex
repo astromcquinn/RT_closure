@@ -1,0 +1,109 @@
+% Appendix of main.tex: tests and convergence of the moment transport.
+% Condensed from convergence.tex (Sections 2-3). Figure: scripts/fig_app_convergence.py.
+\section{Tests and convergence of the moment transport}\label{app:convergence}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.78\linewidth]{figures/fig_app_convergence.pdf}
+\caption{Transfer function from the sources to the photon density for a uniform mean free path $\lambda$,
+with a source in every cell: M1 (left) and OTVET (right), $\lambda=L/4$ (top) and $\lambda=L$ (bottom).
+Black: the exact solution, equation~(\ref{eq:app_exact}). Dashed: the linear solution of each closure in
+the continuum, equations~(\ref{eq:app_m1}) and (\ref{eq:app_otvet}). Filled circles: our transport with the
+settings of the suite, at $32^3$ to $256^3$ cells (light to dark; to $128^3$ for $\lambda=L$). Bands: the
+linear solution with the numerical diffusion of the scheme, equation~(\ref{eq:app_glf}) (lower edge), and
+with the injection floor of equation~(\ref{eq:app_floor}) added (upper edge), for each resolution. Open
+symbols, $128^3$ only: sources injected before the transport (circles) and a second-order scheme (squares).}
+\label{fig:app_conv}
+\end{figure}
+
+We test the moment transport as \citet{gnedin25} does, with a uniform mean free path
+$\lambda=1/\kappa$ in a periodic box of side $L$. The transport routines of the code are run to steady
+state with a source of random luminosity in every cell (30\% rms), and each substep (one cell of light
+travel, $\Delta t=\Delta x/\chat$, taken in four transport updates) ends with $N$ and $\mathbf F$ multiplied
+by $e^{-\Delta x/\lambda}$ in place of the chemistry. We measure
+$T(k)\equiv[P_N(k)/P_L(k)]^{1/2}$, normalized to unity as $k\to0$; with uniform opacity this is the
+$T_{\Gamma L}$ of Section~\ref{sec:conclusions}. Figure~\ref{fig:app_conv} compares it with four analytic
+results.
+
+\emph{Exact.} Each source contributes $L_se^{-r/\lambda}/(4\pi r^2\chat)$ to $N$, whose Fourier
+transform gives
+\begin{equation}
+T_{\rm exact}(k)=\frac{1}{\lambda}\int_0^\infty\!dr\,e^{-r/\lambda}\,\frac{\sin kr}{kr}
+=\frac{\arctan(k\lambda)}{k\lambda}.\label{eq:app_exact}
+\end{equation}
+
+\emph{The closures in the continuum.} In steady state the moment equations are
+$i\mathbf k\cdot\mathbf F=S/\chat-\kappa N$ and $ik_j(\mathsf D_{ij}N)=-\kappa F_i$. With many sources
+per $\lambda^3$ the radiation is nearly isotropic, and M1 has $\mathsf D=\mathsf I/3$ to first order in
+the perturbation, so
+\begin{equation}
+T_{\rm M1}(k)=\frac{1}{1+k^2\lambda^2/3},\label{eq:app_m1}
+\end{equation}
+which falls as $3/(k\lambda)^2$ where the exact solution falls as $\pi/(2k\lambda)$. The OTVET tensor
+(equation~\ref{eqn:otvet}) instead responds to the sources: for source fluctuations $\delta_L$,
+$\delta\mathsf D_{ij}(\mathbf k)=-(\pi^2/kL_{\rm O})(\hat k_i\hat k_j-\delta_{ij}/3)\,\delta_L(\mathbf k)$
+for $kL\gg1$, where $L_{\rm O}\equiv\int d^3r/r^2=7.66\,L$ over the minimum-image cube. This adds a term to
+the flux equation and gives \citep{wu21}
+\begin{equation}
+T_{\rm OTVET}(k)=\frac{1+2\pi^2k\lambda^2/(3L_{\rm O})}{1+k^2\lambda^2/3}.\label{eq:app_otvet}
+\end{equation}
+The extra term is $0.86\,(k\lambda)(\lambda/L)$: OTVET has too much structure once $\lambda$ approaches $L$.
+
+\emph{Numerical diffusion.} The first-order Lax--Friedrichs flux through a cell face is
+$\tfrac12(f_i+f_{i+1})-\tfrac12\chat\,(u_{i+1}-u_i)$, which adds a diffusion term
+$\tfrac12\chat\Delta x\nabla^2$ to both moment equations. In the linear solution $\mathbf k$ becomes
+$\mathbf s$ and the loss rate $\kappa$ becomes $q$, with
+$s_d=\sin(k_d\Delta x)/\Delta x$ and $q=\kappa+\sum_d[1-\cos(k_d\Delta x)]/\Delta x\simeq\kappa+\tfrac12k^2\Delta x$:
+\begin{equation}
+T^{\rm num}_{\rm M1}=\frac{\kappa}{q+|\mathbf s|^2/3q},\qquad
+T^{\rm num}_{\rm OTVET}=\frac{\kappa+2\pi^2|\mathbf s|^2/(3qkL_{\rm O})}{q+|\mathbf s|^2/3q}.\label{eq:app_glf}
+\end{equation}
+For $k\gtrsim(2/\lambda\Delta x)^{1/2}$, $T^{\rm num}_{\rm M1}$ flattens near $1.5\,\Delta x/\lambda$.
+
+\emph{Injection floor.} In our runs each substep transports, then injects the sources, then calls the
+chemistry, so a substep's emission is still in its source cell when the rate is evaluated. Let
+$A(\mathbf k)$ be the transfer of one substep of transport and $f=1-e^{-\Delta x/\lambda}$ the fraction
+absorbed per substep. The steady state is $T_1=f/[1-(1-f)A]$, and $T_0=A\,T_1$ if the sources are
+injected before the transport instead. Eliminating $A$,
+\begin{equation}
+T_1=T_0+f\,(1-T_0),\label{eq:app_floor}
+\end{equation}
+exactly for any linear transport: the photon density keeps an unsmoothed copy of the source field with
+amplitude $f\simeq\Delta x/\lambda$, which exceeds $T_{\rm exact}$ for $k\Delta x>\pi/2$.
+
+\emph{Results.} (i) At $k\lambda\lesssim2$ M1 is within 2--13\% and OTVET within 6\% of its continuum
+solution at every resolution: the transport solves the closure's equations. (ii) At higher $k$ the code
+lies inside the band between equation~(\ref{eq:app_glf}) and the same with the floor of
+equation~(\ref{eq:app_floor}) in every bin for M1 (to 1\%), and for OTVET except in its lowest bins, where it
+scatters by up to 20\% about equation~(\ref{eq:app_otvet}). (iii) M1 is not converged at $k\lambda\gg1$. At
+$k\lambda=10$ and $\lambda=L/4$ it is 4.9, 3.7, 2.6 and 1.8 times equation~(\ref{eq:app_m1}) at $32^3$,
+$64^3$, $128^3$ and $256^3$ (OTVET: 1.8, 1.6, 1.4, 1.2 times equation~\ref{eq:app_otvet}), and it crosses
+above the exact solution at $k\Delta x\approx1.3$ at every resolution and both $\lambda$. Its agreement with
+the exact solution at $\lambda=L/4$ is produced by the two numerical terms, and it converges away from it
+at about first order in $\Delta x$. (iv) For $\lambda=L$ OTVET is converged, within 20\% of
+equation~(\ref{eq:app_otvet}) and 1.6--2.3 times the exact solution. (v) A second-order scheme
+(monotonized-central reconstruction, Heun step; not used in the suite) lowers M1's $T$ by factors of
+1.1--1.9 at $k\Delta x=0.1$--0.8 and leaves the floor; injecting before the transport removes the floor and
+never crosses the exact solution, but leaves dense source cells neutral in full runs. The reversal of M1's
+deficit at $k\gtrsim15\hmpc$ in Fig.~\ref{fig:pkg} is therefore numerical, and a converged M1 would have
+less small-scale power than ours.
+
+\emph{Other tests.} The moment solver also passes the following.
+(1) The transport conserves photons and energy to rounding and keeps $|\mathbf F|\le N$; a pulse stays
+inside its light cone; an M1 plane beam moves one cell per substep without sideways spread.
+(2) The OTVET tensor of one source has rank one and unit trace, includes the periodic images, and its direct and FFT sums agree
+to $3\times10^{-7}$.
+(3) Results are identical for 1, 2 and 4 threads and across a restart, and in every run the photons
+emitted, absorbed, redshifted and in flight balance to six digits.
+(4) An ionization front in a uniform medium at $\chat=0.1c$ follows the finite-speed solution
+$R(t)=R_\infty(t-R/\chat)$ (Shapiro et al.\ 2006), where $R_\infty$ is the front for infinite speed: the
+radius is 36\% high at $\chat t=2$ cells, and 3\% and 0.3\% high at $\chat t=10$ and 30 cells for M1
+(1.6\% and $-0.6$\% for OTVET; 1.7\% and 0.2\% for the rays).
+(5) Behind a dense clump lit by one source, the mean ionized fraction on the axis is 0.000 for the rays,
+0.044 for M1 and 0.004 for OTVET.
+(6) With 16 sources in a lognormal density field, M1 and OTVET are 6\% and 3\% above the rays in ionized
+fraction at half ionization, and 18--19\% of the cells differ from the rays by more than 0.1 in
+$x_{\rm HII}$, against 6\% between two ray runs with different HEALPix orientations.
+\draft{(7) Optional: full reionization runs at $128^3$, $256^3$ and $512^3$ in a $20\mpch$ box with rays, M1
+and OTVET at each resolution. At $\xv\approx0.57$ the ratio of M1's to the rays' $\Gamma_{\rm HI}$ power at
+$k=16\hmpc$ is 3.05, 1.36 and 1.05, and OTVET's 3.6, 2.5 and 2.1. See \texttt{convergence.tex}.}
