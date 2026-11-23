@@ -287,7 +287,7 @@ averaged over the modes of each $k$ bin as the measurement is.
 
 \paragraph{Comparison with the code.} The first-order code agrees with equation (\ref{eq:disc}) to within
 3\,\% in every bin, for M1 and OTVET, both injection orders, $\lambda=L/4$ ($32^3$--$256^3$) and $\lambda=L$
-($32^3$--$128^3$): the ratio of code to theory spans 0.972--1.023, and is within 0.5\,\% in most bins at
+($32^3$--$256^3$): the ratio of code to theory spans 0.969--1.023, and is within 0.5\,\% in most bins at
 $k\dx>0.3$ with the default order. The residuals are largest in bins with few modes, where the measured
 ratio of two noisy spectra differs from the mode average of $|T|^2$. So the solver solves its discretized
 linear equations, the nonlinearity of the M1 closure plays no role in this test, and every departure from
@@ -379,8 +379,10 @@ OTVET, order 2 & 10 & 1.85 & 1.43 & 1.22 & 1.11\\
 OTVET, order 1 & 20 & 3.0 & 2.2 & 1.9 & 1.6\\
 \midrule
 \multicolumn{6}{l}{$\lambda=L$}\\
-M1, order 1 & 25 & 9.9 & 6.3 & 3.8 & \pending{}\\
-M1, order 2 & 25 & 6.6 & 3.6 & 2.3 & \pending{}\\
+M1, order 1 & 25 & 9.9 & 6.3 & 3.8 & 2.4\\
+M1, order 2 & 25 & 6.6 & 3.6 & 2.3 & 1.6\\
+OTVET, order 1 & 25 & 1.05 & 1.09 & 1.07 & 1.04\\
+OTVET, order 2 & 25 & 1.16 & 1.08 & 1.05 & 1.02\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -394,7 +396,6 @@ a little faster (1.3--2.0 per doubling). At $32^3$ and $\lambda=L/4$ it gains no
 $k\dx\ge1.25$. With injection before the
 transport it approaches the continuum from below, 0.56, 0.63, 0.79, 0.89 from $32^3$ to $256^3$ at $k\lambda=10$.
 \item OTVET is converged at $\lambda=L$ and converges like M1, with smaller amplitude, at $\lambda=L/4$.
-\item The $256^3$ points at $\lambda=L$ are running. \pending{job 43451395}
 \end{itemize}
 
 \subsection{The same test with the rays}\label{sec:raytest}
@@ -564,8 +565,8 @@ size and particle mass of the $256^3$ runs here; the $512^3$ runs have half the 
 
 \begin{itemize}
 \item \textbf{Resolution series:} rays, M1, and OTVET at each $N$; M1 with injection before the transport
-at $128^3$ and $256^3$ (not run at $512^3$); M1 and OTVET with the second-order scheme at $128^3$ and $256^3$
-\pending{only the $128^3$ M1 run is finished}.
+at every $N$; M1 and OTVET with the second-order scheme at $128^3$ and $256^3$
+\pending{the $256^3$ OTVET second-order run is still running}.
 \item \textbf{Ray-budget series} at $256^3$: the cap on rays per cell (\texttt{nray\_max\_factor}) $f=8$, 15
 (the suite's value), 32, 64 and 120.
 \item Spectra are of $\delta_\Gamma=\Gamma/\langle\Gamma\rangle_V-1$ and of $x_{\rm HII}$, compared at
@@ -599,7 +600,8 @@ match.
 \includegraphics[width=\linewidth]{figures/convergence/rt_convergence_res.png}
 \caption{Resolution series. Columns: $\xv\approx0.57$, 0.77, 0.86--0.92 and after overlap. Top: $P_\Gamma$ of
 each moment run over that of the ray run with the same $N$ (blue $128^3$, orange $256^3$, red $512^3$; M1 solid, M1 with
-injection before the transport dashed, OTVET dash-dotted, M1 second order dash-dot-dotted); thin vertical lines: $k\dx=1.3$.
+injection before the transport dashed, OTVET dash-dotted, M1 second order dash-dot-dotted, OTVET second order
+sparse dots); thin vertical lines: $k\dx=1.3$.
 Second row: cross-correlation with the rays. Third and fourth rows: $\Delta^2_\Gamma$ of the ray runs and of the M1
 runs themselves. Table: \texttt{data/convergence/rt\_convergence\_res.txt}.}
 \label{fig:res}
@@ -648,12 +650,20 @@ the redshift mismatch of the paired snapshots as for M1.
 \item \textbf{OTVET's excess after overlap is large and grows as the mean free path does:} 8--12 times the
 rays' power at $k=0.5$--$4\hmpc$ at $256^3$ ($\lambda=15$--20\,pMpc) and 26--85 times at $128^3$
 ($\lambda=38$\,pMpc), in line with the $\lambda/L$ scaling of its tensor term.
-\item \textbf{Second-order M1 in a reionization run ($128^3$) does not reduce the excess.} The ratio to the rays
+\item \textbf{Second-order M1 in a reionization run does not reduce the excess, at $128^3$ or $256^3$.} At
+$128^3$ the ratio to the rays
 at $k=2$, 4, 8, $16\hmpc$ is 1.14, 1.47, 1.91, 3.29 at $\xv\approx0.58$ against 0.93, 1.12, 1.47, 3.05 at first order, and the
-cross-correlation at $k=1$--$4\hmpc$ falls from 0.89--0.98 to 0.76--0.87. The uniform test predicted a modest
-reduction. The cause is not known. It is not the build: a control run of the first-order scheme with the executable
+cross-correlation at $k=1$--$4\hmpc$ falls from 0.89--0.98 to 0.76--0.87. At $256^3$ it is 1.17, 1.40, 1.56, 1.90
+against 0.96, 0.99, 1.10, 1.36, and the correlation falls from 0.86--0.95 to 0.75--0.84. After overlap at $256^3$
+the second-order run has more power at every $k$: 0.30, 0.55, 0.83, 1.07, 1.41 of the rays' at $k=1$, 2, 4, 8,
+$16\hmpc$ against 0.16, 0.35, 0.60, 0.74, 0.98, with a lower correlation (0.73--0.84 against 0.79--0.96 at
+$k=1$--$4\hmpc$). The uniform test predicted a modest
+reduction of the small-scale power. The cause is not known. It is not the build: a control run of the first-order scheme with the executable
 of the second-order run reproduces the original first-order run byte for byte.
-\pending{$256^3$ runs}
+\item \textbf{Second-order OTVET ($128^3$) has less excess at $k\le4\hmpc$ and more at $k=16\hmpc$:} 1.21, 1.64,
+2.47, 4.18 at $k=2$, 4, 8, $16\hmpc$ and $\xv\approx0.58$ against 1.50, 2.08, 2.56, 3.63 at first order, with the
+same correlation with the rays (0.99). After overlap its excess at $k=4$--$16\hmpc$ is larger (33, 24, 7.0 against
+26, 12, 3.7 times the rays). \pending{$256^3$ OTVET second order}
 \end{itemize}
 
 \subsection{Injection before the transport in the reionization runs}\label{sec:inject}
@@ -665,7 +675,12 @@ $\xv\approx0.57$ the ratio is 0.79, 0.74, 0.54, 0.31 at $k=1$, 2, 4, $8\hmpc$, a
 the default. The difference between the two is the injection floor: most of M1's power above $k\approx4\hmpc$ at
 $256^3$ is the source cells' own photons.
 \item Its ratio depends on resolution as much as the default's does at fixed $k$, because the source smoothing is
-also fixed in cells.
+also fixed in cells. At $\xv\approx0.58$ the ratio at $k=8\hmpc$ is 0.09, 0.31, 0.49 and at $k=16\hmpc$ 0.01, 0.07,
+0.31 from $128^3$ to $512^3$: it approaches the rays from below, as in the uniform test. At $k=2\hmpc$ it is
+0.60, 0.74, 0.62, with no trend.
+\item At $512^3$ and $\xv\approx0.58$ the ratio is 0.69, 0.62, 0.53, 0.49, 0.31 at $k=1$, 2, 4, 8, $16\hmpc$,
+against 0.78, 0.78, 0.87, 0.99, 1.05 with the default. The run reionizes earlier than the default: $\xv=0.954$ at
+$z=4.98$, against 0.865 (default, $z=5.00$) and 0.837 (rays, $z=4.97$). Its dense-cell statistics were not computed.
 \item \textbf{Dense cells} (more than 100 times the mean density) after overlap at $256^3$: mass-weighted neutral
 fraction 0.110 (rays), 0.184 (M1) and 0.308 (M1, injection before); mean $\Gamma$ in those cells $3.6\times10^{-12}$,
 $4.5\times10^{-12}$ and $7.4\times10^{-13}\,{\rm s^{-1}}$. At $128^3$: 0.028, 0.134 and 0.295. Injection before the
@@ -772,15 +787,15 @@ box at the same cell size has proportionally more sources. Not measured: either 
 \section{What was and was not run}\label{sec:status}
 
 \begin{itemize}
-\item Uniform test: first order at $32^3$--$256^3$ ($\lambda=L/4$) and $32^3$--$128^3$ ($\lambda=L$), plus
+\item Uniform test: first order at $32^3$--$256^3$ ($\lambda=L/4$ and $\lambda=L$), plus
 $\lambda=L/8$ and $2.5L$ with few and many sources; both orders and both injection orders at $64^3$ and $128^3$.
-The second order at $32^3$ (both $\lambda$) and $256^3$ ($\lambda=L/4$) is done. \pending{$256^3$, $\lambda=L$}
+The second order at $32^3$ and $256^3$ (both $\lambda$) is done.
 \item Uniform test with the rays (Section~\ref{sec:raytest}): $128^3$ at pools of 8, 15, 64 and 120 per cell and
 $64^3$ at 15, $\lambda=L/4$ and $L$, with M1 and OTVET on the same source cells.
-\item Reionization runs finished: rays, M1 at $128^3$, $256^3$, $512^3$; OTVET at $128^3$, $256^3$, $512^3$; M1 with injection before the transport at $128^3$
-and $256^3$; the ray budgets; M1 second order at $128^3$.
-\pending{M1 second order $256^3$; OTVET second order $128^3$, $256^3$}
-\item Not run: M1 with injection before the transport at $512^3$; OTVET with injection before the transport in a reionization
+\item Reionization runs finished: rays, M1 at $128^3$, $256^3$, $512^3$; OTVET at $128^3$, $256^3$, $512^3$; M1 with injection before the transport at $128^3$,
+$256^3$ and $512^3$; the ray budgets; M1 second order at $128^3$ and $256^3$; OTVET second order at $128^3$.
+\pending{OTVET second order $256^3$}
+\item Not run: OTVET with injection before the transport in a reionization
 run; any $512^3$ run past overlap; the screen and cone closures in any of these tests; an HLL flux; the second-order scheme on refined grids.
 \end{itemize}
 
