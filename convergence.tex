@@ -40,7 +40,7 @@ the reionization runs M1's excess of photoionization-rate power over the rays at
 with resolution as that predicts (a ratio of 3.1, 1.4 and 1.05 at $k=16\hmpc$ on $128^3$, $256^3$ and $512^3$ cells), while
 its deficit at large scales after overlap, and OTVET's excess, do not go away.
 The ray runs of the paper's suite are converged in ray number to 3\,\% at $k\ge2\hmpc$ and to 8--20\,\%
-at $k\le1\hmpc$ after overlap. Items still running are marked \pending{}.
+at $k\le1\hmpc$ after overlap.
 \end{abstract}
 
 \tableofcontents
@@ -565,8 +565,7 @@ size and particle mass of the $256^3$ runs here; the $512^3$ runs have half the 
 
 \begin{itemize}
 \item \textbf{Resolution series:} rays, M1, and OTVET at each $N$; M1 with injection before the transport
-at every $N$; M1 and OTVET with the second-order scheme at $128^3$ and $256^3$
-\pending{the $256^3$ OTVET second-order run is still running}.
+at every $N$; M1 and OTVET with the second-order scheme at $128^3$ and $256^3$.
 \item \textbf{Ray-budget series} at $256^3$: the cap on rays per cell (\texttt{nray\_max\_factor}) $f=8$, 15
 (the suite's value), 32, 64 and 120.
 \item Spectra are of $\delta_\Gamma=\Gamma/\langle\Gamma\rangle_V-1$ and of $x_{\rm HII}$, compared at
@@ -660,10 +659,14 @@ $16\hmpc$ against 0.16, 0.35, 0.60, 0.74, 0.98, with a lower correlation (0.73--
 $k=1$--$4\hmpc$). The uniform test predicted a modest
 reduction of the small-scale power. The cause is not known. It is not the build: a control run of the first-order scheme with the executable
 of the second-order run reproduces the original first-order run byte for byte.
-\item \textbf{Second-order OTVET ($128^3$) has less excess at $k\le4\hmpc$ and more at $k=16\hmpc$:} 1.21, 1.64,
+\item \textbf{Second-order OTVET does not reduce the excess either.} At $128^3$ it has less excess at
+$k\le4\hmpc$ and more at $k=16\hmpc$: 1.21, 1.64,
 2.47, 4.18 at $k=2$, 4, 8, $16\hmpc$ and $\xv\approx0.58$ against 1.50, 2.08, 2.56, 3.63 at first order, with the
 same correlation with the rays (0.99). After overlap its excess at $k=4$--$16\hmpc$ is larger (33, 24, 7.0 against
-26, 12, 3.7 times the rays). \pending{$256^3$ OTVET second order}
+26, 12, 3.7 times the rays). At $256^3$ it has more excess at every $k\ge1\hmpc$ during reionization: 1.33, 1.72,
+2.38, 3.07 at $\xv\approx0.57$ against 1.27, 1.50, 1.96, 2.47, with the same correlation (0.98--0.99). After
+overlap it is within 3\,\% of first order at $k\le4\hmpc$ (9.0, 9.0, 8.2 times the rays at $k=1$, 2, $4\hmpc$ against 9.2, 9.2,
+8.4) and larger at $k=8$ and $16\hmpc$ (7.7 and 6.4 against 7.3 and 4.6).
 \end{itemize}
 
 \subsection{Injection before the transport in the reionization runs}\label{sec:inject}
@@ -793,8 +796,7 @@ The second order at $32^3$ and $256^3$ (both $\lambda$) is done.
 \item Uniform test with the rays (Section~\ref{sec:raytest}): $128^3$ at pools of 8, 15, 64 and 120 per cell and
 $64^3$ at 15, $\lambda=L/4$ and $L$, with M1 and OTVET on the same source cells.
 \item Reionization runs finished: rays, M1 at $128^3$, $256^3$, $512^3$; OTVET at $128^3$, $256^3$, $512^3$; M1 with injection before the transport at $128^3$,
-$256^3$ and $512^3$; the ray budgets; M1 second order at $128^3$ and $256^3$; OTVET second order at $128^3$.
-\pending{OTVET second order $256^3$}
+$256^3$ and $512^3$; the ray budgets; M1 and OTVET second order at $128^3$ and $256^3$.
 \item Not run: OTVET with injection before the transport in a reionization
 run; any $512^3$ run past overlap; the screen and cone closures in any of these tests; an HLL flux; the second-order scheme on refined grids.
 \end{itemize}
