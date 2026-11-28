@@ -33,13 +33,14 @@ DATA = os.path.join(HERE, "..", "data")
 FIG = os.path.join(HERE, "..", "figures")
 
 # the paper's runs: key in the data, label, colour, line style, width
-RUNS = [("rays", "rays", "#000000", "-", 2.2),
+# The methods' names are capitalised in the labels, as in the text (user, 2026-11-28).
+RUNS = [("rays", "Rays", "#000000", "-", 2.2),
         ("M1", "M1", "#2a78d6", "-", 1.5),
         ("OTVET", "OTVET", "#eb6834", "-", 2.6),  # wide: the split (dashed, on top) follows it before overlap
         ("OTVET_nobg", "OTVET, no background", "#eb6834", (0, (4, 1.5)), 1.0),
-        ("screen", "screen", "#eda100", "-.", 1.5),
-        ("cone", "cone", "#e87ba4", ":", 2.0),
-        ("rays_A+RR", "rays, case A + RR", "#008300", "-", 1.2),
+        ("screen", "Screen", "#eda100", "-.", 1.5),
+        ("cone", "Cone", "#e87ba4", ":", 2.0),
+        ("rays_A+RR", "Rays, case A + RR", "#008300", "-", 1.2),
         ("21cmFAST", "21cmFAST", "#6250d6", "-", 1.8)]
 INK2 = "#52514e"
 KMAX = 10.0  # h/Mpc: the largest k drawn (0: all)
@@ -180,8 +181,8 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip
         a2.set_xlabel(r"$k$ [$h$ Mpc$^{-1}$]")
         if j == 0:
             a0.set_ylabel(ylabel)
-            a1.set_ylabel(r"$P/P_{\rm rays}$")
-            a2.set_ylabel(r"$r(k)$ with the rays")
+            a1.set_ylabel(r"$P/P_{\rm Rays}$")
+            a2.set_ylabel(r"$r(k)$ with Rays")
         if pdfs:
             a3 = fig.add_subplot(gs[4, j], sharey=None)
             _, dp, below = pdfs[j]
@@ -204,7 +205,7 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip
             if j == 0:
                 a3.set_ylabel(r"$dP/d\log_{10}\Gamma$")
             if "rays" in below and below["rays"] > 0.005:
-                a3.text(0.03, 0.95, f"rays: {below['rays']:.0%}\n" + r"below $10^{-4}$", transform=a3.transAxes,
+                a3.text(0.03, 0.95, f"Rays: {below['rays']:.0%}\n" + r"below $10^{-4}$", transform=a3.transAxes,
                         ha="left", va="top", fontsize=7.5, color=INK2)
     order = [lab for _, lab, *_ in RUNS if lab in handles]
     fig.legend([handles[l] for l in order], order, loc="upper center", ncol=min(len(order), 4),

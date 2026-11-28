@@ -110,7 +110,7 @@ for ir, frac in enumerate((4, 1)):
         p.loglog(kk, np.sqrt(ex ** 2 + SIG0 ** 2 / nray / SRC), color=RCOL[f], lw=1.1, zorder=2.5)
         p.loglog(kl, d["rays_f%d" % f], ls="none", marker="o", ms=4.2, color=RCOL[f], mec="white", mew=0.5, zorder=3)
     p.loglog(kl, d["rays_f15_avg"], ls="none", marker="o", ms=4.6, mfc="none", mec=RCOL[15], mew=1.0, zorder=4)
-    p.text(0.97, 0.94, r"rays, $\lambda=L%s$" % ("/4" if frac == 4 else ""), transform=p.transAxes,
+    p.text(0.97, 0.94, r"Rays, $\lambda=L%s$" % ("/4" if frac == 4 else ""), transform=p.transAxes,
            ha="right", va="top", fontsize=10)
     p.tick_params(which="both", direction="in", top=True, right=True, labelsize=8.5)
     p.set_xlabel(r"$k\lambda$", fontsize=10)
@@ -125,9 +125,9 @@ if variants:
           Line2D([], [], ls="none", marker="s", ms=4.6, mfc="none", mec=COL[NREF], label=r"$2^{\rm nd}$ order solver, $%d^3$" % NREF)]
 ax[1, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 h = [Line2D([], [], ls="none", marker="o", ms=4.5, color=RCOL[f],
-            label=r"rays, $%d^3$, pool %d%s" % (NREF, f, {15: " (suite)", 64: " (original)"}.get(f, ""))) for f in POOLS]
+            label=r"Rays, $%d^3$, pool %d%s" % (NREF, f, {15: " (suite)", 64: " (original)"}.get(f, ""))) for f in POOLS]
 ax[0, 2].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
-h = [Line2D([], [], color=RCOL[15], lw=1.1, label="arctan with shot noise\nof the rays"),
+h = [Line2D([], [], color=RCOL[15], lw=1.1, label="arctan with shot noise\nof Rays"),
      Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=RCOL[15], label="pool 15, mean of 16 substeps")]
 ax[1, 2].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 fig.tight_layout(h_pad=0.6, w_pad=0.4)

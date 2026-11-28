@@ -68,9 +68,9 @@ def main():
             a1.plot(d[:, 0], d[:, 1], color=c, ls=ls, lw=lw, marker="o", ms=3.5)
     uni = np.array(sorted([float(v) for v in l.split()[1:]] for l in open(os.path.join(DATA, f"taueff_temp{sfx}.txt"))
                           if l.startswith("rays ")))
-    for col, ls, mk, label in ((9, (0, (5, 2)), "o", r"rays, uniform $\Gamma_{\rm HI}$"),
-                               (15, (0, (4, 1.5, 1, 1.5)), "v", r"rays, uniform $\Gamma_{\rm HI}$ and $T$"),
-                               (18, (0, (1, 1.5)), "D", r"rays, uniform $\Gamma_{\rm HI}$, $T$, no neutral gas")):
+    for col, ls, mk, label in ((9, (0, (5, 2)), "o", r"Rays, uniform $\Gamma_{\rm HI}$"),
+                               (15, (0, (4, 1.5, 1, 1.5)), "v", r"Rays, uniform $\Gamma_{\rm HI}$ and $T$"),
+                               (18, (0, (1, 1.5)), "D", r"Rays, uniform $\Gamma_{\rm HI}$, $T$, no neutral gas")):
         a1.plot(uni[:, 0], uni[:, col], color=TEST, ls=ls, lw=1.1, marker=mk, ms=3.4, mfc="white", mew=0.9,
                 zorder=3, label=label)
     a1.legend(fontsize=6.5, frameon=False, loc="upper right", handlelength=3.8)

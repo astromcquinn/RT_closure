@@ -24,6 +24,8 @@ directory (DIR/run/step_NNNN/fHI.bin), read like a run.
 usage: fig_maps.py --field xHII --steps 69,84,93 --out figures/fig1_maps_xHII.png RUN:label ...
        fig_maps.py --field gamma --steps 84,93,99 --out figures/fig3_gamma_maps.png RUN:label ...
        fig_maps.py --field gamma --relative --steps 84,93,99 --out figures/fig3_gamma_maps.png RUN:label ...
+       fig_maps.py ... --retitle OLD.png --out NEW.png x:label ...   (new labels on an existing figure,
+                                                                     without the runs; see retitle())
 A label may contain "\\n" for a two-line column title.
 Writes <out>_panels.txt: which snapshot of which run went into each panel.
 """
@@ -114,6 +116,73 @@ def slab(d, fd, n):
     return m if fd["floor"] is None else np.maximum(m, fd["floor"])
 
 
+def layout(nr, nc, twoline):
+    """The figure of nr x nc square panels: width and height [in], then left, right, gap,
+    the panel's width and height, the vertical gap and the top of the first row (fractions)."""
+    W = 7.2
+    left, right, gap = 0.085, 0.885, 0.006
+    head = 0.42 if twoline else 0.28                  # column titles [in]
+    w = (right - left - gap * (nc - 1)) / nc          # panel width, fraction of W
+    hin = w * W                                       # panel size [in]
+    H = hin * nr + gap * W * (nr - 1) + head + 0.08
+    h, gy, top = hin / H, gap * W / H, 1 - head / H
+    return W, H, left, right, gap, w, h, gy, top
+
+
+def colorbar(fig, a, fd, nr, right, h, gy, top):
+    bot = top - nr * h - (nr - 1) * gy
+    cax = fig.add_axes([right + 0.015, bot + 0.1 * (top - bot), 0.015, 0.8 * (top - bot)])
+    if a.relative:
+        cmap_r, norm_r = rel_style()
+        cb = fig.colorbar(ScalarMappable(norm=norm_r, cmap=cmap_r), cax=cax, ticks=np.log10(REL_EDGES))
+        cb.set_ticklabels(REL_LABELS)
+        ref_lab = r"\bar\Gamma_{\rm Rays}" if a.rel_to == "ref" else r"\bar\Gamma"
+        cb.set_label(rf"$\Gamma_{{\rm HI}}/{ref_lab}$ (black: neutral)", fontsize=8)
+    else:
+        cb = fig.colorbar(ScalarMappable(norm=fd["norm"], cmap=fd["cmap"]), cax=cax)
+        cb.set_label(fd["label"], fontsize=8)
+    cb.ax.tick_params(labelsize=7)
+    return cb
+
+
+def retitle(a, fd, specs, nr):
+    """--retitle PNG: the column titles and the colour bar's label of an existing figure
+    redrawn with the labels given now, every other pixel kept. The layout does not depend
+    on the data, so the titles are drawn on empty panels of the same figure and the band
+    above the first row (and the box of the colour bar's label) is copied into PNG's
+    pixels. For a change of labels without the runs' cubes."""
+    import matplotlib.image as mi
+    old = mi.imread(a.retitle)
+    nc = len(specs)
+    W, H, left, right, gap, w, h, gy, top = layout(nr, nc, any("\n" in l for _, l in specs))
+    fig = plt.figure(figsize=(W, H))
+    for j, (_, lab) in enumerate(specs):
+        ax = fig.add_axes([left + j * (w + gap), top - h, w, h])
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_title(lab, fontsize=8)
+    cb = colorbar(fig, a, fd, nr, right, h, gy, top)
+    fig.set_dpi(300)
+    fig.canvas.draw()
+    new = np.asarray(fig.canvas.buffer_rgba()).astype(np.float32) / 255
+    if new.shape[:2] != old.shape[:2]:
+        raise SystemExit(f"{a.retitle} is {old.shape[:2]}, this layout {new.shape[:2]}: other labels, steps or runs?")
+    out = old.copy()
+    if out.shape[2] == 3:
+        new = new[..., :3]
+    ytop = int(np.floor((1 - top) * new.shape[0])) - 2        # the band above the first row
+    out[:ytop] = new[:ytop]
+    boxes = [f"rows 0-{ytop - 1}"]
+    if a.relative:
+        bb = cb.ax.yaxis.label.get_window_extent()
+        x0, x1 = int(np.floor(bb.x0)) - 3, int(np.ceil(bb.x1)) + 3
+        y0, y1 = new.shape[0] - int(np.ceil(bb.y1)) - 3, new.shape[0] - int(np.floor(bb.y0)) + 3
+        out[y0:y1, x0:x1] = new[y0:y1, x0:x1]
+        boxes.append(f"x {x0}-{x1}, y {y0}-{y1}")
+    mi.imsave(a.out, out, dpi=300)
+    print("retitled", a.retitle, "->", a.out, "; replaced", "; ".join(boxes))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("runs", nargs="+", help="RUN:label; the first is the reference")
@@ -126,6 +195,10 @@ def main():
                     help="gamma only: Gamma over the median of the ionised cells, in bands")
     ap.add_argument("--rel-to", choices=("ref", "own"), default="ref",
                     help="--relative: the first run's median (ref) or each run's own (own)")
+    ap.add_argument("--retitle", metavar="PNG",
+                    help="redraw only the column titles and the colour bar's label of PNG (a figure "
+                         "of this script with the same steps and runs) with the labels given now; "
+                         "the runs are not read")
     a = ap.parse_args()
     if a.relative and a.field != "gamma":
         ap.error("--relative applies to --field gamma")
@@ -135,15 +208,11 @@ def main():
     specs = [(r.partition(":")[0], (r.partition(":")[2] or os.path.basename(r)).replace("\\n", "\n"))
              for r in a.runs]
     steps = [int(s) for s in a.steps.split(",")]
+    if a.retitle:
+        return retitle(a, fd, specs, len(steps))
     snaps = [snapshots(p, fd["file"]) for p, _ in specs]
     nr, nc = len(steps), len(specs)
-    W = 7.2
-    left, right, gap = 0.085, 0.885, 0.006
-    head = 0.42 if any("\n" in l for _, l in specs) else 0.28   # column titles [in]
-    w = (right - left - gap * (nc - 1)) / nc          # panel width, fraction of W
-    hin = w * W                                       # panel size [in]
-    H = hin * nr + gap * W * (nr - 1) + head + 0.08
-    h, gy, top = hin / H, gap * W / H, 1 - head / H
+    W, H, left, right, gap, w, h, gy, top = layout(nr, nc, any("\n" in l for _, l in specs))
     fig = plt.figure(figsize=(W, H))
     log = []
     for i, st in enumerate(steps):
@@ -179,17 +248,7 @@ def main():
                 ax.set_title(lab, fontsize=8)
             if j == 0:
                 ax.set_ylabel(f"$z={z0:.2f}$\n$x_V={xv0:.2f}$", fontsize=8)
-    bot = top - nr * h - (nr - 1) * gy
-    cax = fig.add_axes([right + 0.015, bot + 0.1 * (top - bot), 0.015, 0.8 * (top - bot)])
-    if a.relative:
-        cb = fig.colorbar(ScalarMappable(norm=norm_r, cmap=cmap_r), cax=cax, ticks=np.log10(REL_EDGES))
-        cb.set_ticklabels(REL_LABELS)
-        ref_lab = r"\bar\Gamma_{\rm rays}" if a.rel_to == "ref" else r"\bar\Gamma"
-        cb.set_label(rf"$\Gamma_{{\rm HI}}/{ref_lab}$ (black: neutral)", fontsize=8)
-    else:
-        cb = fig.colorbar(ScalarMappable(norm=fd["norm"], cmap=fd["cmap"]), cax=cax)
-        cb.set_label(fd["label"], fontsize=8)
-    cb.ax.tick_params(labelsize=7)
+    colorbar(fig, a, fd, nr, right, h, gy, top)
     fig.savefig(a.out, dpi=300)
     with open(os.path.splitext(a.out)[0] + "_panels.txt", "w") as f:
         f.write("\n".join(log) + "\n")
