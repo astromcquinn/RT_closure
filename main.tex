@@ -29,7 +29,7 @@
 \affiliation{\todo{affiliations}}
 
 \begin{abstract}
-We compare reionization simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented ontop of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty.  OTVET and especially M1 do not capture well the photoionization fluctuations after reionization. We propose a few \todo{two?} simple closure schemes that perform significantly better.  They likey make order-unity errors in $\tau_{\rm eff}$ fluctuations in the Ly$\alpha$ transmission that owe to intensity fluctuations.
+We compare reionization simulations run different moment closures, such as M1 and OTVET, with full radiative transfer all implemented on top of the same hydro-dark matter code.  For the structure of reionization, all represent the structure well enough for radiative transfer to not be a major modeling uncertainty.  OTVET and especially M1 do not capture well the photoionization fluctuations after reionization and could lead to significant errors in Ly$\alpha$ forest statistics such as the PDF of $\tau_{\rm eff}$ in limits where it is driven by intensity fluctuations. We propose two simple closure schemes that perform better than the standard ones at a moderate computational cost. 
 \end{abstract}
 \keywords{\todo{keywords from the Unified Astronomy Thesaurus}}
 
@@ -46,7 +46,7 @@ tensor (OTVET; \citealt{gnedin01}) method underlies the CROC simulations
 21\,cm experiments will map \citep{Furlanetto2006}; after it, it sets the mean opacity and its scatter observed in the Ly$\alpha$ forest \citep{davies16,davies17}, as well as the mean free path of ionizing photons probed by Lyman-limit absorption \citep{becker21,zhu23}. Therefore, any errors these closures make may become errors in predicting the observables.
 
 The closures have known problems. M1 carries one flux direction per cell,
-so the light of several sources is merged into a single flux, and a source's light on top of a nearly isotropic background is transported isotropically instead of streaming outward, so the excess near the source falls off as $1/r$ rather than $1/r^2$ once it reaches steady state.  The optically thin tensor ignores intervening absorbers, so
+so the light of several sources is merged into a single flux, and a source's light on top of a larger nearly isotropic background is transported isotropically instead of streaming outward.  The optically thin tensor ignores intervening absorbers, so
 it casts no sharp shadows \citep{gnedin01,petkova09}, and its
 normalization depends on the simulation box size, so the statistics of the radiation depend on the box size \citep{wu21}. CROC (using OTVET) and Thesan (using M1) disagree
 on the power spectrum of the photoionization rate, although controlled
@@ -67,9 +67,9 @@ that depends only on the energy density and flux, are unstable
 Here we test two-moment closures against adaptive ray tracing on full reionization simulations rather than the test problems that have often been considered \citep{iliev06,iliev09,wu21,gnedinkatz26}. One code
 holds every closure and the rays of \citet{trac07}, with all other
 physics shared, so differences between runs come from the transfer alone.  This differs from \citet{gnedin25}, the other study that compared reionization simulations.
-We also introduce two new closures; the more complete of them, which
+We also introduce two new closures; the more sophisticated of them, which
 attenuates the light by the HI along each direction, follows the rays
-more closely than M1 or OTVET at every stage of reionization. \textcolor{red}{[Check this claim against the new cone runs.]}
+more closely than M1 or OTVET at every stage of reionization. 
 %======================================================================
 \section{Simulations and radiative transfer}\label{sec:methods}
 
@@ -85,41 +85,40 @@ code bit for bit on a set of validation problems. %The runs here enable a set of
 The comparison uses one uniform suite of six runs that differ only in
 the radiative transfer (and, for one ray run, the treatment of
 recombinations; see below). The box is $40\mpch$ on a
-side, with $512^3$ gas and RT cells ($78\,h^{-1}$\,kpc comoving) and $1024^3$ dark
+side, with a $512^3$ grid for both the hydrodynamics and the radiative transfer ($78\,h^{-1}$\,kpc comoving) and $1024^3$ dark
 matter particles of $6.4\times10^6\,M_\odot$, whose forces are computed on
-a $2048^3$ PM mesh. The cosmology is $\Omega_m=0.27$,
+a $2048^3$ mesh. The cosmology is $\Omega_m=0.27$,
 $\Omega_\Lambda=0.73$, $\Omega_b=0.045$, $h=0.70$, $\sigma_8=0.80$ and
 $n_s=0.96$. The initial conditions are a Zel'dovich realization at $z=100$
-of the no-wiggle linear power spectrum of \citet{eisenstein98}.  While $40 \hmpc$ is too small to capture the statistics of the ionization field \citep{}, the relative comparison of different radiative transfer methods should be less depedent on boxsize.  Furthermore, our ability to resolve enough dense systems to limit the mean free path of ionizing photons in a manner that is similar to found in observations we think likely makes the method differences close to what one would expect in realistic reionization simulations.
+of the no-wiggle linear power spectrum of \citet{eisenstein98}.  While $40 \hmpc$ is too small to capture the statistics of the ionization field \citep{barkana??}, the relative comparison of different radiative transfer methods should be less dependent on the box size.  Furthermore, our ability to resolve enough dense systems to limit the mean free path of ionizing photons in a manner that is similar to found in observations we think likely makes the method differences close to what one would expect in realistic reionization simulations.
 
 Sources are the friends-of-friends halos (linking length 0.2) found on the
-fly at every hydro step, down to 20 particles halos that have a mass of $1.3\times10^8\,M_\odot$. Each halo's UV luminosity comes from abundance
-matching observed UV luminosity functions to a Sheth--Tormen mass function
+fly at every hydro step, down to 20-particle halos that have a mass of $1.3\times10^8\,M_\odot$. Each halo's ionizing luminosity comes from abundance
+matching observed ultaviolet luminosity functions to a Sheth--Tormen mass function
 refit to the friends-of-friends halos of this box
-\citep{sheth99,bouwens21,bouwens22,donnan24,atek26}. Below a turnover at
+\citep{sheth99,bouwens21,bouwens22,donnan24,atek26}. Below a turnover at halo masses of
 $M\approx3$--$5\times10^{11}\,M_\odot$, this gives approximately $L_{\rm UV}\propto M^{1.45}$ over $z=5-7$. The
 ionizing photon production efficiency is
 $\log\xi_{\rm ion}=25.38$ \citep{pahl25}, and the escape fraction is
-$f_{\rm esc}(z)=f_6\,[(1+z)/7]^{2.5}$ with $f_6=0.10$, a value tuned to match Ly$\alpha$ forest opacity measurements (with reionization ending at $z\approx 5.3$) \todo{cite D'Aloisio in prep}.
+$f_{\rm esc}(z)=f_6\,[(1+z)/7]^{2.5}$ with $f_6=0.10$, a value tuned to match Ly$\alpha$ forest opacity measurements (with reionization ending at $z\approx 5.3$) \todo{cite D'Aloisio in prep and check that this is the version of fesc now}.
 % f6 = 0.10 and the continuous c-hat schedule: the late-end suite reion512late* of
 % 2026-11-11 (NewRadHydroCode main 6658086, legacy_physics = 0 with P11, no SN heating).
 
-All runs use case-B recombination and hence on-the-spot absorption of the
-recombination photons, except one ray run with case-A recombination and
+All runs use case B recombination and hence on-the-spot absorption of the
+recombination photons, except one ray run with case A recombination and
 the recombination radiation transported (``rays, case A + RR''). %As in the original code, cooling is suppressed above 200 times the mean density, and a cell denser than 50 times the mean (overdensity $\delta>50$) removes only a fraction $e^{-(\delta-50)/50}$ of the photons its photoionizations use, so the densest gas neither consumes nor shields much radiation.
 The reduced speed of light follows the volume-weighted ionized fraction
 $x$ of the previous hydro step. It is piecewise linear through
 $(x,\chat/c)=(0.125,0.1)$, $(0.375,0.2)$, $(0.625,0.3)$ and $(0.875,0.5)$,
 and constant outside them, a schedule designed from a series of tests so that the ionization history is converged to $\Delta z<0.1$.  Every $\Gamma_{\rm HI}$ statistic uses
-$\Gamma_{\rm HI}$ averaged over the RT substeps of the hydro step, which
+$\Gamma_{\rm HI}$ averaged over the radiative transfer (RT) substeps of the hydro step, which
 removes most of the rays' sampling noise. Since the runs share their
-initial conditions and sources, and their histories agree to $\delta x_{\rm HI, M}\sim 0.025$
-iat fixed $z$ with the moment ahead of the rays (Fig.~\ref{fig:hist}, left), we compare them at fixed redshift. Figure~\ref{fig:hist} also shows the median $\Gamma_{\rm HI}$ of the ionized gas and the mean free path of every run, with the measurements at $z=5$--6.
+initial conditions and sources, and their histories agree to $\delta x_{\rm HI, M}\lesssim 0.025$ at fixed $z$ with the moment ahead of the rays (left panel Fig.~\ref{fig:hist}, left), we compare them at fixed redshift. Figure~\ref{fig:hist} also shows the median $\Gamma_{\rm HI}$ in ionized cells (middle panel) as well as the mean free path of every run (right panel), both alongside measurements at $z=5$--6.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{figures/fig_history.pdf}
-\caption{Comparison of our simulation suite run with the same sources but different raidative transfer simulations on different global properties. Left: the mass-weighted neutral fraction of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), with the measurements of \citet{gaikwad23} (squares). Right: the 912\,\AA\ mean free path from random starts  alongside the measurements of \citet{becker21} (squares) and \citet{zhu23} (diamonds).}
+\caption{Comparison of our simulation suite run with the same sources but different raidative transfer simulations on different global properties. Left: the mass-weighted neutral fraction of every run against redshift. Middle: the median $\Gamma_{\rm HI}$ of the ionized cells ($x_{\rm HI}<10^{-2}$), and the measurements of \citet{gaikwad23} (squares). Right: the 912\,\AA\ mean free path from random starts, and the measurements of \citet{becker21} (squares) and \citet{zhu23} (diamonds). \textbf{let's remove the green markers in the right panel}}
 \label{fig:hist}
 \end{figure}
 %Making it continuous in $x$ avoids the jumps in $\Gamma_{\rm HI}$ that a stepped schedule causes each time it switches. Radiation is redshifted by the distance it travels rather than by elapsed time, which is appropriate for $\chat<c$. The radiative transfer starts at $z=15$ and the runs end at $z=5$.
@@ -130,7 +129,7 @@ The radiative transfer methods we consider are the following.
 \paragraph{Rays.} Our reference is the adaptive ray tracing of \citet{trac07}. Each source emits rays along HEALPix
 directions \citep{gorski05}, which split as they travel so that every cell
 they reach is crossed by several rays \citep{abel02,trac07}, and deposit
-their photoionizations cell by cell, conserving photons. %One comparison run uses case-B recombination, the other case A with the recombination radiation transported.
+their photoionizations cell by cell, conserving photons.  Rays merge once \text{finish thought and refer to accuracy in appendx}.   %One comparison run uses case-B recombination, the other case A with the recombination radiation transported.
 
 \paragraph{Moment methods.} For each frequency group, we evolve the photon
 density $N$ and the flux $\chat\,\mathbf F$,
@@ -233,7 +232,7 @@ cones' light in the ionized cells equals the photons the solution holds
 there; when it does not exceed them, as during most of overlap, there is
 no cutoff.}  The receivers' cone light is interpolated to every cell (with trilinear weighting) and added to the optically thin light from within 8 cells, and the sum gives the cell's tensor.
 \end{itemize}
-The wall time of every moment run is 9--10 hours on 192 cores (the cone's no longer than OTVET's), and the ray runs take 21--22 hours. The rays thus cost about twice the moment methods at this resolution, and the factor is smaller on finer grids: in runs of the same box and source model to $z=5$ at $128^3$, $256^3$ and $512^3$ cells, the rays take 4.1, 2.5 and 1.9 times the wall time of M1 (0.7, 2.5 and 16.8 hours against 0.2, 1.0 and 8.9; OTVET's times equal M1's), and 196\,GB of memory against 130\,GB at $512^3$. The cost of the rays follows their number, which is set by the sources and the merging and not by the grid. The mean number of rays per cell over these runs is 9.3, 7.8 and 5.0, and the ray transport takes 10, 3.5 and 2.5 times the M1 transport. The photochemistry, which is the same routine for every method and costs nearly as much per cell as the M1 transport, is 5\%, 16\% and 22\% of the rays' radiative transfer time. This trend is one of cell size at a fixed box and source population, not of problem size. M1 needs no separate tensor calculation. In test runs at $256^3$ on 192 cores, computing the Eddington tensor takes 0.7\,s per hydro step for OTVET, 1.2\,s for the screen and 2.1\,s for the cone. \textcolor{red}{[$512^3$ times: from the \texttt{OTVET :} lines of each late-end run's \texttt{ray.log} on klone.]}
+The wall time of every moment run is 9--10 hours on 192 cores (the cone's no longer than OTVET's), and the ray runs take 21--22 hours. M1 needs no separate tensor calculation. In test runs at $256^3$ on 192 cores, computing the Eddington tensor takes 0.7\,s per hydro step for OTVET, 1.2\,s for the screen and 2.1\,s for the cone. 
 
 We also compare the radiative transfer models with the excursion-set
 model of 21cmFAST \citep{mesinger11,murray20}, which does no radiative
@@ -296,7 +295,7 @@ of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
 coefficient $r(k)$ with the rays. Although our $40\mpch$ box is too small for these statistics to be converged, the relative comparison of the methods is likely to be similar in a larger box. On large scales ($k\lesssim0.5\hmpc$), every RT method has the
 rays' power to within 20\% until $\xv\approx0.8$, whereas 21cmFAST has up to 3 times the rays' power on the largest scales in the box and $r<0.5$ at $k\gtrsim1\hmpc$. The closures differ mainly at higher wavenumbers, which is clearest in the cross-correlation coefficient (bottom panels): at $k=2\hmpc$ and $\xv=0.80$, $r=0.95$ for the cone, 0.89--0.90 for OTVET and the screen, and 0.54 for M1. Near the end of reionization ($\xv=0.96$) every closure has too little power (0.4--0.8 times the rays'), the cone the least (0.7--0.8 at $k\le2\hmpc$), and only the cone keeps $r>0.9$ at $k\approx1\hmpc$. %\textcolor{red}{[At $z=5.24$ the moment runs are further along ($\xv=0.97$--0.98 against the rays' 0.963; Fig.~1 panels file), so part of this deficit reflects the history rather than the morphology. Compare this panel at fixed $\xv$, or say so.]}
 
-Also shown is a ray-tracing run that uses case-A recombination and transports the recombination radiation. It is much closer to the fiducial rays (case B, on the spot) than any closure is, with 0.9--1.0 times their power and $r\ge0.98$ at $k\le2\hmpc$, so the treatment of recombination radiation matters less than the closure. \textcolor{red}{[Suggestion: use this run to set the scale of differences that matter, e.g.\ in the conclusions.]}
+Also shown is a ray-tracing run that uses case-A recombination and transports the recombination radiation. It is much closer to the fiducial rays (case B, on the spot) than any closure is, with 0.9--1.0 times their power and $r\ge0.98$ at $k\le2\hmpc$, so the treatment of recombination radiation matters less than the closure. 
 
 
 

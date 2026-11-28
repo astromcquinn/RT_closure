@@ -4,9 +4,9 @@
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{figures/fig_app_convergence.pdf}
-\caption{Transfer function from the sources to the photon density for a uniform mean free path $\lambda$:
-M1 (left), OTVET (middle) and the rays (right), $\lambda=L/4$ (top) and $\lambda=L$ (bottom).
+\includegraphics[width=0.72\linewidth]{figures/fig_app_convergence.pdf}
+\caption{Transfer function from the sources to the photon density for a uniform mean free path $\lambda$,
+with a source in every cell: M1 (left) and OTVET (right), $\lambda=L/4$ (top) and $\lambda=L$ (bottom), where $L$ is the boxsize.
 Black: the exact solution, equation~(\ref{eq:app_exact}). Dashed: the linear solution of each closure in
 the continuum, equations~(\ref{eq:app_m1}) and (\ref{eq:app_otvet}). Filled blue circles: our moment
 transport with the settings of the suite and a source in every cell, at $32^3$ to $256^3$ cells (light to
@@ -50,7 +50,7 @@ the flux equation and gives \citep{wu21}
 \begin{equation}
 T_{\rm OTVET}(k)=\frac{1+2\pi^2k\lambda^2/(3L_{\rm O})}{1+k^2\lambda^2/3}.\label{eq:app_otvet}
 \end{equation}
-The extra term is $0.86\,(k\lambda)(\lambda/L)$: OTVET has too much structure once $\lambda$ approaches $L$.
+The extra term in the neumerator relative to M1 is $0.86\,(k\lambda)(\lambda/L)$: OTVET has too much structure once $\lambda$ approaches $L$.
 
 \emph{Numerical diffusion.} We first take time as continuous, which shows how the discretization acts.
 The first-order Lax--Friedrichs flux through a cell face is
@@ -131,7 +131,7 @@ less small-scale power than ours.
 \emph{Other tests.} The moment solver also passes the following.
 (1) The transport conserves photons to rounding and keeps $|\mathbf F|\le N$; a pulse stays
 inside its light cone; an M1 plane beam moves one cell per substep without sideways spread.
-(2) The OTVET tensor of one source has rank one and unit trace, and its direct and FFT sums agree
+(2) The OTVET tensor of one source has rank one and unit trace, and its direct calculation and FFT sums agree
 to $3\times10^{-7}$.
 (3) Results are identical for 1, 2 and 4 threads and across a restart, and in every run the photons
 emitted, absorbed, redshifted and in flight balance to six digits.
@@ -139,11 +139,12 @@ emitted, absorbed, redshifted and in flight balance to six digits.
 $R(t)=R_\infty(t-R/\chat)$ (Shapiro et al.\ 2006), where $R_\infty$ is the front for infinite speed: the
 radius is 36\% high at $\chat t=2$ cells, and 3\% and 0.3\% high at $\chat t=10$ and 30 cells for M1
 (1.6\% and $-0.6$\% for OTVET; 1.7\% and 0.2\% for the rays).
-(5) Behind a dense clump lit by one source, the mean ionized fraction on the axis is 0.000 for the rays,
-0.044 for M1 and 0.004 for OTVET.
-(6) With 16 sources in a lognormal density field, M1 and OTVET are 6\% and 3\% above the rays in ionized
-fraction at half ionization, and 18--19\% of the cells differ from the rays by more than 0.1 in
-$x_{\rm HII}$, against 6\% between two ray runs with different HEALPix orientations.
-\draft{(7) Optional: full reionization runs at $128^3$, $256^3$ and $512^3$ in a $20\mpch$ box with rays, M1
-and OTVET at each resolution. At $\xv\approx0.57$ the ratio of M1's to the rays' $\Gamma_{\rm HI}$ power at
-$k=16\hmpc$ is 3.05, 1.36 and 1.05, and OTVET's 3.6, 2.5 and 2.1. See \texttt{convergence.tex}.}
+(5) In a dense-clump shadow test in the spirit of Test~3 of \citet{iliev06}, but with a
+point source, the rays cast a sharp, cone-shaped shadow. M1 casts a softer one into which
+some radiation leaks (4\% ionized on the axis), as moment methods tend to
+\citep{rosdahl13}. OTVET keeps the shadow nearly as dark as the rays (0.4\% versus 0.0\% for rays), as might expected since OTVET
+tensor is exact for a single source but the Lax-Friedrichs solver is more diffusive. %Behind a dense clump lit by one source, the mean ionized fraction on the axis is 0.000 for the rays, 0.044 for M1 and 0.004 for OTVET.
+%(6) With 16 sources in a lognormal density field, M1 and OTVET are 6\% and 3\% above the rays in ionized
+%fraction at half ionization, and 18--19\% of the cells differ from the rays by more than 0.1 in
+%$x_{\rm HII}$, against 6\% between two ray runs with different HEALPix orientations.
+
