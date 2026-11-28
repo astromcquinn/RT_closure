@@ -136,7 +136,7 @@ The radiative transfer methods we consider are the following.
 \paragraph{Rays.} Our reference is the adaptive ray tracing of \citet{trac07}. Each source emits rays along HEALPix
 directions \citep{gorski05}, which split as they travel so that every cell
 they reach is crossed by several rays \citep{abel02,trac07}, and deposit
-their photoionizations cell by cell, conserving photons.  Rays merge once \textbf{finish thought and refer to accuracy in appendx}.   %One comparison run uses case-B recombination, the other case A with the recombination radiation transported.
+their photoionizations cell by cell, conserving photons.  Rays merge once \todos{finish thought and reference accuracy tests in appendix}.   %One comparison run uses case-B recombination, the other case A with the recombination radiation transported.
 
 \paragraph{Moment methods.} For each frequency group, we evolve the photon
 density $N$ and the flux $\chat\,\mathbf F$,
@@ -242,10 +242,10 @@ The wall time of every moment run is 9--10 hours on 192 cores, and the ray runs 
 
 We also compare the radiative transfer models with the excursion-set
 model of 21cmFAST \citep{mesinger11,murray20}, which does no radiative
-transfer. It smooths the density field on spheres of decreasing radius
+transfer. Instead, it smooths the matter density field on spheres of decreasing radius
 around each cell, computes the ionizing photons that the halos inside
 each sphere produce, and marks the cell ionized if, on any sphere, they
-outnumber the hydrogen atoms in it. We run it on the simulation's own
+outnumber the hydrogen atoms in it (assuming gas traces matter). We run it on the simulation's own
 density field, without recombinations, and with its default maximum
 radius $R_{\rm max}=15$\,Mpc (comoving), which stands in for the mean free path set
 by Lyman-limit systems and is within a factor of $2$ of the mean free path at the end of reionization at $z\approx 5.5$ in our runs. Its sources are matched to ours: the photons of
@@ -284,10 +284,10 @@ and the cross-correlation coefficient with the rays (bottom) at $z=6.48$,
 
 
 Figure~\ref{fig:maps} shows the ionized fraction in a $0.625\mpch$-thick slab through the
-box at three stages of reionization. All the RT methods agree reasonably well on the morphology: smoothed on scales above a few$\mpch$, their $x_{\rm HII}$ fields are
-nearly identical. Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure, as has been shown previously \citep{zahn07,zahn11,mesinger11}.  Unlike these previous studies of 21cmFAST, this comparison is to simulations that have mean free paths that match observations and so is a more realistic comparison between these methods. The fraction of cells whose $x_{\rm HII}$ differs from the rays' by more than 0.5 is 2.0--2.2\% for Cone at $z=6.48$ and 5.70, 2.7--3.3\% for OTVET and the screen, 7.1--7.4\% for M1, and 17--21\% for 21cmFAST. % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
+box at three stages of reionization. All the RT methods agree reasonably well on the morphology: smoothed on scales above a few megaparsecs, their $x_{\rm HII}$ fields are
+nearly identical. Even 21cmFAST, which does no radiative transfer and instead assigns ionization based on source clustering, captures most of the structure, as has been shown previously \citep{zahn07,zahn11,mesinger11}.  Unlike these previous studies of 21cmFAST, this comparison is to simulations that have mean free paths that match observations and so is a more realistic comparison between these methods, although it is possible that the smaller boxsize of our simulations amplifies differences. The fraction of cells whose $x_{\rm HII}$ differs from the rays' by more than 0.5 is 2.0--2.2\% for Cone at $z=6.48$ and 5.70, 2.7--3.3\% for OTVET and the screen, 7.1--7.4\% for M1, and 17--21\% for 21cmFAST. % 1.9--2.0\% of the cells differ from the rays by more than 0.5 in $x_{\rm HII}$ for the cone at $z=6.48$ and 5.70, 2.6--2.9\% for OTVET and the screen, and 7.1--7.4\% for M1.
 
-Of the closures, M1 departs most from the ray-tracing simulation (rays), our proxy for the truth, although it is still much closer to the rays than 21cmFAST is. M1's local closure merges the
+Of the closures, M1 departs most from the ray-tracing simulation (Rays), our proxy for the truth, although it is still much closer to the rays than 21cmFAST is. M1's local closure merges the
 light of several sources into one flux per cell, so its
 fronts are rounder than the rays' and can be either ahead of or behind them. OTVET's fronts follow the rays' positions better, likely because its tensor points at the sources. Nevertheless, its fronts are also
 somewhat rounder than the rays', likely because it illuminates
@@ -298,8 +298,8 @@ the HI along each direction, gives a morphology very similar to the rays' at eve
 
 Figure~\ref{fig:pkx} quantifies these differences with the power spectrum
 of $x_{\rm HII}$, its ratio to the rays' and the cross-correlation
-coefficient $r(k)$ with the rays. Although our $40\mpch$ box is too small for these statistics to be converged, the relative comparison of the methods is likely to be similar in a larger box. On large scales ($k\lesssim0.5\hmpc$), every RT method has the
-Rays' power to within 20\% until $\xv\approx0.8$, whereas 21cmFAST has up to 3$\times$ the Rays' power on the largest scales in the box and $r<0.5$ at $k\gtrsim1\hmpc$. The closures differ mainly at higher wavenumbers, which is clearest in the cross-correlation coefficient (bottom panels): at $k=2\hmpc$ and $\xv=0.80$, $r=0.95$ for the Cone, 0.90 for OTVET and the Screen, and 0.54 for M1. Near the end of reionization ($\xv=0.96$) every closure has too little power (0.4--0.8$\times$ the Rays'), the Cone the least (0.7--0.8 at $k\le2\hmpc$), and only the Cone keeps $r>0.9$ at $k\approx1\hmpc$. %\textcolor{red}{[At $z=5.24$ the moment runs are further along ($\xv=0.97$--0.98 against the rays' 0.963; Fig.~1 panels file), so part of this deficit reflects the history rather than the morphology. Compare this panel at fixed $\xv$, or say so.]}
+coefficient with the rays $r(k) \equiv P_{\rm Rays-X}/\sqrt{P_{\rm Rays}P_{\rm X}}$, where $P_{\rm Rays-X}$ is the cross power between rays and method $X$. Although our $40\mpch$ box is too small for these statistics to be converged, the relative comparison of the methods is likely to be similar in a larger box. On large scales ($k\lesssim0.5\hmpc$), every RT method has the
+Rays' power to $\approx 30$\% until $\xv\approx0.8$, with the difference being much smaller for the methods other than M1. However, 21cmFAST has up to 3$\times$ the Rays' power on the largest scales in the box and $r<0.5$ at $k\gtrsim1\hmpc$. The closures differ mainly at higher wavenumbers, which is clearest in the cross-correlation coefficient (bottom panels): at $k=2\hmpc$ and $\xv=0.80$, $r=0.95$ for the Cone, 0.90 for OTVET and the Screen, and 0.54 for M1. Near the end of reionization ($\xv=0.96$) every closure has too little power (0.4--0.8$\times$ the Rays'), the Cone the least (0.7--0.8 at $k\le2\hmpc$), and only the Cone keeps $r>0.9$ at $k\approx1\hmpc$. %\textcolor{red}{[At $z=5.24$ the moment runs are further along ($\xv=0.97$--0.98 against the rays' 0.963; Fig.~1 panels file), so part of this deficit reflects the history rather than the morphology. Compare this panel at fixed $\xv$, or say so.]}
 
 Also shown is a ray-tracing run that uses case-A recombination and transports the recombination radiation. It is much closer to the fiducial rays (case B, on the spot) than any closure is, with 0.9--1.0 times their power and $r\ge0.98$ at $k\le2\hmpc$, so the treatment of recombination radiation matters less than the closure. 
 
@@ -320,9 +320,8 @@ of the ionized cells at that redshift and shown in bands at factors of 1.25, 2 a
 \centering
 \includegraphics[width=.8\linewidth]{figures/fig4_pk_gamma.pdf}
 \caption{As Fig.~\ref{fig:pkx}, for $\delta_\Gamma=\Gamma_{\rm HI}/\langle\Gamma_{\rm HI}\rangle-1$ at $\xv=0.54$, 0.80,
-0.96 and after overlap ($z=4.99$), for every method; the last panel's ratio axis is wider. \draft{Alternative: at $z\approx6.0$, 5.5
-and 5.0 (snapshots 5.97, 5.48, 4.99; needs a \texttt{--z} option in
-\texttt{rt\_suite\_figures.py}).}}
+0.96 and after overlap ($z=4.99$), for every method; the last panel's ratio axis is wider. %\draft{Alternative: at $z\approx6.0$, 5.5 and 5.0 (snapshots 5.97, 5.48, 4.99; needs a \texttt{--z} option in \texttt{rt\_suite\_figures.py}).}
+}
 \label{fig:pkg}
 \end{figure}
 
@@ -425,8 +424,11 @@ The right panel of Fig.~\ref{fig:taueff} shows that the 84--16\% width of the $\
 
 %======================================================================
 
-\section{The mean photoionization rate}
+\subsection{Resolving the dense gas}
 
+To test whether resolving the dense gas changes these conclusions, we reran the rays and M1 with two levels of adaptive refinement on the same $512^3$ base grid, with the same initial conditions and sources; the two refined runs differ only in the transfer. They also differ from the suite above in their star formation (sinks above $3000\bar\rho$, no cooling suppression) and a temperature cap of $10^6$\,K, and their $f_{\rm esc}$ is 0.13 instead of 0.10 so that both finish overlap before $z=5$. \draft{\citet{wu21} argue that once self-shielding absorbers are resolved, $\Gamma_{\rm HI}$ at fixed emissivity depends on the transfer method, with M1 below the rays [check direction/wording].} Refinement does lower $\Gamma_{\rm HI}$ per emitted photon in both methods: at $z=5.0$--5.1 it is 0.56--0.58 times the unrefined value for the rays and 0.80--0.86 times for M1. But the dependence on the method has the opposite sign. At $z=5$ the refined M1 has 1.55 times the rays' median $\Gamma_{\rm HI}$ in ionized gas ($3.4$ versus $2.2\times10^{-13}\,{\rm s^{-1}}$) and 1.45 times their mean free path (14.9 versus 10.3\,pMpc), against 1.08 and 1.09 without refinement, and it reaches $\xv=0.99$ at $z=5.38$ rather than 5.08. Photon budgets of $128^3$ runs with the same refinement show where the difference arises. The two methods photoionize the same amount of hydrogen to within 1\%, but M1 recombines less: by 17\% in the cells that host sources (0.187 versus 0.225 recombinations per H atom by $z=6$) and by a third in gas with $\Delta>10^3$ (0.061 versus 0.092), into which the rays deliver twice M1's photoionizations. The cone matches M1 in the source cells (0.186), and injecting M1's photons before rather than after the transport lowers that term threefold. That term is therefore set by how long the moment methods hold photons in the emitting cell, a property of their numerics rather than of the closure. The dense gas that refinement resolves in these runs is mostly gas around the sources, lit at close range, not the self-shielded systems lit by a nearly isotropic background that \citet{wu21} consider. \draft{A single resolved absorber in a uniform background does show their sign in our code: M1 has twice the rays' recombinations.} Once M1 is ahead, its higher $\Gamma_{\rm HI}$ ionizes the absorbers further. The neutral fraction of base cells with $\Delta=30$--100 at $z=4.99$ is 1.5--4.9\% in the refined M1, 2.6--7.0\% in the refined rays and 0.05--0.34\% without refinement, so M1's longer mean free path widens the gap.
+
+The fluctuations of $\Gamma_{\rm HI}$ in the refined pair follow the pattern of Fig.~\ref{fig:pkg}, with M1 further below the rays. During reionization, at $z=6.50$ and 5.97 ($\xv=0.61$ and 0.77 in the refined rays), the refined M1 has 0.55--0.69 and 0.43--0.63 times the rays' power at $k=0.5$--$2\hmpc$, where the unrefined pair has 0.63--0.84 and 0.68--0.89 at the same redshifts. The correlation coefficients are $r=0.62$--0.84 and 0.45--0.82, against 0.68--0.87 and 0.58--0.84 without refinement. At $\xv=0.96$ in the rays ($z=5.25$ in both pairs) the refined ratio is 0.13--0.36, against 0.34--0.51. After overlap ($z=4.99$) it is 0.04--0.08, 12--25 times too little power, against 0.10--0.29, with $r=0.35$--0.77. Part of this larger late deficit is timing: by $z=5.25$ the refined M1 has finished overlap ($\xv=0.9999$), while the refined rays keep neutral islands ($\xv=0.963$) that carry large-scale power. At $k\approx5$--$10\hmpc$ the refined M1 also stays below the rays (0.68--0.84 during reionization, 0.26--0.35 after overlap), whereas the unrefined M1 reaches 1.0--1.24 there before overlap. This fits our attribution of that high-$k$ excess to the first-order transport on the coarse grid. Refinement therefore leaves the conclusions of this section qualitatively unchanged: it increases M1's deficit in the $\Gamma_{\rm HI}$ fluctuations rather than moving M1 toward the rays.
 
 \section{Discussion and conclusions}\label{sec:conclusions}
 We have compared four two-moment closures with adaptive ray tracing in one code, with all other physics shared, in a $40\mpch$, $512^3$ reionization simulation. Our main conclusions are as follows.
