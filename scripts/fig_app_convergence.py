@@ -37,6 +37,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
+from matplotlib.ticker import NullFormatter
 
 here = os.path.dirname(os.path.abspath(__file__))
 variants = "--variants" in sys.argv
@@ -129,6 +130,7 @@ for ir, frac in enumerate((4, 1)):
         p.text(0.97, 0.94, r"%s, $\lambda=L%s$" % (name, "/4" if frac == 4 else ""), transform=p.transAxes,
                ha="right", va="top", fontsize=10)
         p.tick_params(which="both", direction="in", top=True, right=True, labelsize=8.5)
+        p.xaxis.set_minor_formatter(NullFormatter())  # a range under two decades would label the minor ticks
         if ic == 0:
             p.set_ylabel(r"$T(k)$", fontsize=10)
         p.set_xlabel(r"$k\lambda$", fontsize=10)
@@ -147,12 +149,14 @@ for ir, frac in enumerate((4, 1)):
     p.text(0.97, 0.94, r"Rays, $\lambda=L%s$" % ("/4" if frac == 4 else ""), transform=p.transAxes,
            ha="right", va="top", fontsize=10)
     p.tick_params(which="both", direction="in", top=True, right=True, labelsize=8.5)
+    p.xaxis.set_minor_formatter(NullFormatter())
     p.set_xlabel(r"$k\lambda$", fontsize=10)
 
 h = [Line2D([], [], color="k", lw=1.8, label=r"$(k\lambda)^{-1}\arctan(k\lambda)$"),
      Line2D([], [], color="0.4", ls="--", lw=1.4, label="closure's linear theory")]
 h += [Line2D([], [], ls="none", marker="o", ms=4.5, color=COL[N],
-             label=(r"code, first-cell injection, $%d^3$" if inject2 else r"code, $%d^3$") % N) for N in NS]
+             label=(r"code, first-cell injection, $%d^3$" if inject2 else r"code, $%d^3$") % N) for N in NS
+      if not inject2 or load(N, 4, "T2") is not None]
 ax[0, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 h = [Line2D([], [], color=COL[NREF], lw=1.1, label="linear theory of the\ndiscretized equations")]
 if variants and inject2:
