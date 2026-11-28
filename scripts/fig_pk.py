@@ -10,6 +10,9 @@
         PDFs of data/pdf_gamma.txt are read only to check the snapshots (the
         z = 4.99 PDF is drawn by fig_history.py)
 
+Both figures stop at k = KMAX = 10 h/Mpc (user, 2026-11-28); --kmax 0 draws every
+k of the data files (to the Nyquist frequency, 40 h/Mpc, and beyond).
+
 usage: python3 scripts/fig_pk.py   (writes figures/fig2_pk_xHII.{pdf,png} and
        figures/fig4_pk_gamma.{pdf,png})
        python3 scripts/fig_pk.py --only xhii --xhii-data data/pk_xHII_21cmfast_early.txt \
@@ -23,6 +26,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
+from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "data")
@@ -38,6 +42,7 @@ RUNS = [("rays", "rays", "#000000", "-", 2.2),
         ("rays_A+RR", "rays, case A + RR", "#008300", "-", 1.2),
         ("21cmFAST", "21cmFAST", "#6250d6", "-", 1.8)]
 INK2 = "#52514e"
+KMAX = 10.0  # h/Mpc: the largest k drawn (0: all)
 
 
 def read_blocks(path):
@@ -104,9 +109,24 @@ def read_pdf(path):
     return out
 
 
-def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip=()):
+def plain_log_labels(ax):
+    """Label a log y axis with plain numbers (0.01, 0.1, 1). An axis that spans less than
+    1.6 decades, as the spectra do below KMAX, also gets labels at 2 and 5 times the
+    decades; the default there is '2 x 10^-1', which runs into the next panel."""
+    lo, hi = ax.get_ylim()
+    fmt = FuncFormatter(lambda y, _: f"{y:g}")
+    ax.yaxis.set_major_formatter(fmt)
+    if np.log10(hi / lo) < 1.6:
+        ax.yaxis.set_minor_locator(LogLocator(subs=[2, 5]))
+        ax.yaxis.set_minor_formatter(fmt)
+    else:
+        ax.yaxis.set_minor_formatter(NullFormatter())
+
+
+def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip=(), kmax=KMAX):
     """ylim_ratio: one (lo, hi) for every panel, or a list with one per panel.
     skip: run keys left out of the figure.
+    kmax: the bins above it are not drawn, so that the axes scale to what is shown (0: all).
     pdfs: optional read_pdf() panels, one per block, drawn in a fourth row."""
     plt.rcParams.update({"font.size": 9, "axes.labelsize": 10, "xtick.labelsize": 8.5,
                          "ytick.labelsize": 8.5, "axes.linewidth": 0.8, "axes.edgecolor": INK2})
@@ -124,10 +144,12 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip
     handles = {}
     for j, ((runs, k, d), title) in enumerate(zip(blocks, titles)):
         a0, a1, a2 = axs[0, j], axs[1, j], axs[2, j]
+        sel = k <= kmax * (1 + 1e-6) if kmax > 0 else np.ones(len(k), dtype=bool)
+        k = k[sel]
         for key, label, c, ls, lw in RUNS:
             if key not in d or key in skip:
                 continue
-            D2, ratio, r = d[key]
+            D2, ratio, r = (v[sel] for v in d[key])
             h, = a0.plot(k, D2, color=c, ls=ls, lw=lw)
             a1.plot(k, ratio, color=c, ls=ls, lw=lw)
             a2.plot(k, r, color=c, ls=ls, lw=lw)
@@ -141,7 +163,10 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip
             a1.set_yticks([0.3, 0.5, 1, 2, 3])
             a1.set_yticklabels(["0.3", "0.5", "1", "2", "3"])
             a1.minorticks_off()
+        else:
+            plain_log_labels(a1)
         a1.axhline(1, color="#9a9a96", lw=0.8, zorder=0)
+        plain_log_labels(a0)
         a2.set_ylim(0, 1.05)
         a2.set_yticks([0, 0.5, 1])
         for ax in (a0, a1, a2):
@@ -149,6 +174,9 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip
             ax.grid(alpha=0.3, lw=0.5)
             ax.spines["top"].set_visible(False)
             ax.spines["right"].set_visible(False)
+        if kmax > 0:
+            a2.set_xlim(right=kmax)
+        a2.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{x:g}"))
         a2.set_xlabel(r"$k$ [$h$ Mpc$^{-1}$]")
         if j == 0:
             a0.set_ylabel(ylabel)
@@ -185,7 +213,7 @@ def panel_grid(blocks, titles, ylabel, out, ylim_ratio=(0.3, 3), pdfs=None, skip
     top = 0.83 if n > 3 else 0.87
     if pdfs:
         top = 1 - (1 - top) * 6.2 / 8.5
-    fig.subplots_adjust(left=0.1, right=0.99, bottom=0.08 * 6.2 / (8.5 if pdfs else 6.2), top=top)
+    fig.subplots_adjust(left=0.1, right=0.98, bottom=0.08 * 6.2 / (8.5 if pdfs else 6.2), top=top)
     fig.savefig(out + ".pdf")
     fig.savefig(out + ".png", dpi=300)
     print("wrote", os.path.normpath(out) + ".{pdf,png}")
@@ -199,15 +227,16 @@ def main():
     ap.add_argument("--xhii-out", default="fig2_pk_xHII", help="figure name under figures/")
     ap.add_argument("--ratio-ylim", default="0.3,3", help="the P/P_rays axis of the x_HII figure")
     ap.add_argument("--only", choices=("all", "xhii", "gamma"), default="all")
+    ap.add_argument("--kmax", type=float, default=KMAX, help="largest k drawn, h/Mpc (0: all)")
     a = ap.parse_args()
     if a.only in ("all", "xhii"):
         lo, hi = (float(v) for v in a.ratio_ylim.split(","))
-        fig_xhii(a.xhii_data, os.path.join(FIG, a.xhii_out), (lo, hi))
+        fig_xhii(a.xhii_data, os.path.join(FIG, a.xhii_out), (lo, hi), a.kmax)
     if a.only in ("all", "gamma"):
-        fig_gamma()
+        fig_gamma(a.kmax)
 
 
-def fig_xhii(path, out, ylim_ratio):
+def fig_xhii(path, out, ylim_ratio, kmax=KMAX):
     bx = read_blocks(path)
     xv = read_xv(path)
     heads = {int(re.match(r"# step (\d+)", h).group(1)): h for h in bx}
@@ -216,10 +245,10 @@ def fig_xhii(path, out, ylim_ratio):
               for s in steps]
     panel_grid([bx[heads[s]] for s in steps], titles,
                r"$\Delta^2_{x_{\rm HII}}(k)$", out, ylim_ratio=ylim_ratio,
-               skip=("split",))  # = OTVET to < 1 % in power before overlap
+               skip=("split",), kmax=kmax)  # the split = OTVET to < 1 % in power before overlap
 
 
-def fig_gamma():
+def fig_gamma(kmax=KMAX):
     bs = read_blocks(os.path.join(DATA, "pk_suite.txt"))
     gam = [h for h in bs if h.startswith("# gamma")]
     titles = []
@@ -232,7 +261,8 @@ def fig_gamma():
         "the PDF panels are not the power-spectrum panels"
     # the PDF row was moved to fig_history.py (z = 4.99 only), 2026-11-18
     panel_grid([bs[h] for h in gam], titles, r"$\Delta^2_{\delta_\Gamma}(k)$",
-               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=[(0.3, 3)] * (len(gam) - 1) + [(0.02, 30)])
+               os.path.join(FIG, "fig4_pk_gamma"), ylim_ratio=[(0.3, 3)] * (len(gam) - 1) + [(0.02, 30)],
+               kmax=kmax)
 
 
 if __name__ == "__main__":
