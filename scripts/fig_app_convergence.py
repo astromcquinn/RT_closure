@@ -2,7 +2,7 @@
 """Appendix figure of main.tex: the uniform mean free path test of the moment
 transport against the analytic transfer functions, at every resolution run.
 
-usage: fig_app_convergence.py [--variants]
+usage: fig_app_convergence.py [--variants] [--inject2]
 reads data/convergence/T_N<N>_l{4,1}.txt (tools/analysis/moment_transfer.py of
 NewRadHydroCode, branch moment-order2), writes figures/fig_app_convergence.{pdf,png}
 
@@ -12,6 +12,14 @@ exact linear solution of the discrete scheme (data/convergence/Tlin_N*.txt,
 scripts/transfer_exact_linear.py). --variants adds, at the reference
 resolution of each row, injection before the transport (with its exact
 linear solution) and second order.
+
+--inject2: the same figure for the injection over the sources' first cell of
+travel (moment_inject = 2 of NewRadHydroCode, docs/rt_moments.md section 10):
+the points are data/convergence/T2_N<N>_l{4,1}.txt, the curves the columns
+m1_inj2 / otvet_inj2 of data/convergence/Tlin2_N<N>_l{4,1}.txt (tools/analysis/
+moment_transfer_exact.py). With --variants the open symbols at the reference
+resolution are the two other injections. Written to
+figures/fig_app_convergence_inject2.{pdf,png}; not in the paper.
 
 Rays (third column): data/convergence/T_rays_N128_l{4,1}.txt (tools/analysis/
 ray_transfer.cpp, branch rt-convergence-runs; sources in one cell in 512) at
@@ -32,6 +40,7 @@ from matplotlib.patches import Patch
 
 here = os.path.dirname(os.path.abspath(__file__))
 variants = "--variants" in sys.argv
+inject2 = "--inject2" in sys.argv
 NS = (32, 64, 128, 256)
 COL = {32: "#86b6ef", 64: "#3987e5", 128: "#1c5cab", 256: "#0d366b"}  # one hue, light to dark
 NREF = 128  # resolution of the variants
@@ -39,6 +48,15 @@ POOLS = (8, 15, 64, 120)
 RCOL = {8: "#f2b28a", 15: "#e57a3c", 64: "#b24a17", 120: "#6b2706"}  # a second hue, light to dark
 SIG0 = 0.95  # rms per cell of the ray noise times sqrt(rays per cell), scripts/ray_noise.py
 SRC = 512.0  # cells per source in the ray test: P_L / Lbar^2 = SRC cells
+
+
+def load_lin(N, frac, stem):
+    """{column name: values} of a moment_transfer_exact.py table"""
+    f = os.path.join(here, "..", "data", "convergence", "%s_N%d_l%d.txt" % (stem, N, frac))
+    hdr = [ln for ln in open(f) if ln.startswith("# k*lam")][0]
+    names = hdr[2:].split()
+    a = np.loadtxt(f)
+    return {n: a[:, i] for i, n in enumerate(names)}
 
 
 def load(N, frac, stem="T"):
@@ -67,6 +85,22 @@ for ir, frac in enumerate((4, 1)):
         for N in NS:
             d = load(N, frac)
             if d is None:
+                continue
+            if inject2:
+                d2 = load(N, frac, "T2")
+                if d2 is None:
+                    continue
+                fine = d2
+                kl = d2["k*lam"]
+                t2 = load_lin(N, frac, "Tlin2")
+                p.loglog(t2["k*lam"], t2[m + "_inj2"], color=COL[N], lw=1.1, zorder=2.5)
+                p.loglog(kl, d2[m + "_inj2_o1"], ls="none", marker="o", ms=4.2, color=COL[N], mec="white", mew=0.5,
+                         zorder=3)
+                if variants and N == NREF:
+                    for key, mk in ((m + "_inj1_o1", "D"), (m + "_inj0_o1", "o")):
+                        ok = d["r_" + key] > 0.5
+                        p.loglog(kl[ok], d[key][ok], ls="none", marker=mk, ms=4.6 if mk == "o" else 4.0, mfc="none",
+                                 mec=COL[N], mew=1.0, zorder=4)
                 continue
             fine = d
             lam = N / frac
@@ -117,10 +151,15 @@ for ir, frac in enumerate((4, 1)):
 
 h = [Line2D([], [], color="k", lw=1.8, label=r"$(k\lambda)^{-1}\arctan(k\lambda)$"),
      Line2D([], [], color="0.4", ls="--", lw=1.4, label="closure's linear theory")]
-h += [Line2D([], [], ls="none", marker="o", ms=4.5, color=COL[N], label=r"code, $%d^3$" % N) for N in NS]
+h += [Line2D([], [], ls="none", marker="o", ms=4.5, color=COL[N],
+             label=(r"code, first-cell injection, $%d^3$" if inject2 else r"code, $%d^3$") % N) for N in NS]
 ax[0, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 h = [Line2D([], [], color=COL[NREF], lw=1.1, label="linear theory of the\ndiscretized equations")]
-if variants:
+if variants and inject2:
+    h += [Line2D([], [], ls="none", marker="D", ms=4.0, mfc="none", mec=COL[NREF],
+                 label=r"inject after (the suite), $%d^3$" % NREF),
+          Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=COL[NREF], label=r"inject before, $%d^3$" % NREF)]
+elif variants:
     h += [Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=COL[NREF], label=r"inject before, $%d^3$" % NREF),
           Line2D([], [], ls="none", marker="s", ms=4.6, mfc="none", mec=COL[NREF], label=r"$2^{\rm nd}$ order solver, $%d^3$" % NREF)]
 ax[1, 0].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
@@ -131,6 +170,6 @@ h = [Line2D([], [], color=RCOL[15], lw=1.1, label="arctan with shot noise\nof Ra
      Line2D([], [], ls="none", marker="o", ms=4.6, mfc="none", mec=RCOL[15], label="pool 15, mean of 16 substeps")]
 ax[1, 2].legend(handles=h, fontsize=7.4, loc="lower left", frameon=False, handlelength=1.8, labelspacing=0.35)
 fig.tight_layout(h_pad=0.6, w_pad=0.4)
-out = os.path.join(here, "..", "figures", "fig_app_convergence")
+out = os.path.join(here, "..", "figures", "fig_app_convergence" + ("_inject2" if inject2 else ""))
 fig.savefig(out + ".pdf")
 fig.savefig(out + ".png", dpi=170)
